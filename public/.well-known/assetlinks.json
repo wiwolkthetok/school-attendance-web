@@ -3,6 +3,9 @@
   "target": {
     "namespace": "android_app",
     "package_name": "app.vercel.school_attendance_web_flax.twa",
-    "sha256_cert_fingerprints": ["75:4F:D0:80:50:37:68:17:C5:D1:79:AC:76:73:16:2F:EF:D6:67:AD:1B:6D:2D:78:63:5A:4B:D0:E7:61:D6:00"]
+    "sha256_cert_fingerprints": [
+      "F8:0D:71:11:C4:9E:8E:DB:57:CB:3A:9F:84:81:10:29:49:B7:52:21:C7:2F:D3:16:D4:E1:64:7A:35:48:95:FC",
+      "75:4F:D0:80:50:37:68:17:C5:D1:79:AC:76:73:16:2F:EF:D6:67:AD:1B:6D:2D:78:63:5A:4B:D0:E7:61:D6:00"
+    ]
   }
 }]
