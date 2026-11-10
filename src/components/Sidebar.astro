@@ -54,7 +54,7 @@ const navItems = [
   {
     id: "login",
     label: "Portal Presensi",
-    href: "/",
+    href: "/login",
     icon: "login",
     adminOnly: false,
   },
@@ -343,6 +343,13 @@ komponen penting buat nampilin icon
       }
     } catch {}
   }
+
+  // Jika admin mengklik Portal Presensi untuk kembali ke halaman login, bersihkan sesi agar langsung ke form login
+  document.getElementById('sidebar-link-login')?.addEventListener('click', () => {
+    if ((window as any).sidebarLogout) {
+      (window as any).sidebarLogout();
+    }
+  });
 
   updateSidebarAuth();
   document.addEventListener('DOMContentLoaded', updateSidebarAuth);
