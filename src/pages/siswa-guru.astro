@@ -922,12 +922,10 @@ const guruCount = 0;
             </div>
             <input
               id="student-uid-input"
-              type="tel"
-              inputmode="numeric"
-              pattern="[0-9]*"
+              type="text"
               required
-              maxlength="9"
-              placeholder="9 digit nomor kartu RFID"
+              maxlength="20"
+              placeholder="Nomor kartu RFID (Desimal)"
               class="w-full text-sm font-mono font-black uppercase tracking-widest text-blue-950 bg-white border-2 border-blue-300/80 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-inner"
             />
             <div
@@ -1194,7 +1192,7 @@ const guruCount = 0;
       try {
         const [sRes, lRes, pRes] = await Promise.all([
           fetch("/api/students"),
-          fetch("/api/attendance"),
+          fetch("/api/attendance?t=" + Date.now()),
           fetch("/api/permissions"),
         ]);
         allStudents = await sRes.json();
@@ -1301,13 +1299,26 @@ const guruCount = 0;
               ? "GURU"
               : item.className.split(" ")[0] || "X";
 
-        // Badge Kehadiran Harian & Perizinan
-        const masukLog = currentLogs.find(
-          (l: any) => l.rfidUid === item.rfidUid && l.type === "masuk",
-        );
-        const pulangLog = currentLogs.find(
-          (l: any) => l.rfidUid === item.rfidUid && l.type === "pulang",
-        );
+        // Normalisasi pencocokan log ke siswa (kebal leading zero, huruf besar/kecil, atau kecocokan ID/Nama)
+        const itemCleanUid = (item.rfidUid || '').trim().toUpperCase().replace(/^0+/, '');
+        const itemName = (item.name || '').trim().toLowerCase();
+        const itemId = (item.id || '').trim().toUpperCase();
+
+        const studentLogs = currentLogs.filter((l: any) => {
+          const lCleanUid = (l.rfidUid || '').trim().toUpperCase().replace(/^0+/, '');
+          const lName = (l.name || '').trim().toLowerCase();
+          const lId = (l.id || '').trim().toUpperCase();
+          return (
+            (itemCleanUid && lCleanUid && itemCleanUid === lCleanUid) ||
+            (itemId && lId.includes(itemId)) ||
+            (itemName && lName === itemName)
+          );
+        });
+
+        // Prioritas presensi masuk: Utamakan log 'Hadir' atau 'Terlambat' asli di atas tiket 'Alpa' otomatis
+        const masukLogs = studentLogs.filter((l: any) => l.type === 'masuk');
+        const masukLog = masukLogs.find((l: any) => l.status === 'Hadir' || l.status === 'Terlambat') || masukLogs[0];
+        const pulangLog = studentLogs.find((l: any) => l.type === 'pulang');
 
         // Cek apakah civitas memiliki izin resmi yang disetujui untuk hari ini
         const todayStr = new Date().toLocaleDateString("en-CA", {
@@ -1340,13 +1351,13 @@ const guruCount = 0;
           statusBadgeHtml = `
             <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-rose-900 bg-rose-100 border border-rose-300 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs animate-pulse">
               <span class="w-2 h-2 rounded-full bg-rose-600"></span>
-              Bolos (-10)
+              Bolos (-20)
             </span>
           `;
         } else if (masukLog && pulangLog) {
           statusBadgeHtml = `
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="inline-flex items-center gap-1 text-[10px] font-bold ${masukLog.status === "Terlambat" ? "text-amber-800 bg-amber-100 border-amber-300" : "text-emerald-800 bg-emerald-100 border-emerald-300"} border px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
+              <span class="inline-flex items-center gap-1 text-[10px] font-bold ${masukLog.status === "Terlambat" ? "text-amber-800 bg-amber-100 border-amber-300" : (masukLog.status === "Alpa" ? "text-purple-800 bg-purple-100 border-purple-300" : "text-emerald-800 bg-emerald-100 border-emerald-300")} border px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
                 Masuk ${masukLog.time}
               </span>
               <span class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-800 bg-blue-100 border border-blue-300 px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
@@ -1356,9 +1367,14 @@ const guruCount = 0;
           `;
         } else if (masukLog) {
           const isLate = masukLog.status === "Terlambat";
+          const isAlpa = masukLog.status === "Alpa";
+          const badgeClass = isAlpa
+            ? "text-purple-900 bg-purple-100 border-purple-300"
+            : (isLate ? "text-amber-900 bg-amber-100 border-amber-300" : "text-emerald-900 bg-emerald-100 border-emerald-300");
+          const dotClass = isAlpa ? "bg-purple-600" : (isLate ? "bg-amber-600" : "bg-emerald-600");
           statusBadgeHtml = `
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold ${isLate ? "text-amber-900 bg-amber-100 border-amber-300" : "text-emerald-900 bg-emerald-100 border-emerald-300"} border px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs">
-              <span class="w-2 h-2 rounded-full ${isLate ? "bg-amber-600" : "bg-emerald-600"}"></span>
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold ${badgeClass} border px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs">
+              <span class="w-2 h-2 rounded-full ${dotClass}"></span>
               ${masukLog.status} (${masukLog.time})
             </span>
           `;

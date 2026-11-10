@@ -78,8 +78,8 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({
       status: 'success',
       message: studentId
-        ? `Siswa ${result.penalizedStudents[0]?.name || studentId} berhasil ditindaklanjuti dan dipotong 10 poin disiplin.`
-        : `Evaluasi bolos selesai: ${result.bolosCount} siswa dikategorikan bolos dan dipotong 10 poin.`,
+        ? `Siswa ${result.penalizedStudents[0]?.name || studentId} berhasil ditindaklanjuti dan dipotong 20 poin disiplin.`
+        : `Evaluasi bolos selesai: ${result.bolosCount} siswa dikategorikan bolos dan dipotong 20 poin.`,
       data: result,
     }), {
       headers: { 'Content-Type': 'application/json' },

@@ -38,16 +38,27 @@ export const DELETE: APIRoute = async () => {
   });
 };
 
-// Helper pemfilter UID: Mengekstrak UID Decimal 9 digit dari payload scanner/IoT
+// Helper pemfilter UID: Mengekstrak UID Decimal / ID kartu dari payload scanner/IoT secara presisi
 function extractDecimalUid(raw: any): string {
   if (!raw) return '';
   const text = String(raw).trim();
   if (text.toUpperCase().startsWith('ADM-') || /^(admin|piket)$/i.test(text)) return text.toUpperCase();
-  const decMatch = text.match(/(?:UID\s*Decimal|Decimal|Dec)\s*[:=]?\s*([0-9]{8,12})/i);
+  const decMatch = text.match(/(?:UID\s*Decimal|Decimal|Dec)\s*[:=]?\s*([0-9]{6,14})/i);
   if (decMatch && decMatch[1]) return decMatch[1].trim();
-  const digitsOnly = text.replace(/[^0-9]/g, '');
-  if (digitsOnly.length >= 9) return digitsOnly.slice(0, 9);
-  return digitsOnly || text;
+  // Bersihkan hanya karakter pemisah seperti spasi, titik dua, enter, strip
+  return text.replace(/[:\s\-\.\r\n]/g, '').trim();
+}
+
+function extractPayloadValue(body: any, fallbackText: string): string {
+  if (typeof body === 'object' && body !== null) {
+    for (const key of Object.keys(body)) {
+      const k = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (['uid', 'rfid', 'id', 'rfiduid', 'cardid', 'card', 'tag', 'data', 'text', 'cardnumber'].includes(k)) {
+        if (body[key]) return String(body[key]);
+      }
+    }
+  }
+  return fallbackText || '';
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -65,13 +76,12 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (contentType.includes('application/json')) {
       body = await request.json().catch(() => ({}));
-      rawInput = body.uid || body.rfid || body.id || body.rfidUid || body.data || body.text || '';
-      if (!rawInput && typeof body === 'string') rawInput = body;
+      rawInput = extractPayloadValue(body, typeof body === 'string' ? body : '');
     } else {
       const text = await request.text().catch(() => '');
       try {
         body = JSON.parse(text);
-        rawInput = body.uid || body.rfid || body.id || body.rfidUid || body.data || text;
+        rawInput = extractPayloadValue(body, text);
       } catch {
         rawInput = text;
       }
@@ -93,15 +103,23 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Step 1: Cek apakah ID terdaftar
+    // Step 1: Cek apakah ID terdaftar dengan pencocokan cerdas (toleransi leading zero 0xxxxxxxxx)
     const students = await getStudents();
-    const student = students.find(
-      (s) => s.rfidUid.toUpperCase() === uid || s.id.toUpperCase() === uid
-    );
+    const cleanScanUid = uid.replace(/^0+/, '');
+    const student = students.find((s) => {
+      const sRfid = (s.rfidUid || '').toUpperCase().trim();
+      const sClean = sRfid.replace(/^0+/, '');
+      const sId = (s.id || '').toUpperCase().trim();
+      return (
+        sRfid === uid.toUpperCase() ||
+        (cleanScanUid && sClean === cleanScanUid) ||
+        sId === uid.toUpperCase()
+      );
+    });
     if (!student) {
       console.log(`❌ [PRESENSI] UID [${uid}] BELUM TERDAFTAR di database.\n`);
       return new Response(
-        JSON.stringify({ status: 'error', message: `ID/UID ${uid} belum terdaftar di sistem` }),
+        JSON.stringify({ status: 'error', message: `ID/UID [${uid}] belum terdaftar di sistem` }),
         { status: 404, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -203,7 +221,8 @@ export const POST: APIRoute = async ({ request }) => {
       const matchRfid = l.rfidUid.toUpperCase() === student.rfidUid.toUpperCase() && l.date === dateStr;
       if (!matchRfid) return false;
       if (isStaff) return true; // Guru & Admin hanya absen satu kali sehari
-      return l.type === session;
+      // Abaikan tiket Alpa otomatis agar siswa yang tap tetap bisa masuk dan mengganti status jadi Hadir/Terlambat
+      return l.type === session && l.status !== 'Alpa';
     });
 
     if (existing) {

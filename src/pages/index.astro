@@ -1248,7 +1248,7 @@ import Layout from "../layouts/Layout.astro";
       try {
         const [studentsRes, logsRes, permsRes] = await Promise.all([
           fetch("/api/students"),
-          fetch("/api/attendance"),
+          fetch("/api/attendance?t=" + Date.now()),
           fetch("/api/permissions"),
         ]);
         const students = await studentsRes.json();

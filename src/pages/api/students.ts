@@ -24,11 +24,10 @@ function extractDecimalUid(raw: any): string {
   if (!raw) return '';
   const text = String(raw).trim();
   if (text.toUpperCase().startsWith('ADM-') || /^(admin|piket)$/i.test(text)) return text.toUpperCase();
-  const decMatch = text.match(/(?:UID\s*Decimal|Decimal|Dec)\s*[:=]?\s*([0-9]{8,12})/i);
+  const decMatch = text.match(/(?:UID\s*Decimal|Decimal|Dec)\s*[:=]?\s*([0-9]{6,14})/i);
   if (decMatch && decMatch[1]) return decMatch[1].trim();
-  const digitsOnly = text.replace(/[^0-9]/g, '');
-  if (digitsOnly.length >= 9) return digitsOnly.slice(0, 9);
-  return digitsOnly || text;
+  // Bersihkan karakter pemisah seperti spasi, titik dua, enter, strip tanpa memotong digit
+  return text.replace(/[:\s\-\.\r\n]/g, '').trim();
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -67,7 +66,11 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Cek apakah UID sudah dipakai oleh civitas lain
-    const existing = students.find((s) => s.rfidUid.toUpperCase() === rfidUid && s.id !== body.id);
+    const cleanNewUid = rfidUid.replace(/^0+/, '');
+    const existing = students.find((s) => {
+      const sClean = (s.rfidUid || '').replace(/^0+/, '');
+      return (s.rfidUid.toUpperCase() === rfidUid.toUpperCase() || (cleanNewUid && sClean === cleanNewUid)) && s.id !== body.id;
+    });
     if (existing) {
       return new Response(
         JSON.stringify({

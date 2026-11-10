@@ -411,13 +411,13 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
       await saveLog(bolosLog);
 
       const deductionRecord = {
-        id: `DED-BOLOS-${Date.now()}-${target.id}`,
+        id: `DED-BOLOS-${target.id}-${dateStr}`,
         studentId: target.id,
         rfidUid: target.rfidUid,
         date: dateStr,
         time: timeStr.slice(0, 8),
         minutesLate: 0,
-        pointsDeducted: 10,
+        pointsDeducted: 20,
         reason: 'Bolos: Tertangkap basah meninggalkan lingkungan sekolah / jam pelajaran tanpa izin',
       };
       await savePointDeduction(deductionRecord);
@@ -439,7 +439,7 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
             rfidUid: target.rfidUid,
             name: target.name,
             className: target.className,
-            pointsDeducted: 10,
+            pointsDeducted: 20,
           },
         ],
       };
@@ -512,15 +512,15 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
         };
         await saveLog(bolosLog);
 
-        // 2. Potong 10 Poin otomatis sesuai aturan ide.txt
+        // 2. Potong 20 Poin otomatis sesuai aturan kedisiplinan (terkunci 1x per hari)
         const deductionRecord = {
-          id: `DED-BOLOS-${Date.now()}-${student.id}`,
+          id: `DED-BOLOS-${student.id}-${dateStr}`,
           studentId: student.id,
           rfidUid: student.rfidUid,
           date: dateStr,
           time: timeStr.slice(0, 8),
           minutesLate: 0,
-          pointsDeducted: 10,
+          pointsDeducted: 20,
           reason: 'Bolos: Tercatat presensi masuk pagi tetapi tidak melakukan presensi kepulangan (pulang)',
         };
         await savePointDeduction(deductionRecord);
@@ -538,7 +538,7 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
           rfidUid: student.rfidUid,
           name: student.name,
           className: student.className,
-          pointsDeducted: 10,
+          pointsDeducted: 20,
         });
       }
     }
