@@ -1,0 +1,115 @@
+{
+	"version": 3,
+	"routes": [
+		{
+			"src": "^/_astro(?:/(.*))$",
+			"headers": {
+				"cache-control": "public, max-age=31536000, immutable"
+			},
+			"continue": true
+		},
+		{
+			"handle": "filesystem"
+		},
+		{
+			"src": "^/_server-islands/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/_image/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/attendance/alpa/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/attendance/archive/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/attendance/bolos/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/attendance/cron-status/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/attendance/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/attendance-stream/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/auth/login/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/permissions/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/points/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/schedules/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/settings/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/students/promote/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/students/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/izin-dispensasi/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/jadwal/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/login/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/pengaturan/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/profil-siswa/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/rekapitulasi/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/siswa-guru/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/404/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/.*$",
+			"dest": "_render"
+		}
+	]
+}

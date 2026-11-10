@@ -1,0 +1,25 @@
+---
+/**
+ * @file src/components/PwaMeta.astro
+ * @description Komponen Modular Head Meta & Inisialisasi PWA
+ * Mendukung instalasi lintas platform: Android, iOS, Windows, macOS, & Linux (32 & 64-bit)
+ */
+---
+
+<!-- Web App Manifest -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="theme-color" content="#2563eb" />
+
+<!-- Apple iOS / Safari Support -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Smart Absen" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
+<!-- Windows / Desktop Tile Support (32 & 64-bit) -->
+<meta name="application-name" content="Smart Absen" />
+<meta name="msapplication-TileColor" content="#2563eb" />
+<meta name="msapplication-TileImage" content="/icons/icon-192.png" />
+
+<!-- Client-side PWA Initializer -->
+<script is:inline src="/pwa-init.js"></script>

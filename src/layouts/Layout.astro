@@ -1,0 +1,610 @@
+---
+/**
+ * @file src/layouts/Layout.astro
+ * @description Master layout untuk SI-HADIR SMK
+ * Mengintegrasikan Sidebar Kiri (modular), Navbar Atas (modular), slot konten ber-padding responsif,
+ * serta styling global untuk zebra-striping tabel, sticky header, dan accessibility focus-rings.
+ */
+import Sidebar from '../components/Sidebar.astro';
+import Navbar from '../components/Navbar.astro';
+import BottomNav from '../components/BottomNav.astro';
+import PwaMeta from '../components/PwaMeta.astro';
+
+// === TAMBAHKAN IMPOR CSS STITCH ANDA DI SINI ===
+// Sesuaikan nama file 'global.css' dengan nama file asli di folder src/styles/ Anda!
+import '../styles/global.css'; 
+
+interface Props {
+  title: string;
+  activeNav?: 'data-presensi' | 'jadwal-agenda' | 'izin-dispensasi' | 'siswa-guru' | 'rekap' | 'pengaturan' | 'profil-siswa' | 'login';
+}
+
+const { title, activeNav = 'data-presensi' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Absensi SMK</title>
+  <meta name="description" content="Sistem Presensi Digital dan Agenda Akademik SMK berbasis Astro dan Tailwind CSS." />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+    rel="stylesheet"
+  />
+  <PwaMeta />
+
+  <!-- Instant Pre-Render Auth Guard: Pengguna wajib login terlebih dahulu sebelum dapat mengakses dashboard atau halaman internal -->
+  <script is:inline>
+    (function () {
+      try {
+        var path = window.location.pathname;
+        var civ = localStorage.getItem('auth_civitas');
+        var role = localStorage.getItem('auth_role');
+        var active = sessionStorage.getItem('auth_active');
+        var bypass = sessionStorage.getItem('bypass_login');
+        
+        var hasCookie = document.cookie.split(';').some(function (c) {
+          return c.trim().startsWith('auth_session=');
+        });
+
+        var isAuth = Boolean((civ && role) || active || bypass || hasCookie);
+
+        // 1. Jika belum login: Sembunyikan halaman seketika & redirect ke /login
+        if (!isAuth) {
+          document.documentElement.style.display = 'none';
+          window.location.replace('/login');
+          return;
+        }
+
+        var civObj = null;
+        try {
+          if (civ) civObj = JSON.parse(civ);
+        } catch (e) {}
+
+        var isKepsekOrWaka = civObj && (civObj.tag === 'kepsek' || civObj.tag === 'waka');
+        var canAccessDashboard = role === 'admin' || isKepsekOrWaka || bypass;
+
+        // 2. Akses Dashboard: HANYA Admin, Kepsek, dan Waka! Pengguna lain diarahkan ke profil masing-masing
+        var isAllowed = canAccessDashboard || path.startsWith('/profil-siswa');
+        if (!isAllowed) {
+          document.documentElement.style.display = 'none';
+          var civId = civObj ? civObj.id : '';
+          window.location.replace('/profil-siswa' + (civId ? '?id=' + encodeURIComponent(civId) + '&auth=true' : ''));
+          return;
+        }
+      } catch (err) {
+        document.documentElement.style.display = 'none';
+        window.location.replace('/login');
+      }
+    })();
+  </script>
+
+  <style is:global>
+    /* Card Glows */
+    .card-glow-blue {
+      box-shadow: 0 14px 28px -6px rgba(47, 105, 255, 0.42);
+    }
+    .card-glow-cyan {
+      box-shadow: 0 14px 28px -6px rgba(14, 165, 233, 0.42);
+    }
+    .card-glow-green {
+      box-shadow: 0 14px 28px -6px rgba(16, 185, 129, 0.42);
+    }
+    .heima-shadow {
+      box-shadow: 0 16px 40px -12px rgba(45, 60, 110, 0.16);
+    }
+    
+    /* Folder Tabs */
+    .tab-notch-active {
+      background-color: #ffffff;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      position: relative;
+      box-shadow: 0 -2px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .tab-notch-inactive {
+      background-color: #e4e9f7;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    /* Accessibility Focus Rings */
+    *:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    /* Table Sticky Header & Zebra Striping Utilities */
+    .table-sticky-header th {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background-color: rgba(248, 250, 252, 0.95);
+      backdrop-filter: blur(4px);
+    }
+
+    @keyframes slideInUp {
+      from { transform: translateY(100%) scale(0.95); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .animate-toast {
+      animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes pageFadeIn {
+      from { opacity: 0.96; }
+      to { opacity: 1; }
+    }
+    #main-content {
+      animation: pageFadeIn 0.1s ease-out both;
+    }
+  </style>
+</head>
+<body class="bg-[#d8def2] text-slate-800 min-h-screen font-sans antialiased p-0 sm:p-5 lg:p-6 flex items-center justify-center relative selection:bg-blue-600 selection:text-white">
+  <!-- Main Outer Window Container inspired by HeiMaUX -->
+  <div class="w-full max-w-[1520px] bg-white rounded-none sm:rounded-[26px] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-screen md:min-h-[920px] border-0 sm:border border-white/70">
+    
+    <!-- 1. SIDEBAR KIRI MODULAR (Bisa digantikan khusus via slot 'sidebar') -->
+    {Astro.slots.has('sidebar') ? (
+      <slot name="sidebar" />
+    ) : (
+      <Sidebar activeNav={activeNav} />
+    )}
+
+    <!-- 2. MAIN CONTENT AREA DENGAN PADDING SEIMBANG -->
+    <main class="flex-1 bg-[#f4f7fe] flex flex-col overflow-y-auto min-w-0" id="main-content">
+      <!-- NAVBAR ATAS MODULAR -->
+      <Navbar title={title} />
+
+      <!-- DINAMIS CONTENT INJECTION DENGAN TAG <slot /> -->
+      <div class="p-3.5 sm:p-6 lg:p-8 space-y-6 flex-1 pb-24 md:pb-8">
+        <slot />
+      </div>
+    </main>
+  </div>
+
+  <!-- 3. FLOATING BOTTOM NAVIGATION BAR (KHUSUS MOBILE / ANDROID - DESAIN NO. 02) -->
+  {Astro.slots.has('bottom-nav') ? (
+    <slot name="bottom-nav" />
+  ) : (
+    <BottomNav activeNav={activeNav} />
+  )}
+
+  <!-- Floating Toast Notifications Container -->
+  <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-2 pointer-events-none max-w-sm"></div>
+
+  <!-- FLOATING IOT SIMULATOR POPUP TOOLS WIDGET -->
+  <div id="iot-simulator-root" class="fixed bottom-20 md:bottom-6 right-3 sm:right-6 z-40 flex flex-col items-end gap-3 select-none">
+    <!-- Popup Drawer / Card (Hidden by default) -->
+    <div id="iot-simulator-card" class="hidden w-96 max-w-[calc(100vw-2rem)] max-h-[85vh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl p-5 shadow-2xl border border-blue-200/80 text-slate-800 space-y-3.5 animate-toast scrollbar-thin">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+          <h4 class="text-xs font-black tracking-tight text-slate-900 uppercase">IoT & Dev Simulator</h4>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span id="iot-active-day-tag" class="text-[9px] font-black px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">Kalender Asli</span>
+          <button id="close-iot-sim" class="text-slate-400 hover:text-slate-700 text-sm font-bold p-1 hover:bg-slate-100 rounded-lg">✕</button>
+        </div>
+      </div>
+
+      <!-- 1. Simulasi Hari / Kalender -->
+      <div>
+        <label for="iot-day-mode" class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Simulasi Hari / Kalender</label>
+        <select id="iot-day-mode" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="auto">📅 Kalender Asli (Otomatis Hari Ini)</option>
+          <option value="weekday">🏫 Hari Sekolah Aktif (Senin - Sabtu)</option>
+          <option value="sunday">🏖️ Hari Libur Sekolah (Minggu)</option>
+        </select>
+      </div>
+
+      <!-- 2. Mode Sesi / Waktu Pengetesan -->
+      <div>
+        <label for="iot-time-mode" class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Simulasi Jam / Sesi</label>
+        <select id="iot-time-mode" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="realtime">⏱️ Jam Nyata Sekarang (WIB)</option>
+          <option value="05:45|masuk">🚫 Masuk Belum Buka (05:45 WIB)</option>
+          <option value="06:45|masuk">🌅 Pagi Tepat Waktu (06:45 WIB)</option>
+          <option value="07:45|masuk">⏰ Pagi Terlambat (07:45 WIB)</option>
+          <option value="14:00|pulang">⏳ Pulang Belum Buka (14:00 WIB)</option>
+          <option value="15:30|pulang">🌇 Siang Pulang Sah (15:30 WIB)</option>
+          <option value="17:30|pulang">⚠️ Batas Akhir Pulang (17:30 WIB)</option>
+        </select>
+      </div>
+
+      <!-- 3. Otomasi Pengujian Kilat (1-Click Batch) -->
+      <div>
+        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Otomasi Pengujian Cepat</span>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button type="button" id="btn-batch-all-hadir" class="px-2 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 font-bold text-[10px] transition text-center truncate shadow-xs">
+            ⚡ Hadir Semua
+          </button>
+          <button type="button" id="btn-batch-mixed" class="px-2 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-600 hover:text-white text-amber-800 font-bold text-[10px] transition text-center truncate shadow-xs">
+            ⏰ Hadir & Telat
+          </button>
+          <button type="button" id="btn-batch-pulang" class="px-2 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-800 font-bold text-[10px] transition text-center truncate shadow-xs">
+            🌇 Pulang Semua
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. Quick Student Tap Buttons (9-Digit Real RFID UIDs) -->
+      <div>
+        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Tap Kartu RFID Siswa (8 Siswa & Guru)</span>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button type="button" class="sim-btn px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 font-semibold text-[11px] transition text-left truncate border border-slate-100" data-uid="101182001">
+            👧 Alya (XII AKL)
+          </button>
+          <button type="button" class="sim-btn px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 font-semibold text-[11px] transition text-left truncate border border-slate-100" data-uid="101182002">
+            👦 Rizky (XII RPL)
+          </button>
+          <button type="button" class="sim-btn px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 font-semibold text-[11px] transition text-left truncate border border-slate-100" data-uid="101182003">
+            👦 Fadli (XI RPL)
+          </button>
+          <button type="button" class="sim-btn px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 font-semibold text-[11px] transition text-left truncate border border-slate-100" data-uid="101182004">
+            👦 Budi (X RPL)
+          </button>
+          <button type="button" class="sim-btn px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 font-semibold text-[11px] transition text-left truncate border border-slate-100" data-uid="101182005">
+            👧 Siti (X AKL)
+          </button>
+          <button type="button" class="sim-btn px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 font-semibold text-[11px] transition text-left truncate border border-slate-100" data-uid="101182006">
+            👧 Dewi (XI AKL)
+          </button>
+          <button type="button" class="sim-btn px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 font-semibold text-[11px] transition text-left truncate border border-slate-100" data-uid="119849847">
+            👧 Mesi (X RPL)
+          </button>
+          <button type="button" class="sim-btn px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 font-semibold text-[11px] transition text-left truncate border border-slate-100" data-uid="171182156">
+            👦 Farhan (X RPL)
+          </button>
+          <button type="button" class="sim-btn col-span-2 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-600 hover:text-white text-amber-800 font-semibold text-[11px] transition text-left truncate border border-amber-200" data-uid="201182001">
+            👨‍🏫 Pak Wahyu Hidayat (Guru / Waka)
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. Manual Input UID -->
+      <div class="flex items-center gap-1.5">
+        <input id="manual-uid-input" type="text" placeholder="UID: 101182001..." class="flex-1 text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+        <button id="manual-tap-btn" type="button" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs transition">Tap</button>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+        <button type="button" onclick="window.resetAttendance()" class="text-[11px] font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 hover:underline">
+          <span class="material-symbols-outlined text-xs">restart_alt</span> Reset Presensi
+        </button>
+        <span class="text-[10px] text-slate-400">Jadwal: 06:00 - 23:00</span>
+      </div>
+    </div>
+
+    <!-- Floating Toggle Button -->
+    <button id="toggle-iot-sim" type="button" class="flex items-center gap-2 sm:gap-2.5 px-3 py-2 sm:px-4 sm:py-3 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black text-xs shadow-xl shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-white/30">
+      <span class="relative flex h-2.5 w-2.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+      </span>
+      <span class="material-symbols-outlined text-sm">sensors</span>
+      <span class="hidden sm:inline">Simulasi IoT RFID</span>
+      <span class="sm:hidden text-[11px]">IoT RFID</span>
+    </button>
+  </div>
+
+  <script>
+    // === AUTHENTICATION & ROLE-BASED ACCESS CONTROL (RBAC) ===
+    try {
+      const path = window.location.pathname;
+      const isLoginPage = path.startsWith('/login');
+      const isProfilePage = path.startsWith('/profil-siswa');
+      const authRaw = localStorage.getItem('auth_civitas');
+      let civitas: any = null;
+      try {
+        if (authRaw) civitas = JSON.parse(authRaw);
+      } catch {}
+
+      const authRole = localStorage.getItem('auth_role') || civitas?.role || '';
+      const civitasTag = civitas?.tag || '';
+      const isKepsek = civitasTag === 'kepsek' || (civitas?.className && civitas.className.toLowerCase().includes('kepala sekolah'));
+      const isWaka = civitasTag === 'waka' || (civitas?.className && civitas.className.toLowerCase().includes('waka'));
+      const isAdmin = authRole === 'admin';
+      const isAllowedAdmin = isAdmin || isKepsek || isWaka || sessionStorage.getItem('bypass_login') === 'true';
+
+      // 1. Jika belum login sama sekali dan bukan mode dev bypass, arahkan ke login
+      if (!isLoginPage && !authRaw && !isAllowedAdmin) {
+        window.location.href = '/login';
+      }
+
+      // 2. PROTEKSI HAK AKSES DASHBOARD: HANYA Admin, Kepsek, dan Waka yang boleh mengakses Dashboard!
+      // Pengguna lain (Siswa, Guru Biasa, Bendahara, dll.) HANYA boleh mengakses halaman Profil Pribadi mereka
+      if (!isAllowedAdmin && !isProfilePage && !isLoginPage) {
+        const studentId = civitas?.id || '';
+        window.location.href = studentId ? `/profil-siswa?id=${studentId}&auth=true` : '/profil-siswa';
+      }
+    } catch (e) {}
+
+    function updateClock() {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+      const timeParts = new Intl.DateTimeFormat('id-ID', options).format(now).replace(/\./g, ':');
+      
+      const clockElement = document.getElementById('liveClockDisplay');
+      if (clockElement) {
+        clockElement.textContent = timeParts + ' WIB';
+      }
+
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      let hoursLeft = 23 - currentHour;
+      let minutesLeft = 60 - currentMinute;
+      if (minutesLeft === 60) {
+        minutesLeft = 0;
+      } else {
+        hoursLeft -= 1;
+      }
+      const resetCountdownEl = document.getElementById('resetCountdown');
+      if (resetCountdownEl) {
+        if (hoursLeft >= 0) {
+          resetCountdownEl.textContent = `Reset dlm ${hoursLeft}j ${minutesLeft}m`;
+        } else {
+          resetCountdownEl.textContent = 'Reset Selesai (23:00)';
+        }
+      }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // === IOT TESTING TOOLS UNTUK BROWSER CONSOLE & POPUP UI ===
+    function showToast(message: string, type: 'success' | 'warning' | 'error' | 'info' = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-emerald-600 text-white shadow-emerald-500/30',
+        warning: 'bg-amber-500 text-white shadow-amber-500/30',
+        error: 'bg-rose-600 text-white shadow-rose-500/30',
+        info: 'bg-blue-600 text-white shadow-blue-500/30',
+      };
+      toast.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl font-bold text-xs flex items-center gap-2 animate-toast transition-all duration-300 ${colors[type]}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+    (window as any).showToast = showToast;
+
+    (window as any).listStudents = async function() {
+      const res = await fetch('/api/students');
+      const data = await res.json();
+      console.table(data);
+      return data;
+    };
+
+    (window as any).listAttendance = async function() {
+      const res = await fetch('/api/attendance');
+      const data = await res.json();
+      if (!data.length) console.info('ℹ️ Belum ada presensi tercatat hari ini.');
+      else console.table(data);
+      return data;
+    };
+
+    (window as any).resetAttendance = async function() {
+      const res = await fetch('/api/attendance', { method: 'DELETE' });
+      const data = await res.json();
+      console.log('🔄', data.message);
+      showToast('🔄 Riwayat presensi berhasil direset', 'info');
+      window.dispatchEvent(new CustomEvent('attendance-updated'));
+      return data;
+    };
+
+    (window as any).tap = (window as any).tapCard = async function(input: string, options: any = {}) {
+      if (!input) {
+        console.warn('⚠️ Masukkan UID kartu atau nama siswa, contoh: tap("A1B2C3D4") atau tap("Alya")');
+        return;
+      }
+      let uid = String(input).trim();
+      if (uid.length < 8 || !/^[0-9a-fA-F]+$/.test(uid)) {
+        const studentsRes = await fetch('/api/students');
+        const students = await studentsRes.json();
+        const found = students.find((s: any) => s.name.toLowerCase().includes(uid.toLowerCase()));
+        if (found) {
+          uid = found.rfidUid;
+          console.log(`🔍 Siswa Ditemukan: ${found.name} (UID: ${uid})`);
+        }
+      }
+
+      const bodyPayload: any = { uid };
+      if (options.simulatedTime) bodyPayload.simulatedTime = options.simulatedTime;
+      if (options.type) bodyPayload.type = options.type;
+
+      const res = await fetch('/api/attendance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bodyPayload),
+      });
+      const result = await res.json();
+
+      if (result.status === 'success') {
+        const timeBadge = result.data.time || '';
+        console.log(`%c✅ [${result.data.status.toUpperCase()}] ${result.data.name} (${result.data.className}) - ${timeBadge} WIB`, 'color: #10b981; font-weight: bold; font-size: 12px;');
+        showToast(`✅ ${result.data.name} - ${result.data.status} (${timeBadge} WIB)`, result.data.status === 'Terlambat' ? 'warning' : 'success');
+      } else if (result.status === 'warning') {
+        console.warn(`⚠️ [DOUBLE-TAP] ${result.message}`);
+        showToast(`⚠️ ${result.message}`, 'warning');
+      } else {
+        console.error(`❌ [ERROR] ${result.message}`);
+        showToast(`❌ ${result.message}`, 'error');
+      }
+
+      window.dispatchEvent(new CustomEvent('attendance-updated', { detail: result }));
+      return result;
+    };
+
+    // Helper Mode Hari & Libur Sekolah
+    function getSimDayMode(): string {
+      return localStorage.getItem('sim_day_mode') || 'auto';
+    }
+    function isSchoolHoliday(): boolean {
+      const mode = getSimDayMode();
+      if (mode === 'sunday') return true;
+      if (mode === 'weekday') return false;
+      return new Date().getDay() === 0;
+    }
+    (window as any).getSimDayMode = getSimDayMode;
+    (window as any).isSchoolHoliday = isSchoolHoliday;
+    (window as any).setSimDayMode = function(mode: string) {
+      localStorage.setItem('sim_day_mode', mode);
+      updateDayUi();
+      window.dispatchEvent(new CustomEvent('day-mode-changed', { detail: { mode } }));
+      window.dispatchEvent(new CustomEvent('attendance-updated'));
+    };
+
+    const dayModeSelect = document.getElementById('iot-day-mode') as HTMLSelectElement | null;
+    const activeDayTag = document.getElementById('iot-active-day-tag');
+    function updateDayUi() {
+      const mode = getSimDayMode();
+      if (dayModeSelect) dayModeSelect.value = mode;
+      if (activeDayTag) {
+        if (mode === 'sunday') {
+          activeDayTag.textContent = 'Libur Minggu';
+          activeDayTag.className = 'text-[9px] font-black px-2 py-0.5 rounded-md bg-purple-100 text-purple-800';
+        } else if (mode === 'weekday') {
+          activeDayTag.textContent = 'Sekolah Aktif';
+          activeDayTag.className = 'text-[9px] font-black px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800';
+        } else {
+          const isSun = new Date().getDay() === 0;
+          activeDayTag.textContent = isSun ? 'Libur Minggu (Real)' : 'Sekolah (Real)';
+          activeDayTag.className = isSun
+            ? 'text-[9px] font-black px-2 py-0.5 rounded-md bg-purple-100 text-purple-800'
+            : 'text-[9px] font-black px-2 py-0.5 rounded-md bg-blue-100 text-blue-800';
+        }
+      }
+    }
+    updateDayUi();
+    dayModeSelect?.addEventListener('change', () => {
+      const val = dayModeSelect.value;
+      (window as any).setSimDayMode(val);
+      const label = val === 'sunday' ? 'Hari Libur Sekolah (Minggu)' : (val === 'weekday' ? 'Hari Sekolah Aktif (Senin - Sabtu)' : 'Kalender Asli');
+      showToast(`📅 Simulasi Hari: ${label}`, 'info');
+    });
+
+    // Otomasi Pengujian Kilat Siswa
+    const REGISTERED_STUDENTS = [
+      { name: 'Alya Putri Ramadhani', uid: '101182001' },
+      { name: 'Rizky Fajar Pratama', uid: '101182002' },
+      { name: 'Fadli Muhammad', uid: '101182003' },
+      { name: 'Budi Santoso', uid: '101182004' },
+      { name: 'Siti Nurhaliza', uid: '101182005' },
+      { name: 'Dewi Lestari', uid: '101182006' },
+      { name: 'Mesi Kawala', uid: '119849847' },
+      { name: 'Muhammad Farhan', uid: '171182156' },
+    ];
+
+    async function batchTap(scenario: 'all' | 'mixed' | 'pulang') {
+      showToast('⏳ Memproses simulasi presensi batch...', 'info');
+      for (let i = 0; i < REGISTERED_STUDENTS.length; i++) {
+        const s = REGISTERED_STUDENTS[i];
+        let opts: any = { simulatedTime: '06:45', type: 'masuk' };
+        if (scenario === 'mixed') {
+          opts = i < 5 ? { simulatedTime: '06:45', type: 'masuk' } : { simulatedTime: '07:45', type: 'masuk' };
+        } else if (scenario === 'pulang') {
+          opts = { simulatedTime: '15:30', type: 'pulang' };
+        }
+        await (window as any).tap(s.uid, opts);
+        await new Promise((r) => setTimeout(r, 60));
+      }
+      const successMsg = scenario === 'pulang' ? '🌇 Seluruh siswa berhasil tap pulang!' : '✅ Seluruh siswa berhasil diproses!';
+      showToast(successMsg, 'success');
+    }
+
+    document.getElementById('btn-batch-all-hadir')?.addEventListener('click', () => batchTap('all'));
+    document.getElementById('btn-batch-mixed')?.addEventListener('click', () => batchTap('mixed'));
+    document.getElementById('btn-batch-pulang')?.addEventListener('click', () => batchTap('pulang'));
+
+    // Toggle Popup Card
+    const toggleBtn = document.getElementById('toggle-iot-sim');
+    const simCard = document.getElementById('iot-simulator-card');
+    const closeBtn = document.getElementById('close-iot-sim');
+    const timeModeSelect = document.getElementById('iot-time-mode') as HTMLSelectElement | null;
+
+    toggleBtn?.addEventListener('click', () => {
+      simCard?.classList.toggle('hidden');
+    });
+    closeBtn?.addEventListener('click', () => {
+      simCard?.classList.add('hidden');
+    });
+
+    // Quick Tap Buttons in Popup
+    document.querySelectorAll('.sim-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const uid = btn.getAttribute('data-uid');
+        if (!uid) return;
+        const modeVal = timeModeSelect?.value || 'realtime';
+        const opts: any = {};
+        if (modeVal !== 'realtime') {
+          const [simTime, simType] = modeVal.split('|');
+          opts.simulatedTime = simTime;
+          opts.type = simType;
+        }
+        (window as any).tap(uid, opts);
+      });
+    });
+
+    // Manual UID Tap in Popup
+    const manualBtn = document.getElementById('manual-tap-btn');
+    const manualInput = document.getElementById('manual-uid-input') as HTMLInputElement | null;
+    manualBtn?.addEventListener('click', () => {
+      const val = manualInput?.value.trim();
+      if (!val) return;
+      const modeVal = timeModeSelect?.value || 'realtime';
+      const opts: any = {};
+      if (modeVal !== 'realtime') {
+        const [simTime, simType] = modeVal.split('|');
+        opts.simulatedTime = simTime;
+        opts.type = simType;
+      }
+      (window as any).tap(val, opts);
+      if (manualInput) manualInput.value = '';
+    });
+
+    // === REALTIME JEMBATAN OTOMATIS: SERVER-SENT EVENTS (SSE) ===
+    let eventSource: EventSource | null = null;
+    function connectSSE() {
+      if (eventSource) eventSource.close();
+      eventSource = new EventSource('/api/attendance-stream');
+
+      eventSource.addEventListener('attendance', (e: MessageEvent) => {
+        try {
+          const payload = JSON.parse(e.data);
+          // Beri tahu seluruh halaman web bahwa data presensi baru saja masuk
+          window.dispatchEvent(new CustomEvent('attendance-updated', { detail: payload }));
+          
+          if (payload.type === 'new_log' && payload.log) {
+            const log = payload.log;
+            showToast(`📡 [Realtime] ${log.name} - ${log.status} (${log.time} WIB)`, log.status === 'Terlambat' ? 'warning' : 'success');
+          } else if (payload.type === 'reset') {
+            showToast('🔄 [Realtime] Seluruh data presensi direset', 'info');
+          }
+        } catch (err) {
+          console.error('SSE Parse Error:', err);
+        }
+      });
+
+      eventSource.onerror = () => {
+        // Otomatis re-connect jika jaringan sempat terputus
+        eventSource?.close();
+        setTimeout(connectSSE, 3000);
+      };
+    }
+    connectSSE();
+
+    console.log('%c📡 [SI-HADIR IoT Tester Ready - SSE Realtime Connected]', 'background: #2563eb; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 6px;');
+  </script>
+</body>
+</html>
