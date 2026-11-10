@@ -33,7 +33,7 @@ export const GET: APIRoute = async ({ request }) => {
         const u = s.rfidUid.toUpperCase();
         if (morningMap.has(u)) {
           if (bolosSet.has(u)) {
-            confirmedBolos.push({ student: s, masukLog: morningMap.get(u), status: 'Sudah Dihukum Bolos (-10 Poin)' });
+            confirmedBolos.push({ student: s, masukLog: morningMap.get(u), status: 'Sudah Dihukum Bolos (-20 Poin)' });
           } else if (!afternoonSet.has(u)) {
             pendingBolos.push({ student: s, masukLog: morningMap.get(u), status: 'Belum Presensi Pulang' });
           }

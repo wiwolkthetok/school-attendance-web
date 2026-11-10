@@ -7,7 +7,7 @@ export const GET: APIRoute = async () => {
   return new Response(JSON.stringify(settings), {
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=120',
+      'Cache-Control': 'no-store, no-cache, must-revalidate',
     },
   });
 };

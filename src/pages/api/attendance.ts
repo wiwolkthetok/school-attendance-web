@@ -25,7 +25,7 @@ export const GET: APIRoute = async () => {
   return new Response(JSON.stringify(safeLogs), {
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'public, s-maxage=2, stale-while-revalidate=10',
+      'Cache-Control': 'no-store, no-cache, must-revalidate',
     },
   });
 };

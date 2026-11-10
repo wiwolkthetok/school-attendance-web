@@ -210,10 +210,11 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
           <option value="realtime">⏱️ Jam Nyata Sekarang (WIB)</option>
           <option value="05:45|masuk">🚫 Masuk Belum Buka (05:45 WIB)</option>
           <option value="06:45|masuk">🌅 Pagi Tepat Waktu (06:45 WIB)</option>
-          <option value="07:45|masuk">⏰ Pagi Terlambat (07:45 WIB)</option>
-          <option value="14:00|pulang">⏳ Pulang Belum Buka (14:00 WIB)</option>
-          <option value="15:30|pulang">🌇 Siang Pulang Sah (15:30 WIB)</option>
-          <option value="17:30|pulang">⚠️ Batas Akhir Pulang (17:30 WIB)</option>
+          <option value="07:35|masuk">⏰ Pagi Terlambat (07:35 WIB)</option>
+          <option value="08:00|masuk">🛑 Pagi Lewat Toleransi (08:00 WIB)</option>
+          <option value="12:45|pulang">⏳ Pulang Belum Buka (12:45 WIB)</option>
+          <option value="14:15|pulang">🌇 Siang Pulang Sah (14:15 WIB)</option>
+          <option value="15:30|pulang">⚠️ Batas Akhir Pulang Lewat (15:30 WIB)</option>
         </select>
       </div>
 
@@ -513,9 +514,9 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
         const s = REGISTERED_STUDENTS[i];
         let opts: any = { simulatedTime: '06:45', type: 'masuk' };
         if (scenario === 'mixed') {
-          opts = i < 5 ? { simulatedTime: '06:45', type: 'masuk' } : { simulatedTime: '07:45', type: 'masuk' };
+          opts = i < 5 ? { simulatedTime: '06:45', type: 'masuk' } : { simulatedTime: '07:35', type: 'masuk' };
         } else if (scenario === 'pulang') {
-          opts = { simulatedTime: '15:30', type: 'pulang' };
+          opts = { simulatedTime: '14:15', type: 'pulang' };
         }
         await (window as any).tap(s.uid, opts);
         await new Promise((r) => setTimeout(r, 60));
@@ -574,18 +575,80 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
       if (manualInput) manualInput.value = '';
     });
 
-    // === REALTIME JEMBATAN OTOMATIS: SERVER-SENT EVENTS (SSE) ===
+    // === HYBRID REALTIME: SSE (Persistent) + Smart Polling Fallback (Serverless) ===
     let eventSource: EventSource | null = null;
+    let sseAlive = false;
+    let pollingTimer: ReturnType<typeof setInterval> | null = null;
+    let connectTimeout: ReturnType<typeof setTimeout> | null = null;
+    let reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
+    let lastHeartbeat = 0;
+
+    function startSmartPolling() {
+      if (pollingTimer) return;
+      pollingTimer = setInterval(() => {
+        if (document.visibilityState === 'visible') {
+          window.dispatchEvent(new CustomEvent('attendance-updated', { detail: { type: 'poll' } }));
+        }
+      }, 4000);
+      console.log('%c🔄 [Realtime] Mode: Smart Polling (4s)', 'background: #f59e0b; color: #000; font-weight: bold; padding: 4px 8px; border-radius: 6px;');
+    }
+
+    function stopSmartPolling() {
+      if (pollingTimer) {
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+      }
+    }
+
     function connectSSE() {
-      if (eventSource) eventSource.close();
-      eventSource = new EventSource('/api/attendance-stream');
+      if (eventSource) {
+        try { eventSource.close(); } catch {}
+        eventSource = null;
+      }
+      if (connectTimeout) clearTimeout(connectTimeout);
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+
+      sseAlive = false;
+      lastHeartbeat = 0;
+
+      if (typeof window.EventSource === 'undefined') {
+        startSmartPolling();
+        return;
+      }
+
+      try {
+        eventSource = new EventSource('/api/attendance-stream');
+      } catch {
+        startSmartPolling();
+        return;
+      }
+
+      // Deteksi cepat 4 detik: jika SSE belum memberi sinyal, aktifkan polling sementara
+      connectTimeout = setTimeout(() => {
+        if (!sseAlive) startSmartPolling();
+      }, 4000);
+
+      eventSource.addEventListener('connected', () => {
+        sseAlive = true;
+        lastHeartbeat = Date.now();
+        stopSmartPolling();
+        console.log('%c📡 [Realtime] Mode: SSE Terhubung', 'background: #22c55e; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 6px;');
+      });
+
+      eventSource.addEventListener('heartbeat', () => {
+        if (!sseAlive) {
+          sseAlive = true;
+          stopSmartPolling();
+          console.log('%c📡 [Realtime] Mode: SSE (Instan)', 'background: #22c55e; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 6px;');
+        }
+        lastHeartbeat = Date.now();
+      });
 
       eventSource.addEventListener('attendance', (e: MessageEvent) => {
         try {
           const payload = JSON.parse(e.data);
-          // Beri tahu seluruh halaman web bahwa data presensi baru saja masuk
           window.dispatchEvent(new CustomEvent('attendance-updated', { detail: payload }));
-          
+
           if (payload.type === 'new_log' && payload.log) {
             const log = payload.log;
             showToast(`📡 [Realtime] ${log.name} - ${log.status} (${log.time} WIB)`, log.status === 'Terlambat' ? 'warning' : 'success');
@@ -598,14 +661,36 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
       });
 
       eventSource.onerror = () => {
-        // Otomatis re-connect jika jaringan sempat terputus
-        eventSource?.close();
-        setTimeout(connectSSE, 3000);
+        try { eventSource?.close(); } catch {}
+        eventSource = null;
+        sseAlive = false;
+        startSmartPolling();
+        reconnectTimeout = setTimeout(connectSSE, 20000);
       };
     }
+
+    // Segera refresh data saat user membuka kembali tab browser
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        window.dispatchEvent(new CustomEvent('attendance-updated', { detail: { type: 'focus' } }));
+        if (!sseAlive) connectSSE();
+      }
+    });
+
     connectSSE();
 
-    console.log('%c📡 [SI-HADIR IoT Tester Ready - SSE Realtime Connected]', 'background: #2563eb; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 6px;');
+    // Watchdog: jika koneksi SSE macet > 25 detik tanpa heartbeat, alihkan ke polling
+    setInterval(() => {
+      if (sseAlive && lastHeartbeat && Date.now() - lastHeartbeat > 25000) {
+        sseAlive = false;
+        startSmartPolling();
+        try { eventSource?.close(); } catch {}
+        eventSource = null;
+        connectSSE();
+      }
+    }, 12000);
+
+    console.log('%c📡 [SI-HADIR IoT Tester Ready - Hybrid Realtime]', 'background: #2563eb; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 6px;');
   </script>
 </body>
 </html>

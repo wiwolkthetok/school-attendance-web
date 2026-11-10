@@ -6,7 +6,7 @@ import {
   filterAttendanceRecords,
   calculateResetCountdown,
   type AttendanceRecord,
-} from './attendanceLogic';
+} from './attendanceLogic.ts';
 
 test('isLateArrival correctly determines late threshold of 07:30', () => {
   assert.equal(isLateArrival('06:45', '07:30'), false);

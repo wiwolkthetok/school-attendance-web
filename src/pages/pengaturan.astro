@@ -169,6 +169,27 @@ import Layout from "../layouts/Layout.astro";
             />
           </div>
         </div>
+
+        <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 text-slate-500 text-[11px] font-semibold">
+            <span class="material-symbols-outlined text-sm text-blue-600">tune</span>
+            <span>Preset Cepat Demo:</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" id="btn-preset-resmi" class="px-2.5 py-1 text-[11px] font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
+              Standar Sekolah
+            </button>
+            <button type="button" id="btn-preset-demo-hadir" class="px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition">
+              🎯 Demo Hadir (Sekarang)
+            </button>
+            <button type="button" id="btn-preset-demo-telat" class="px-2.5 py-1 text-[11px] font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition">
+              ⏰ Demo Telat (Sekarang)
+            </button>
+            <button type="button" id="btn-preset-demo-pulang" class="px-2.5 py-1 text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition">
+              🌇 Demo Pulang (Sekarang)
+            </button>
+          </div>
+        </div>
       </section>
 
       <!-- Card 2: Aturan Presensi Jurusan -->
@@ -446,6 +467,51 @@ import Layout from "../layouts/Layout.astro";
         btnReset.disabled = false;
       }
     }
+
+    function toHHMM(totalM: number) {
+      const normalized = ((totalM % 1440) + 1440) % 1440;
+      const h = Math.floor(normalized / 60).toString().padStart(2, "0");
+      const m = (normalized % 60).toString().padStart(2, "0");
+      return `${h}:${m}`;
+    }
+
+    function applyPreset(type: "resmi" | "hadir" | "telat" | "pulang") {
+      if (type === "resmi") {
+        if (jamBukaInput) jamBukaInput.value = "06:15";
+        if (jamMasukInput) jamMasukInput.value = "07:30";
+        if (jamToleransiInput) jamToleransiInput.value = "07:40";
+        if (jamPulangInput) jamPulangInput.value = "13:30";
+        if (jamTutupPulangInput) jamTutupPulangInput.value = "15:00";
+      } else {
+        const now = new Date();
+        const curM = now.getHours() * 60 + now.getMinutes();
+        if (type === "hadir") {
+          if (jamBukaInput) jamBukaInput.value = toHHMM(curM - 30);
+          if (jamMasukInput) jamMasukInput.value = toHHMM(curM + 20);
+          if (jamToleransiInput) jamToleransiInput.value = toHHMM(curM + 45);
+          if (jamPulangInput) jamPulangInput.value = toHHMM(curM + 180);
+          if (jamTutupPulangInput) jamTutupPulangInput.value = "23:59";
+        } else if (type === "telat") {
+          if (jamBukaInput) jamBukaInput.value = toHHMM(curM - 45);
+          if (jamMasukInput) jamMasukInput.value = toHHMM(curM - 10);
+          if (jamToleransiInput) jamToleransiInput.value = toHHMM(curM + 30);
+          if (jamPulangInput) jamPulangInput.value = toHHMM(curM + 180);
+          if (jamTutupPulangInput) jamTutupPulangInput.value = "23:59";
+        } else if (type === "pulang") {
+          if (jamBukaInput) jamBukaInput.value = "06:00";
+          if (jamMasukInput) jamMasukInput.value = toHHMM(curM - 60);
+          if (jamToleransiInput) jamToleransiInput.value = toHHMM(curM - 30);
+          if (jamPulangInput) jamPulangInput.value = toHHMM(curM - 15);
+          if (jamTutupPulangInput) jamTutupPulangInput.value = "23:59";
+        }
+      }
+      saveSettings();
+    }
+
+    document.getElementById("btn-preset-resmi")?.addEventListener("click", () => applyPreset("resmi"));
+    document.getElementById("btn-preset-demo-hadir")?.addEventListener("click", () => applyPreset("hadir"));
+    document.getElementById("btn-preset-demo-telat")?.addEventListener("click", () => applyPreset("telat"));
+    document.getElementById("btn-preset-demo-pulang")?.addEventListener("click", () => applyPreset("pulang"));
 
     btnSave?.addEventListener("click", saveSettings);
     btnReset?.addEventListener("click", resetSettings);

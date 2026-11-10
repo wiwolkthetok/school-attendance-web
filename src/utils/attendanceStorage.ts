@@ -814,7 +814,7 @@ export async function syncDailyAttendanceAndPermissions(forcedDate?: string): Pr
     const bolosRes = await checkAndApplyBolos(todayWib);
     saveSchedulerState({
       lastBolosDate: todayWib,
-      lastStatusMessage: `Sukses Evaluasi Bolos: ${bolosRes.bolosCount} siswa bolos dipotong 10 poin.`,
+      lastStatusMessage: `Sukses Evaluasi Bolos: ${bolosRes.bolosCount} siswa bolos dipotong 20 poin.`,
     });
   }
 
