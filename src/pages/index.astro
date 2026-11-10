@@ -1257,6 +1257,7 @@ import Layout from "../layouts/Layout.astro";
         
         try {
           localStorage.setItem("dashboard_metrics_cache", JSON.stringify({ students, logs, permissions }));
+          localStorage.setItem("civitas_data_cache", JSON.stringify({ students, logs, permissions }));
         } catch (e) {}
 
         renderDashboardData(students, logs, permissions);

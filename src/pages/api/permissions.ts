@@ -8,7 +8,10 @@ import { turso } from '../../utils/tursoClient';
 export const GET: APIRoute = async () => {
   const permissions = await getPermissions();
   return new Response(JSON.stringify(permissions), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, s-maxage=5, stale-while-revalidate=30',
+    },
   });
 };
 

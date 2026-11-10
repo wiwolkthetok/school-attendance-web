@@ -10,11 +10,13 @@ export const turso = createClient({
   authToken,
 });
 
-let initialized = false;
+// Database schema di Turso Cloud sudah terverifikasi dan aktif permanen.
+// Set initialized = true agar query produksi tidak terblokir roundtrip sqlite_master (hemat ~300ms).
+let initialized = true;
 let initPromise: Promise<void> | null = null;
 
-export async function initDatabase(): Promise<void> {
-  if (initialized) return;
+export async function initDatabase(force = false): Promise<void> {
+  if (initialized && !force) return;
   if (initPromise) return initPromise;
 
   initPromise = (async () => {

@@ -3821,11 +3821,40 @@ import Layout from "../layouts/Layout.astro";
       }
     }
 
+    // 0ms Cache First: Render profil dari cache lokal saat halaman dimuat
+    function loadCachedProfile() {
+      try {
+        const cached = localStorage.getItem('civitas_data_cache');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed.students) && parsed.students.length > 0) {
+            allCivitas = parsed.students;
+            allLogs = parsed.logs || [];
+            allPermissions = parsed.permissions || [];
+            const urlParams = new URLSearchParams(window.location.search);
+            let targetId = urlParams.get('id');
+            authRole = localStorage.getItem('auth_role') || '';
+            const authCivitasRaw = localStorage.getItem('auth_civitas');
+            authCivitas = null;
+            try { if (authCivitasRaw) authCivitas = JSON.parse(authCivitasRaw); } catch {}
+            if ((authRole === 'siswa' || authRole === 'guru') && authCivitas?.id) {
+              targetId = authCivitas.id;
+            }
+            if (targetId) currentCivitas = allCivitas.find((c: any) => c.id === targetId || c.rfidUid === targetId);
+            if (!currentCivitas && authCivitas) currentCivitas = authCivitas;
+            if (!currentCivitas && allCivitas.length > 0) currentCivitas = allCivitas[0];
+            if (currentCivitas) renderProfile();
+          }
+        }
+      } catch (e) {}
+    }
+
     // Dengarkan event push realtime
     window.addEventListener('attendance-updated', loadData);
     setupSubnav();
     setupIzinSectionListeners();
     setupGuruFilterTabs();
+    loadCachedProfile();
     loadData();
   </script>
 </Layout>

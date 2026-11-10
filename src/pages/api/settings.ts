@@ -5,7 +5,10 @@ import { getSettings, saveSettings, resetSettings } from '../../utils/settingsSt
 export const GET: APIRoute = async () => {
   const settings = await getSettings();
   return new Response(JSON.stringify(settings), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=120',
+    },
   });
 };
 

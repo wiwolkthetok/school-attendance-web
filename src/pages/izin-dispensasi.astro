@@ -411,7 +411,25 @@ import Layout from '../layouts/Layout.astro';
 
     btnCleanupTotal?.addEventListener('click', (e) => (window as any).cleanupPermissions(e));
 
-    // Load Data
+    // 0ms Cache First: Render data instan dari cache lokal
+    function loadCachedData() {
+      try {
+        const raw = localStorage.getItem('permissions_cache');
+        if (raw) {
+          const { permissions, students } = JSON.parse(raw);
+          if (Array.isArray(permissions) && permissions.length > 0) {
+            permissionsData = permissions;
+            studentsData = students || [];
+            populateStudentSelect();
+            updateStats();
+            renderList();
+          }
+        }
+      } catch (e) {}
+    }
+    loadCachedData();
+
+    // Load Data Terkini dari API di Background
     async function loadData() {
       try {
         const [pRes, sRes] = await Promise.all([
@@ -420,6 +438,10 @@ import Layout from '../layouts/Layout.astro';
         ]);
         permissionsData = await pRes.json();
         studentsData = await sRes.json();
+
+        try {
+          localStorage.setItem('permissions_cache', JSON.stringify({ permissions: permissionsData, students: studentsData }));
+        } catch (e) {}
 
         populateStudentSelect();
         updateStats();

@@ -23,7 +23,10 @@ export const GET: APIRoute = async () => {
     return l;
   });
   return new Response(JSON.stringify(safeLogs), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, s-maxage=2, stale-while-revalidate=10',
+    },
   });
 };
 

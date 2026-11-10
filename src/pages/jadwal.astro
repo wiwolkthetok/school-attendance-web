@@ -852,10 +852,31 @@ import Layout from '../layouts/Layout.astro';
       return days;
     }
 
+    // 0ms Cache First: Render agenda & jadwal instan dari cache lokal
+    function loadCachedSchedules() {
+      try {
+        const raw = localStorage.getItem('schedules_cache');
+        if (raw) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list) && list.length > 0) {
+            allSchedules = list;
+            renderWeekView();
+            renderMiniCalendar();
+            renderUpcoming();
+            updateCountBadge();
+          }
+        }
+      } catch (e) {}
+    }
+    loadCachedSchedules();
+
     async function loadSchedules() {
       try {
         const res = await fetch('/api/schedules');
         allSchedules = await res.json();
+        try {
+          localStorage.setItem('schedules_cache', JSON.stringify(allSchedules));
+        } catch (e) {}
         renderWeekView();
         renderMiniCalendar();
         renderUpcoming();

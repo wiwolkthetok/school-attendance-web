@@ -13,7 +13,10 @@ export const GET: APIRoute = async () => {
     return s;
   });
   return new Response(JSON.stringify(safeStudents), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=60',
+    },
   });
 };
 

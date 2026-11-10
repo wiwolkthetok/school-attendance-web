@@ -14,23 +14,11 @@ if (authSession === "siswa") {
 }
 
 import Layout from "../layouts/Layout.astro";
-import { getStudents, getLogs } from "../utils/attendanceStorage";
-import { getPermissions } from "../utils/permissionStorage";
 
-const [students, logs, permissions] = await Promise.all([
-  getStudents(),
-  getLogs(),
-  getPermissions()
-]);
-
-// Lindungi UID Admin agar tidak terekspos di DOM
-const safeStudents = students.map((s) => s.role === "admin" ? { ...s, rfidUid: "" } : s);
-const safeLogs = logs.map((l) => l.role === "admin" ? { ...l, rfidUid: "" } : l);
-
-const isAlumni = (s: any) => s.category === "alumni" || (s.className || "").toLowerCase().includes("alumni") || (s.className || "").toLowerCase().includes("lulus");
-const aklCount = safeStudents.filter((s) => s.category === "akl" && !isAlumni(s)).length;
-const rplCount = safeStudents.filter((s) => s.category === "rpl" && !isAlumni(s)).length;
-const guruCount = safeStudents.filter((s) => s.role === "guru" || s.category === "guru").length;
+// Render instan SSR (0ms blokir Turso - data dirender instan via client-side cache)
+const aklCount = 0;
+const rplCount = 0;
+const guruCount = 0;
 ---
 
 <Layout title="Data Siswa" activeNav="siswa-guru">
@@ -239,7 +227,7 @@ const guruCount = safeStudents.filter((s) => s.role === "guru" || s.category ===
             id="header-total-count"
             class="text-[11px] font-bold text-blue-800 bg-blue-100/90 border border-blue-200 px-2.5 py-0.5 rounded-full"
           >
-            {students.length} Terdaftar
+            0 Terdaftar
           </span>
         </div>
       </div>
@@ -2766,37 +2754,9 @@ const guruCount = safeStudents.filter((s) => s.role === "guru" || s.category ===
     // SSE Realtime Listener
     window.addEventListener("attendance-updated", loadData);
 
-    // Initial Load: Langsung isi dari SSR cache payload (0ms render) jika ada
+    // Initial Load: Eksekusi instan dari cache lokal (0ms), lalu sinkronisasi background
     initPromoteAuth();
-    const initialCivitasEl = document.getElementById("initial-civitas-data");
-    let initialRendered = false;
-    if (initialCivitasEl) {
-      try {
-        const payload = JSON.parse(initialCivitasEl.textContent || "{}");
-        if (Array.isArray(payload.students) && payload.students.length > 0) {
-          allStudents = payload.students;
-          currentLogs = payload.logs || [];
-          currentPermissions = payload.permissions || [];
-          updateCategoryCounts();
-          renderTable();
-          initialRendered = true;
-        }
-      } catch {}
-    }
-
-    if (!initialRendered) {
-      loadData();
-    }
+    loadCachedData();
+    loadData();
   </script>
-
-  <!-- Payload SSR untuk Render Instan di HP/Client (0ms waterfall delay) -->
-  <script
-    id="initial-civitas-data"
-    type="application/json"
-    set:html={JSON.stringify({
-      students: safeStudents,
-      logs: safeLogs,
-      permissions
-    })}
-  ></script>
 </Layout>

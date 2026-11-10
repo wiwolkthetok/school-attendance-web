@@ -23,7 +23,10 @@ export const GET: APIRoute = async ({ request }) => {
     }
 
     return new Response(JSON.stringify(list), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=60',
+      },
     });
   } catch (err: any) {
     return new Response(JSON.stringify({ status: 'error', message: err?.message || 'Gagal memuat jadwal' }), {

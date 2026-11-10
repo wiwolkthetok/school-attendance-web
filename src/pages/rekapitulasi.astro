@@ -1557,6 +1557,22 @@ import Layout from '../layouts/Layout.astro';
       return logs;
     }
 
+    // 0ms Cache First: Render rekapitulasi instan dari cache lokal
+    function loadCachedRekap() {
+      try {
+        const raw = localStorage.getItem('rekap_cache');
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (Array.isArray(data.students) && data.students.length > 0) {
+            cachedStudents = data.students;
+            cachedPermits = data.permits || [];
+            cachedDeductions = data.deductions || [];
+            renderRekapFromData(data.todayLogs || []);
+          }
+        }
+      } catch (e) {}
+    }
+
     async function updateRekapStats() {
       try {
         const [sRes, pRes, ptRes, lRes] = await Promise.all([
@@ -1570,6 +1586,21 @@ import Layout from '../layouts/Layout.astro';
         cachedDeductions = await ptRes.json().catch(() => []);
         const todayLogs = await lRes.json().catch(() => []);
 
+        try {
+          localStorage.setItem('rekap_cache', JSON.stringify({
+            students: cachedStudents,
+            permits: cachedPermits,
+            deductions: cachedDeductions,
+            todayLogs
+          }));
+        } catch (e) {}
+
+        await renderRekapFromData(todayLogs);
+      } catch (e) { console.error(e); }
+    }
+
+    async function renderRekapFromData(todayLogs: any[]) {
+      try {
         // Bangun kamus student berdasarkan RFID dan Nama untuk lookup cepat & filter NISN
         studentByRfid = {};
         studentByName = {};
@@ -3113,9 +3144,10 @@ _Laporan otomatis terverifikasi sistem SI-HADIR IoT & Turso Cloud._`;
       }
     });
 
-    // Inisialisasi Tab Switcher & Load Data
+    // Inisialisasi Tab Switcher & Load Data (0ms cache first)
     setupRekapSubnav();
     initResetPointsAuth();
+    loadCachedRekap();
     window.addEventListener('attendance-updated', updateRekapStats);
     window.addEventListener('day-mode-changed', updateRekapStats);
     updateRekapStats();
