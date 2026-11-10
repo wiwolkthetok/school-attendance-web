@@ -1,0 +1,78 @@
+========================================================================
+PANDUAN PRAKTIS SETTING JADWAL DEMO PRESENSI RFID
+SMK MA'ARIF 1 PADANG RATU
+========================================================================
+
+Dokumen ini berisi rumus cepat mengatur jadwal di menu Pengaturan Web
+(/pengaturan) agar Anda bisa mendemokan berbagai status kehadiran:
+(Hadir, Terlambat, Pulang, dan Bolos) pada jam berapa pun.
+
+------------------------------------------------------------------------
+RUMUS PATOKAN (Misalkan jam tangan / jam HP saat demo = "T")
+------------------------------------------------------------------------
+
+1. SKENARIO HADIR TEPAT WAKTU (HIJAU)
+   Kunci: Jam demo (T) harus berada SEBELUM Bel Masuk.
+   - Buka Gerbang           : T dikurangi 30 menit (T - 30 mnt)
+   - Bel Masuk              : T ditambah 15 menit  (T + 15 mnt)
+   - Batas Toleransi Pagi   : T ditambah 45 menit  (T + 45 mnt)
+   - Buka Sesi Pulang       : T ditambah 2 jam     (T + 2 jam)
+   - Tutup Sesi Pulang      : 23:59
+
+   Contoh (Demo jam 09:00 Pagi):
+   * Buka Gerbang     : 08:30
+   * Bel Masuk        : 09:15  --> Belum telat!
+   * Batas Toleransi  : 09:45
+   * Buka Pulang      : 11:00  --> Wajib di atas jam 09:00
+   * Tutup Pulang     : 23:59
+   [HASIL SCAN JAM 09:00]: HADIR TEPAT WAKTU (Hijau)
+
+
+2. SKENARIO SISWA TERLAMBAT & POTONG POIN (KUNING)
+   Kunci: Jam demo (T) harus berada SETELAH Bel Masuk, tapi SEBELUM Toleransi.
+   - Buka Gerbang           : T dikurangi 30 menit (T - 30 mnt)
+   - Bel Masuk              : T dikurangi 10 menit (T - 10 mnt)
+   - Batas Toleransi Pagi   : T ditambah 30 menit  (T + 30 mnt)
+   - Buka Sesi Pulang       : T ditambah 2 jam     (T + 2 jam)
+   - Tutup Sesi Pulang      : 23:59
+
+   Contoh (Demo jam 09:00 Pagi):
+   * Buka Gerbang     : 08:30
+   * Bel Masuk        : 08:50  --> Sudah lewat 10 menit!
+   * Batas Toleransi  : 09:30
+   * Buka Pulang      : 11:00
+   * Tutup Pulang     : 23:59
+   [HASIL SCAN JAM 09:00]: TERLAMBAT 10 MENIT (Kuning, Poin -5)
+
+
+3. SKENARIO KEPULANGAN SISWA (BIRU)
+   Kunci: Jam demo (T) harus berada SETELAH Buka Sesi Pulang.
+   - Buka Sesi Pulang       : T dikurangi 15 menit (T - 15 mnt)
+   - Tutup Sesi Pulang      : 23:59
+
+   Contoh (Demo jam 09:00 Pagi):
+   * Buka Pulang      : 08:45  --> Gerbang pulang sudah buka!
+   * Tutup Pulang     : 23:59
+   [HASIL SCAN JAM 09:00]: PULANG (Biru)
+
+
+4. SKENARIO SISWA BOLOS & POTONG 20 POIN (MERAH)
+   Kunci: Siswa sudah hadir/telat pagi, tapi TIDAK absen pulang
+          dan waktu sudah melewati Tutup Pulang.
+   - Syarat: Siswa sudah ada log masuk pagi.
+   - Cara:
+     1. Ubah Tutup Sesi Pulang menjadi SEBELUM jam demo (misal: 08:50).
+     2. Sistem otomatis mengunci siswa yang tidak tap pulang
+        menjadi BOLOS (-20 Poin).
+
+
+------------------------------------------------------------------------
+STANDAR JAM OPERASIONAL RESMI SEKOLAH (DEFAULT)
+------------------------------------------------------------------------
+Jika demo selesai, klik tombol "Reset ke Default" di web:
+- Buka Gerbang          : 06:15 WIB
+- Bel Masuk Tepat Waktu : 07:30 WIB
+- Batas Toleransi Pagi  : 07:40 WIB
+- Buka Sesi Pulang      : 13:30 WIB
+- Tutup Sesi Pulang     : 15:00 WIB
+========================================================================

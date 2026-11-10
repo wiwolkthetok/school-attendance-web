@@ -155,7 +155,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Tentukan Sesi Presensi: Pagi (Masuk) atau Siang (Pulang)
     const validCustomType = body.type === 'masuk' || body.type === 'pulang' ? body.type : undefined;
-    const session: 'masuk' | 'pulang' = validCustomType || (totalMinutes < Math.min(pulangMinutes, 12 * 60) ? 'masuk' : 'pulang');
+    const session: 'masuk' | 'pulang' = validCustomType || (totalMinutes < pulangMinutes ? 'masuk' : 'pulang');
 
     const isStaff = student.role === 'guru' || student.role === 'admin';
 
