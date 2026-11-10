@@ -19,10 +19,14 @@ const PRECACHE_ASSETS = [
 // 1. Install Event: Pre-cache asset penting & aktifkan seketika
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_ASSETS).catch((err) => {
-        console.warn('PWA Precache partial notice:', err);
-      });
+    caches.open(CACHE_NAME).then(async (cache) => {
+      for (const asset of PRECACHE_ASSETS) {
+        try {
+          await cache.add(asset);
+        } catch (err) {
+          console.warn('PWA Precache partial notice for:', asset, err);
+        }
+      }
     }).then(() => self.skipWaiting())
   );
 });
