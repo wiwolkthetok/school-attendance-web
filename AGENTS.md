@@ -33,5 +33,3 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://astro.build/en/guides/internationalization/)
-
-langsung push ke github begitu perubahan selesai

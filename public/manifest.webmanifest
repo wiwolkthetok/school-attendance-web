@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "SMK Ma'arif Padang Ratu - Smart Absen",
+  "name": "Smart Absen",
   "short_name": "Smart Absen",
-  "description": "Sistem Presensi Digital & Kedisiplinan Siswa IoT SMK Ma'arif 1 Padang Ratu",
+  "description": "Aplikasi absensi online",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
