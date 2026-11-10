@@ -1230,6 +1230,20 @@ import Layout from "../layouts/Layout.astro";
       }
     }
 
+    // 1. Instant Cache Load: Data langsung muncul detik ke-0 tanpa jeda loading
+    function loadCachedMetrics() {
+      try {
+        const cached = localStorage.getItem("dashboard_metrics_cache");
+        if (cached) {
+          const { students, logs, permissions } = JSON.parse(cached);
+          if (Array.isArray(students) && Array.isArray(logs)) {
+            renderDashboardData(students, logs, permissions || []);
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 2. Background Sync: Ambil data terbaru & simpan ke cache lokal
     async function updateDashboardMetrics() {
       try {
         const [studentsRes, logsRes, permsRes] = await Promise.all([
@@ -1240,16 +1254,24 @@ import Layout from "../layouts/Layout.astro";
         const students = await studentsRes.json();
         const logs = await logsRes.json();
         const permissions = await permsRes.json();
+        
+        try {
+          localStorage.setItem("dashboard_metrics_cache", JSON.stringify({ students, logs, permissions }));
+        } catch (e) {}
+
         renderDashboardData(students, logs, permissions);
       } catch (err) {
         console.error("Error updating dashboard metrics:", err);
       }
     }
 
+    // Eksekusi data cache instan segera saat script berjalan
+    loadCachedMetrics();
+
     // Dengarkan event push SSE realtime
     window.addEventListener("attendance-updated", updateDashboardMetrics);
 
-    // Initial Load via client API
+    // Sinkronisasi data terkini di background
     updateDashboardMetrics();
   </script>
 </Layout>

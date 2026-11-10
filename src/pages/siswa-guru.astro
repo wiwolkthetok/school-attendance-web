@@ -1186,6 +1186,22 @@ const guruCount = safeStudents.filter((s) => s.role === "guru" || s.category ===
       "search-civitas-input",
     ) as HTMLInputElement | null;
 
+    function loadCachedData() {
+      try {
+        const cached = localStorage.getItem("civitas_data_cache");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed.students)) {
+            allStudents = parsed.students;
+            currentLogs = parsed.logs || [];
+            currentPermissions = parsed.permissions || [];
+            updateCategoryCounts();
+            renderTable();
+          }
+        }
+      } catch (e) {}
+    }
+
     async function loadData() {
       try {
         const [sRes, lRes, pRes] = await Promise.all([
@@ -1196,12 +1212,19 @@ const guruCount = safeStudents.filter((s) => s.role === "guru" || s.category ===
         allStudents = await sRes.json();
         currentLogs = await lRes.json();
         currentPermissions = await pRes.json();
+
+        try {
+          localStorage.setItem("civitas_data_cache", JSON.stringify({ students: allStudents, logs: currentLogs, permissions: currentPermissions }));
+        } catch (e) {}
+
         updateCategoryCounts();
         renderTable();
       } catch (e) {
         console.error("Gagal memuat civitas:", e);
       }
     }
+
+    loadCachedData();
 
     function updateCategoryCounts() {
       const isAlumni = (s: any) => s.category === "alumni" || (s.className || "").toLowerCase().includes("alumni") || (s.className || "").toLowerCase().includes("lulus");
