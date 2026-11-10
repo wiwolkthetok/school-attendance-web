@@ -53,8 +53,8 @@ const navItems = [
   },
   {
     id: "login",
-    label: "Portal Login Siswa",
-    href: "/login",
+    label: "Portal Presensi",
+    href: "/",
     icon: "login",
     adminOnly: false,
   },
@@ -284,7 +284,7 @@ komponen penting buat nampilin icon
     sessionStorage.removeItem('auth_active');
     sessionStorage.removeItem('bypass_login');
     document.cookie = 'auth_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
-    window.location.replace('/login');
+    window.location.replace('/');
   };
 
   function updateSidebarAuth() {

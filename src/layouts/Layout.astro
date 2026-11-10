@@ -54,10 +54,10 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
 
         var isAuth = Boolean((civ && role) || active || bypass || hasCookie);
 
-        // 1. Jika belum login: Sembunyikan halaman seketika & redirect ke /login
-        if (!isAuth) {
+        // 1. Jika belum login: Sembunyikan halaman seketika & redirect ke /
+        if (!isAuth && path !== '/') {
           document.documentElement.style.display = 'none';
-          window.location.replace('/login');
+          window.location.replace('/');
           return;
         }
 
@@ -79,7 +79,7 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
         }
       } catch (err) {
         document.documentElement.style.display = 'none';
-        window.location.replace('/login');
+        window.location.replace('/');
       }
     })();
   </script>
@@ -311,11 +311,12 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
       const isKepsek = civitasTag === 'kepsek' || (civitas?.className && civitas.className.toLowerCase().includes('kepala sekolah'));
       const isWaka = civitasTag === 'waka' || (civitas?.className && civitas.className.toLowerCase().includes('waka'));
       const isAdmin = authRole === 'admin';
-      const isAllowedAdmin = isAdmin || isKepsek || isWaka || sessionStorage.getItem('bypass_login') === 'true';
+      const hasCookie = typeof document !== 'undefined' && document.cookie.split(';').some(c => c.trim().startsWith('auth_session='));
+      const isAllowedAdmin = isAdmin || isKepsek || isWaka || sessionStorage.getItem('bypass_login') === 'true' || hasCookie;
 
-      // 1. Jika belum login sama sekali dan bukan mode dev bypass, arahkan ke login
-      if (!isLoginPage && !authRaw && !isAllowedAdmin) {
-        window.location.href = '/login';
+      // 1. Jika belum login sama sekali dan bukan mode dev bypass, arahkan ke /
+      if (path !== '/' && !isLoginPage && !authRaw && !isAllowedAdmin) {
+        window.location.href = '/';
       }
 
       // 2. PROTEKSI HAK AKSES DASHBOARD: HANYA Admin, Kepsek, dan Waka yang boleh mengakses Dashboard!

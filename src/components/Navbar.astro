@@ -124,7 +124,7 @@ komponen penting buat nampilin icon
     >
       <a
         id="navbar-login-btn"
-        href="/login"
+        href="/"
         class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-all duration-200 active:scale-95"
       >
         <span class="material-symbols-outlined text-sm">login</span>
@@ -208,7 +208,7 @@ komponen penting buat nampilin icon
           sessionStorage.removeItem("bypass_login");
           document.cookie =
             "auth_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
-          window.location.replace("/login");
+          window.location.replace("/");
         };
       }
 
