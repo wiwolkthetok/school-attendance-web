@@ -4,11 +4,12 @@
  * Menyediakan kapabilitas offline 100% compliant PWA dengan strategi Network-First.
  */
 
-const CACHE_NAME = 'smart-absen-v3';
+const CACHE_NAME = 'smart-absen-v4';
 const PRECACHE_ASSETS = [
   '/',
   '/offline.html',
   '/manifest.webmanifest',
+  '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/icon-maskable.png',

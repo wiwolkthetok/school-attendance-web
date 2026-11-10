@@ -12,17 +12,23 @@
   window.isPwaStandalone = isStandalone;
 
   // 1. Registrasi Service Worker & Pembaruan Otomatis
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
+  function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register('/sw.js')
+        .register('/sw.js', { scope: '/' })
         .then(function (reg) {
           reg.update().catch(function () {});
         })
         .catch(function (err) {
           console.warn('PWA Service Worker notice:', err);
         });
-    });
+    }
+  }
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    registerServiceWorker();
+  } else {
+    window.addEventListener('load', registerServiceWorker);
   }
 
   // 2. Fungsi untuk menampilkan tombol instalasi jika belum standalone

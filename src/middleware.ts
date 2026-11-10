@@ -20,6 +20,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     pathname === '/sw.js' ||
     pathname === '/offline.html' ||
     pathname === '/manifest.webmanifest' ||
+    pathname === '/manifest.json' ||
     pathname === '/pwa-init.js' ||
     pathname === '/login'
   ) {
