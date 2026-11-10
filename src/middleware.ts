@@ -17,6 +17,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     pathname.startsWith('/assets') ||
     pathname.startsWith('/favicon') ||
     pathname.startsWith('/icons') ||
+    pathname.startsWith('/.well-known') ||
     pathname === '/sw.js' ||
     pathname === '/offline.html' ||
     pathname === '/manifest.webmanifest' ||
