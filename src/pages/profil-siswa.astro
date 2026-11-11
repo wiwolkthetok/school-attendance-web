@@ -2279,11 +2279,11 @@ import Layout from "../layouts/Layout.astro";
 
             let badgeHtml = '';
             if (isBolos) {
-              badgeHtml = '<span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white shadow-xs">🚫 Bolos (-10 Poin)</span>';
+              badgeHtml = '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200 shrink-0">BOLOS</span>';
             } else if (isLate) {
-              badgeHtml = '<span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-200">⚠️ Terlambat</span>';
+              badgeHtml = '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border-amber-200 shrink-0">TERLAMBAT</span>';
             } else {
-              badgeHtml = '<span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">✓ Hadir Tepat Waktu</span>';
+              badgeHtml = '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border-emerald-200 shrink-0">HADIR</span>';
             }
 
             return `

@@ -226,7 +226,7 @@ import Layout from "../layouts/Layout.astro";
             </div>
             <span
               id="d1-badge"
-              class="text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full"
+              class="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded"
               >0 Scan</span
             >
           </div>
@@ -342,7 +342,7 @@ import Layout from "../layouts/Layout.astro";
               </p>
             </div>
             <span
-              class="text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full"
+              class="text-[10px] font-mono font-bold tracking-wider uppercase text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded"
               >2 Jurusan</span
             >
           </div>
@@ -442,7 +442,7 @@ import Layout from "../layouts/Layout.astro";
             </div>
             <span
               id="d3-badge"
-              class="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full"
+              class="text-[10px] font-mono font-bold tracking-wider uppercase text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded"
               >0 Berkas</span
             >
           </div>
@@ -568,7 +568,7 @@ import Layout from "../layouts/Layout.astro";
             </div>
             <span
               id="d4-badge"
-              class="text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full"
+              class="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded"
               >Grade -</span
             >
           </div>
@@ -869,12 +869,12 @@ import Layout from "../layouts/Layout.astro";
                 const isBolos = log.status === "Bolos";
                 const isAlpa = log.status === "Alpa";
                 const badgeClass = isBolos
-                  ? "bg-rose-100 text-rose-800 border-rose-300"
+                  ? "bg-rose-50 text-rose-700 border-rose-200"
                   : isAlpa
-                    ? "bg-purple-100 text-purple-800 border-purple-300"
+                    ? "bg-purple-50 text-purple-700 border-purple-200"
                     : isLate
-                      ? "bg-amber-100 text-amber-900 border-amber-300"
-                      : "bg-emerald-100 text-emerald-900 border-emerald-300";
+                      ? "bg-amber-50 text-amber-700 border-amber-200"
+                      : "bg-emerald-50 text-emerald-700 border-emerald-200";
 
                 const avatarBg = isBolos
                   ? "bg-rose-600"
@@ -905,10 +905,10 @@ import Layout from "../layouts/Layout.astro";
                     </div>
                   </div>
                   <div class="text-right flex items-center gap-1.5 sm:gap-2 shrink-0">
-                    <span class="inline-flex items-center gap-1 text-[10px] font-bold ${badgeClass} border px-2 py-0.5 rounded-full">
+                    <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase ${badgeClass} shrink-0">
                       ${log.status}
                     </span>
-                    <span class="text-xs font-mono font-bold text-slate-600">${log.time ? log.time.slice(0, 5) : "-"} WIB</span>
+                    <span class="text-xs font-mono font-medium text-slate-600">${log.time ? log.time.slice(0, 5) : "-"} WIB</span>
                   </div>
                 </div>
               `;
@@ -967,19 +967,19 @@ import Layout from "../layouts/Layout.astro";
           const numKehadiran = parseFloat(kehadiranPct);
           if (totalHadir === 0) {
             d1Badge.className =
-              "text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-slate-600 bg-slate-100 border border-slate-300 px-2 py-0.5 rounded";
             d1Badge.textContent = "0 Scan";
           } else if (numKehadiran >= 90) {
             d1Badge.className =
-              "text-[11px] font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded";
             d1Badge.textContent = "Sangat Baik";
           } else if (numKehadiran >= 75) {
             d1Badge.className =
-              "text-[11px] font-bold text-blue-700 bg-blue-100 border border-blue-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded";
             d1Badge.textContent = "Baik";
           } else {
             d1Badge.className =
-              "text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded";
             d1Badge.textContent = "Rendah";
           }
         }
@@ -1172,23 +1172,23 @@ import Layout from "../layouts/Layout.astro";
           if (totalScan === 0) {
             d4Badge.textContent = "Menunggu";
             d4Badge.className =
-              "text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-slate-600 bg-slate-100 border border-slate-300 px-2 py-0.5 rounded";
           } else if (numTepat >= 95) {
             d4Badge.textContent = "Grade A+";
             d4Badge.className =
-              "text-[11px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded";
           } else if (numTepat >= 85) {
             d4Badge.textContent = "Grade A";
             d4Badge.className =
-              "text-[11px] font-bold text-blue-800 bg-blue-100 border border-blue-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded";
           } else if (numTepat >= 75) {
             d4Badge.textContent = "Grade B";
             d4Badge.className =
-              "text-[11px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded";
           } else {
             d4Badge.textContent = "Grade C";
             d4Badge.className =
-              "text-[11px] font-bold text-rose-800 bg-rose-100 border border-rose-300 px-2 py-0.5 rounded-full";
+              "text-[10px] font-mono font-bold tracking-wider uppercase text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded";
           }
         }
 

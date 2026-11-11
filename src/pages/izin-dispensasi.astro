@@ -509,12 +509,12 @@ import Layout from '../layouts/Layout.astro';
 
         // Badge status akurat
         const statusBadge = isMenunggu
-          ? '<span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900 border border-amber-300">Menunggu Persetujuan</span>'
+          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border-amber-200">MENUNGGU</span>'
           : isDisetujui
-          ? '<span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-300">Disetujui Sah</span>'
+          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border-emerald-200">DISETUJUI</span>'
           : isSelesai
-          ? '<span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-300">Selesai (Arsip)</span>'
-          : '<span class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-900 border border-rose-300">Ditolak</span>';
+          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300">SELESAI</span>'
+          : '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200">DITOLAK</span>';
 
         const borderLeftColor = isMenunggu ? 'border-l-amber-500' : isDisetujui ? 'border-l-emerald-500' : isSelesai ? 'border-l-slate-400' : 'border-l-rose-500';
 
@@ -722,13 +722,13 @@ import Layout from '../layouts/Layout.astro';
       const statusBadgeContainer = document.getElementById('detail-status-badge');
       if (statusBadgeContainer) {
         if (item.status === 'Menunggu') {
-          statusBadgeContainer.innerHTML = '<span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">Menunggu</span>';
+          statusBadgeContainer.innerHTML = '<span class="px-2.5 py-1 rounded border text-[11px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border-amber-200">MENUNGGU</span>';
         } else if (item.status === 'Disetujui') {
-          statusBadgeContainer.innerHTML = '<span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300">Disetujui Sah</span>';
+          statusBadgeContainer.innerHTML = '<span class="px-2.5 py-1 rounded border text-[11px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border-emerald-200">DISETUJUI</span>';
         } else if (item.status === 'Ditolak') {
-          statusBadgeContainer.innerHTML = '<span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-900 border border-rose-300">Ditolak</span>';
+          statusBadgeContainer.innerHTML = '<span class="px-2.5 py-1 rounded border text-[11px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200">DITOLAK</span>';
         } else {
-          statusBadgeContainer.innerHTML = '<span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-300">Selesai (Arsip)</span>';
+          statusBadgeContainer.innerHTML = '<span class="px-2.5 py-1 rounded border text-[11px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300">SELESAI</span>';
         }
       }
 

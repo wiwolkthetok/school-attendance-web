@@ -1758,10 +1758,10 @@ import Layout from '../layouts/Layout.astro';
           } else {
             recentTapsEl.innerHTML = recentLogs.map((t: any) => {
               const isMasuk = t.type === 'masuk';
-              const badgeColor = t.status === 'Bolos' ? 'bg-rose-100 text-rose-800'
-                : t.status === 'Terlambat' ? 'bg-amber-100 text-amber-800'
-                : t.status === 'Pulang' ? 'bg-blue-100 text-blue-800'
-                : 'bg-emerald-100 text-emerald-800';
+              const badgeColor = t.status === 'Bolos' ? 'bg-rose-50 text-rose-700 border-rose-200'
+                : t.status === 'Terlambat' ? 'bg-amber-50 text-amber-700 border-amber-200'
+                : t.status === 'Pulang' ? 'bg-sky-50 text-sky-700 border-sky-200'
+                : 'bg-emerald-50 text-emerald-700 border-emerald-200';
               return `
                 <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50/80 hover:bg-slate-100/80 border border-slate-100 transition">
                   <div class="flex items-center gap-2.5 min-w-0">
@@ -1770,10 +1770,10 @@ import Layout from '../layouts/Layout.astro';
                     </div>
                     <div class="min-w-0">
                       <p class="font-bold text-slate-800 text-xs truncate leading-tight">${t.name}</p>
-                      <p class="text-[10px] text-slate-400 truncate">${t.className} • ${t.time} WIB</p>
+                      <p class="text-[10px] text-slate-400 truncate">${t.className} • ${t.time ? t.time.slice(0, 5) : "-"} WIB</p>
                     </div>
                   </div>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeColor} shrink-0">
+                  <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase ${badgeColor} shrink-0">
                     ${t.status}
                   </span>
                 </div>
@@ -1866,11 +1866,11 @@ import Layout from '../layouts/Layout.astro';
           const nisn = st?.identifier || (l.role === 'guru' ? 'NIP Guru' : 'NISN. -');
           const pts = getStudentPoints(l.rfidUid, st?.id, l.role);
 
-          const bc = l.status === 'Bolos' ? 'bg-rose-100 text-rose-900 border-rose-300'
-            : l.status === 'Terlambat' ? 'bg-amber-100 text-amber-900 border-amber-300'
-            : l.status === 'Pulang' ? 'bg-blue-100 text-blue-800 border-blue-300'
-            : 'bg-emerald-100 text-emerald-900 border-emerald-300';
-          const badgeText = l.status === 'Bolos' ? 'Bolos (-10P)' : l.status;
+          const bc = l.status === 'Bolos' ? 'bg-rose-50 text-rose-700 border-rose-200'
+            : l.status === 'Terlambat' ? 'bg-amber-50 text-amber-700 border-amber-200'
+            : l.status === 'Pulang' ? 'bg-sky-50 text-sky-700 border-sky-200'
+            : 'bg-emerald-50 text-emerald-700 border-emerald-200';
+          const badgeText = l.status ? l.status.toUpperCase() : 'HADIR';
 
           let pointBadge = `<span class="inline-flex items-center gap-1 font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px]">${pts} Poin</span>`;
           if (l.role === 'guru') {
@@ -1902,10 +1902,10 @@ import Layout from '../layouts/Layout.astro';
             <td class="py-3 px-4 font-mono text-slate-500 text-xs">${l.date}</td>
             <td class="py-3 px-4">
               <span class="capitalize font-semibold text-slate-800 text-xs">${l.type}</span>
-              <span class="text-slate-400 text-[11px] font-mono">(${l.time})</span>
+              <span class="text-slate-400 text-[11px] font-mono">(${l.time ? l.time.slice(0, 5) : "-"})</span>
             </td>
             <td class="py-3 px-4">
-              <span class="inline-flex items-center gap-1 text-[11px] font-bold ${bc} border px-2.5 py-0.5 rounded-full">${badgeText}</span>
+              <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase ${bc} shrink-0">${badgeText}</span>
             </td>
             <td class="py-3 px-4">${pointBadge}</td>
           </tr>`;
