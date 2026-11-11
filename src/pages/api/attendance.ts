@@ -49,6 +49,20 @@ function extractDecimalUid(raw: any): string {
   return text.replace(/[:\s\-\.\r\n]/g, '').trim();
 }
 
+function makeDeniedResponse(code: string, message: string, line1: string, line2: string, beep: number = 3) {
+  return new Response(
+    JSON.stringify({
+      status: 'error',
+      code,
+      message,
+      lcd: { line1, line2 },
+      beep,
+      gate: false,
+    }),
+    { status: 200, headers: { 'Content-Type': 'application/json' } }
+  );
+}
+
 function extractPayloadValue(body: any, fallbackText: string): string {
   if (typeof body === 'object' && body !== null) {
     for (const key of Object.keys(body)) {
@@ -97,10 +111,7 @@ export const POST: APIRoute = async ({ request }) => {
     console.log('==================================================');
 
     if (!uid) {
-      return new Response(JSON.stringify({ status: 'error', message: 'ID/UID wajib dikirim' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return makeDeniedResponse('UID_EMPTY', 'ID/UID wajib dikirim', 'ID/UID KOSONG', 'TEMPEL KARTU', 2);
     }
 
     // Step 1: Cek apakah ID terdaftar dengan pencocokan cerdas (toleransi leading zero 0xxxxxxxxx)
@@ -118,23 +129,14 @@ export const POST: APIRoute = async ({ request }) => {
     });
     if (!student) {
       console.log(`❌ [PRESENSI] UID [${uid}] BELUM TERDAFTAR di database.\n`);
-      return new Response(
-        JSON.stringify({ status: 'error', message: `ID/UID [${uid}] belum terdaftar di sistem` }),
-        { status: 404, headers: { 'Content-Type': 'application/json' } }
-      );
+      return makeDeniedResponse('CARD_UNKNOWN', `ID/UID [${uid}] belum terdaftar di sistem`, 'KARTU TDK ADA', 'HUBUNGI PETUGAS', 3);
     }
 
     console.log(`✅ [PRESENSI] Siswa Terdeteksi: ${student.name} (${student.className})\n`);
 
     // Tolak presensi jika siswa telah berstatus Alumni
     if (student.className && (student.className.toLowerCase().includes('alumni') || student.className.toLowerCase().includes('lulus'))) {
-      return new Response(
-        JSON.stringify({
-          status: 'error',
-          message: `Kartu Tidak Aktif: ${student.name} telah berstatus Alumni (${student.className}).`,
-        }),
-        { status: 403, headers: { 'Content-Type': 'application/json' } }
-      );
+      return makeDeniedResponse('ALUMNI_INACTIVE', `Kartu Tidak Aktif: ${student.name} telah berstatus Alumni (${student.className}).`, 'KARTU ALUMNI', 'TIDAK AKTIF', 3);
     }
 
     // Konfigurasi Jam Operasional Dinamis dari Turso
@@ -161,10 +163,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Step 2: Cek jadwal gerbang umum (05:00 WIB hingga 23:00 WIB)
     if (totalMinutes < 5 * 60 || totalMinutes > 23 * 60) {
-      return new Response(
-        JSON.stringify({ status: 'error', message: `Di luar jadwal operasional gerbang (05:00 - 23:00 WIB)` }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
+      return makeDeniedResponse('OUT_OF_HOURS', 'Di luar jadwal operasional gerbang (05:00 - 23:00 WIB)', 'GERBANG DITUTUP', 'LUAR JADWAL KBM', 3);
     }
 
     // Step 2b: Cek jadwal khusus siswa (tolak jika di luar jadwal operasional)
@@ -174,43 +173,19 @@ export const POST: APIRoute = async ({ request }) => {
 
       if (session === 'masuk') {
         if (totalMinutes < bukaMinutes) {
-          return new Response(
-            JSON.stringify({
-              status: 'error',
-              message: `Presensi masuk belum dibuka (Gerbang buka pukul ${settings.jamBuka} WIB)`,
-            }),
-            { status: 400, headers: { 'Content-Type': 'application/json' } }
-          );
+          return makeDeniedResponse('BEFORE_OPEN', `Presensi masuk belum dibuka (Gerbang buka pukul ${settings.jamBuka} WIB)`, 'BELUM BUKA', `BUKA: ${settings.jamBuka} WIB`, 2);
         }
         if (totalMinutes > toleransiMinutes) {
-          return new Response(
-            JSON.stringify({
-              status: 'error',
-              message: `Presensi masuk telah ditutup (Batas toleransi pukul ${settings.jamToleransi || '07:40'} WIB)`,
-            }),
-            { status: 400, headers: { 'Content-Type': 'application/json' } }
-          );
+          return makeDeniedResponse('LATE_CLOSED', `Presensi masuk telah ditutup (Batas toleransi pukul ${settings.jamToleransi || '07:40'} WIB)`, 'GERBANG TUTUP', 'TERLAMBAT', 3);
         }
       }
 
       if (session === 'pulang') {
         if (totalMinutes < pulangMinutes) {
-          return new Response(
-            JSON.stringify({
-              status: 'error',
-              message: `Presensi pulang belum dibuka (Kepulangan pukul ${settings.jamPulang} WIB)`,
-            }),
-            { status: 400, headers: { 'Content-Type': 'application/json' } }
-          );
+          return makeDeniedResponse('EARLY_LEAVE', `Presensi pulang belum dibuka (Kepulangan pukul ${settings.jamPulang} WIB)`, 'BLM JAM PULANG', `PULANG: ${settings.jamPulang} WIB`, 2);
         }
         if (totalMinutes > tutupPulangMinutes) {
-          return new Response(
-            JSON.stringify({
-              status: 'error',
-              message: `Presensi kepulangan telah ditutup (Sesi berakhir pukul ${settings.jamTutupPulang || '15:00'} WIB)`,
-            }),
-            { status: 400, headers: { 'Content-Type': 'application/json' } }
-          );
+          return makeDeniedResponse('PULANG_CLOSED', `Presensi kepulangan telah ditutup (Sesi berakhir pukul ${settings.jamTutupPulang || '15:00'} WIB)`, 'SESI BERAKHIR', 'GERBANG DITUTUP', 3);
         }
       }
     }
@@ -229,9 +204,16 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           status: 'warning',
+          code: 'ALREADY_TAPPED',
           message: isStaff
             ? `Staff/Pendidik (${student.name}) sudah melakukan presensi hari ini (jam ${existing.time} WIB)`
             : `${student.name} sudah absen ${session === 'masuk' ? 'masuk' : 'pulang'} hari ini (${existing.status} jam ${existing.time} WIB)`,
+          lcd: {
+            line1: 'SUDAH ABSEN',
+            line2: `${existing.time ? existing.time.slice(0, 5) : ''} WIB`,
+          },
+          beep: 2,
+          gate: false,
           data: existing,
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
@@ -244,13 +226,7 @@ export const POST: APIRoute = async ({ request }) => {
       const pSum = await getStudentPointSummary(student.id, student.rfidUid);
       studentPoints = pSum.totalPoints;
       if (studentPoints <= 0) {
-        return new Response(
-          JSON.stringify({
-            status: 'error',
-            message: `Akses Ditolak: Poin siswa 0 (Terkunci). Silahkan temui Guru Piket atau Wakasis untuk persetujuan / reset poin.`,
-          }),
-          { status: 403, headers: { 'Content-Type': 'application/json' } }
-        );
+        return makeDeniedResponse('POINTS_ZERO', 'Akses Ditolak: Poin siswa 0 (Terkunci). Silahkan temui Guru Piket atau Wakasis untuk persetujuan / reset poin.', 'AKSES TERKUNCI', 'POIN ANDA 0', 4);
       }
     }
 
@@ -332,20 +308,56 @@ export const POST: APIRoute = async ({ request }) => {
     const clientLog = student.role === 'admin' ? { ...newLog, rfidUid: '' } : newLog;
     attendanceEmitter.emit('attendance', { type: 'new_log', log: clientLog, deduction: deductionInfo, remainingPoints: studentPoints });
 
+    let lcdLine1 = student.name.slice(0, 16).toUpperCase();
+    let lcdLine2 = 'HADIR';
+    let beepCount = 1;
+    let codeStr = 'SUCCESS_ONTIME';
+
+    if (isStaff) {
+      codeStr = 'SUCCESS_STAFF';
+      lcdLine2 = 'HADIR BERTUGAS';
+    } else if (session === 'masuk') {
+      if (status === 'Terlambat') {
+        codeStr = 'SUCCESS_LATE';
+        beepCount = 2;
+        lcdLine2 = studentPoints < 10 ? 'TEMUI GURU' : `TELAT - POIN ${studentPoints}`;
+      } else {
+        codeStr = 'SUCCESS_ONTIME';
+        lcdLine2 = `HADIR - POIN ${studentPoints}`;
+      }
+    } else {
+      codeStr = 'SUCCESS_PULANG';
+      lcdLine2 = status === 'Terlambat' ? 'PULANG (TELAT)' : 'PULANG';
+    }
+
     return new Response(
       JSON.stringify({
         status: 'success',
+        code: codeStr,
         message,
         data: clientLog,
         points: studentPoints,
         deduction: deductionInfo,
+        lcd: { line1: lcdLine1, line2: lcdLine2.slice(0, 16) },
+        beep: beepCount,
+        gate: true,
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (err: any) {
-    return new Response(JSON.stringify({ status: 'error', message: err.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({
+        status: 'error',
+        code: 'SERVER_EXCEPTION',
+        message: err.message,
+        lcd: { line1: 'SISTEM ERROR', line2: 'COBA LAGI NANTI' },
+        beep: 3,
+        gate: false,
+      }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 };
