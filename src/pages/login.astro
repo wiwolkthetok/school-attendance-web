@@ -426,20 +426,20 @@ import PwaMeta from '../components/PwaMeta.astro';
               </div>
             </div>
 
-            <!-- RFID Input (9 Digit) -->
+            <!-- RFID Input -->
             <div class="space-y-1">
-              <label for="reg-rfid-input" class="block text-[11px] font-bold uppercase tracking-wider text-slate-600">UID Kartu RFID (9 Digit) *</label>
+              <label for="reg-rfid-input" class="block text-[11px] font-bold uppercase tracking-wider text-slate-600">UID Kartu RFID *</label>
               <input
                 id="reg-rfid-input"
                 type="text"
                 inputmode="numeric"
                 pattern="[0-9]*"
                 required
-                maxlength="9"
-                placeholder="9 digit nomor kartu"
+                maxlength="14"
+                placeholder="Nomor kartu RFID fisik"
                 class="w-full text-xs font-mono font-bold uppercase tracking-wider text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
               />
-              <p class="text-[10px] text-slate-400">9 digit nomor kartu RFID fisik siswa.</p>
+              <p class="text-[10px] text-slate-400">Nomor kartu RFID fisik siswa (scan atau ketik).</p>
             </div>
 
             <!-- Compact Summary Info -->
@@ -989,8 +989,8 @@ import PwaMeta from '../components/PwaMeta.astro';
         const email = regEmailInput?.value.trim() || `${name.toLowerCase().replace(/[^a-z0-9]/g, '.')}@smkmaarif.sch.id`;
         const rfidUid = regRfidInput?.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
 
-        if (!rfidUid || rfidUid.length !== 9) {
-          showRegAlert('UID Kartu RFID harus 9 digit.');
+        if (!rfidUid || rfidUid.length < 6 || rfidUid.length > 14) {
+          showRegAlert('UID Kartu RFID harus 6–14 digit angka.');
           regRfidInput?.focus();
           return;
         }

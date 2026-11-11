@@ -2523,8 +2523,8 @@ const guruCount = 0;
       try { if (authRaw) civ = JSON.parse(authRaw); } catch {}
       const authRole = localStorage.getItem("auth_role") || civ?.role || "";
       const tag = civ?.tag || "";
-      const isKepsek = tag === "kepsek" || (civ?.className && civ.className.toLowerCase().includes("kepala sekolah"));
-      const isWaka = tag === "waka" || (civ?.className && civ.className.toLowerCase().includes("waka"));
+      const isWaka = tag === "waka" || (civ?.className && (civ.className.toLowerCase().includes("waka") || civ.className.toLowerCase().includes("wakil")));
+      const isKepsek = !isWaka && (tag === "kepsek" || (civ?.className && civ.className.toLowerCase().includes("kepala sekolah")));
       const isAdmin = authRole === "admin" || sessionStorage.getItem("bypass_login") === "true";
       const canPromote = isKepsek || isWaka || isAdmin;
 
