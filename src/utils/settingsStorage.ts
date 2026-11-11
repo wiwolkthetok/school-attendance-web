@@ -170,6 +170,7 @@ export async function resetSettings(): Promise<SchoolSettings> {
   }
 
   attendanceEmitter.emit('settings_updated', DEFAULT_SETTINGS);
+  invalidateSettingsCache();
   return DEFAULT_SETTINGS;
 }
 
