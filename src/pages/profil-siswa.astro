@@ -14,7 +14,7 @@ const url = new URL(Astro.request.url);
 const paramId = url.searchParams.get('id') || '';
 const isGuruInitial = authSession === 'guru' || paramId.startsWith('GUR-');
 const isAdminInitial = authSession === 'admin';
-const isSiswaInitial = authSession === 'siswa';
+const canAccessDashboardInitial = authSession === 'admin';
 
 import Layout from "../layouts/Layout.astro";
 ---
@@ -30,8 +30,8 @@ import Layout from "../layouts/Layout.astro";
     aria-label="Sidebar Khusus Profil Siswa"
   >
     <div class="space-y-6">
-      <!-- Tombol Kembali ke Menu Utama Dashboard (Ditampilkan untuk Admin & Guru) -->
-      <div id="sidebar-back-to-menu" class={`${!isSiswaInitial ? '' : 'hidden '}pb-3 border-b border-white/15`}>
+      <!-- Tombol Kembali ke Menu Utama Dashboard (Ditampilkan HANYA untuk Admin, Kepsek, & Waka) -->
+      <div id="sidebar-back-to-menu" class={`${canAccessDashboardInitial ? '' : 'hidden '}pb-3 border-b border-white/15`}>
         <a
           href="/"
           class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition duration-200 hover:scale-[1.02] active:scale-[0.98] w-full border border-white/15 shadow-sm"
@@ -269,12 +269,12 @@ import Layout from "../layouts/Layout.astro";
         <span class="bnav-label text-[10px] tracking-tight leading-tight transition-all duration-200 whitespace-nowrap text-slate-400 font-medium translate-y-0">Izin</span>
       </button>
 
-      <!-- 6A. Menu Utama (Khusus Admin / Guru / Waka / Kepsek) -->
+      <!-- 6A. Menu Utama (Khusus Admin, Kepsek, & Waka) -->
       <a
         href="/"
         id="profile-mobile-back-link"
         data-astro-prefetch="load"
-        class={`${isSiswaInitial ? 'hidden ' : ''}flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 text-slate-400 hover:text-blue-600 touch-manipulation cursor-pointer`}
+        class={`${canAccessDashboardInitial ? '' : 'hidden '}flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 text-slate-400 hover:text-blue-600 touch-manipulation cursor-pointer`}
         title="Kembali ke Menu Utama"
       >
         <div class="w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300 ease-out bg-transparent text-slate-400 group-hover:text-blue-600 translate-y-0">
@@ -283,11 +283,11 @@ import Layout from "../layouts/Layout.astro";
         <span class="text-[10px] tracking-tight leading-tight whitespace-nowrap font-medium text-slate-400">Menu</span>
       </a>
 
-      <!-- 6B. Logout (Khusus Akun Siswa di Mobile) -->
+      <!-- 6B. Logout (Khusus Siswa & Guru Biasa di Mobile) -->
       <button
         type="button"
         id="profile-mobile-logout-btn"
-        class={`${isSiswaInitial ? 'flex ' : 'hidden '}flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 cursor-pointer touch-manipulation`}
+        class={`${canAccessDashboardInitial ? 'hidden ' : 'flex '}flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 cursor-pointer touch-manipulation`}
         title="Keluar dari Aplikasi"
       >
         <div class="w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300 ease-out bg-transparent text-rose-500 group-hover:bg-rose-50 translate-y-0">
@@ -1494,16 +1494,17 @@ import Layout from "../layouts/Layout.astro";
         authCivitas = null;
         try { if (authCivitasRaw) authCivitas = JSON.parse(authCivitasRaw); } catch {}
 
-        // JIKA LOGIN SEBAGAI SISWA: KUNCI KE PROFIL SENDIRI & SEMBUNYIKAN MENU DASHBOARD & SWITCHER
-        if (authRole === 'siswa') {
+        const isKepsekOrWaka = authCivitas && (authCivitas.tag === 'kepsek' || authCivitas.tag === 'waka');
+        const canAccessDashboard = authRole === 'admin' || isKepsekOrWaka;
+
+        // OPSI 2: HANYA ADMIN, KEPSEK, DAN WAKA YANG DAPAT MENGAKSES MENU DASHBOARD
+        if (!canAccessDashboard) {
           if (authCivitas?.id) targetId = authCivitas.id;
           document.getElementById('sidebar-back-to-menu')?.classList.add('hidden');
           document.getElementById('top-civitas-switcher-bar')?.classList.add('hidden');
         } else {
-          // GURU, ADMIN, WAKA, KEPSEK DAPAT KEMBALI KE MENU UTAMA DASHBOARD
-          if (authRole === 'guru' && authCivitas?.id) targetId = authCivitas.id;
           document.getElementById('sidebar-back-to-menu')?.classList.remove('hidden');
-          if (authRole === 'admin') {
+          if (authRole === 'admin' && !authCivitas) {
             document.getElementById('top-civitas-switcher-bar')?.classList.remove('hidden');
           } else {
             document.getElementById('top-civitas-switcher-bar')?.classList.add('hidden');
@@ -3795,21 +3796,46 @@ import Layout from "../layouts/Layout.astro";
         setTimeout(() => { profIsSwiping = false; }, 80);
       }, { passive: true });
 
-      // Role check untuk tombol mobile profil
+      // Role check untuk tombol mobile profil & sidebar (Opsi 2: Admin, Kepsek, Waka = Menu, lainnya = Keluar)
       const authRole = localStorage.getItem('auth_role');
+      let authCivitasObj: any = null;
+      try {
+        const raw = localStorage.getItem('auth_civitas');
+        if (raw) authCivitasObj = JSON.parse(raw);
+      } catch {}
+      const isKepsekOrWaka = authCivitasObj && (authCivitasObj.tag === 'kepsek' || authCivitasObj.tag === 'waka');
+      const canAccessDashboard = authRole === 'admin' || isKepsekOrWaka;
+
+      const sidebarBackToMenu = document.getElementById('sidebar-back-to-menu');
+      if (sidebarBackToMenu) {
+        if (canAccessDashboard) {
+          sidebarBackToMenu.classList.remove('hidden');
+        } else {
+          sidebarBackToMenu.classList.add('hidden');
+        }
+      }
+
       const mobileBackLink = document.getElementById('profile-mobile-back-link');
       const mobileLogoutBtn = document.getElementById('profile-mobile-logout-btn');
-      if (authRole === 'siswa') {
-        if (mobileBackLink) mobileBackLink.style.display = 'none';
-        if (mobileLogoutBtn) {
-          mobileLogoutBtn.classList.remove('hidden');
-          mobileLogoutBtn.classList.add('flex');
+      if (canAccessDashboard) {
+        if (mobileBackLink) {
+          mobileBackLink.classList.remove('hidden');
+          mobileBackLink.style.display = '';
         }
-      } else {
-        if (mobileBackLink) mobileBackLink.style.display = '';
         if (mobileLogoutBtn) {
           mobileLogoutBtn.classList.add('hidden');
           mobileLogoutBtn.classList.remove('flex');
+          mobileLogoutBtn.style.display = 'none';
+        }
+      } else {
+        if (mobileBackLink) {
+          mobileBackLink.classList.add('hidden');
+          mobileBackLink.style.display = 'none';
+        }
+        if (mobileLogoutBtn) {
+          mobileLogoutBtn.classList.remove('hidden');
+          mobileLogoutBtn.classList.add('flex');
+          mobileLogoutBtn.style.display = '';
         }
       }
       if (mobileLogoutBtn) {

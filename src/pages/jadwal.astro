@@ -11,7 +11,7 @@ const authSession = Astro.cookies.get('auth_session')?.value;
 if (!authSession) {
   return Astro.redirect('/');
 }
-if (authSession === 'siswa') {
+if (authSession === 'siswa' || authSession === 'guru') {
   return Astro.redirect('/profil-siswa');
 }
 

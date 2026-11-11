@@ -195,8 +195,8 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
       const isKepsek = civitasTag === 'kepsek' || (civitas?.className && civitas.className.toLowerCase().includes('kepala sekolah'));
       const isWaka = civitasTag === 'waka' || (civitas?.className && civitas.className.toLowerCase().includes('waka'));
       const isAdmin = authRole === 'admin';
-      const hasCookie = typeof document !== 'undefined' && document.cookie.split(';').some(c => c.trim().startsWith('auth_session='));
-      const isAllowedAdmin = isAdmin || isKepsek || isWaka || sessionStorage.getItem('bypass_login') === 'true' || hasCookie;
+      const hasAdminCookie = typeof document !== 'undefined' && document.cookie.split(';').some(c => c.trim() === 'auth_session=admin');
+      const isAllowedAdmin = isAdmin || isKepsek || isWaka || sessionStorage.getItem('bypass_login') === 'true' || hasAdminCookie;
 
       // 1. Jika belum login sama sekali dan bukan mode dev bypass, arahkan ke /
       if (path !== '/' && !isLoginPage && !authRaw && !isAllowedAdmin) {
