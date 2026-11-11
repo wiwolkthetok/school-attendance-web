@@ -29,11 +29,19 @@ import PwaMeta from '../components/PwaMeta.astro';
     />
     <style is:global>
       html {
+        overflow-x: hidden;
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
       }
       body {
         font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #0a38b8;
+        background-image: 
+          radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.22) 0%, transparent 45%),
+          radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.22) 0%, transparent 45%),
+          linear-gradient(135deg, #0a38b8 0%, #1d4ed8 50%, #0284c7 100%);
+        background-attachment: fixed;
+        background-size: cover;
       }
       .font-mono {
         font-family: 'JetBrains Mono', monospace;
@@ -57,14 +65,8 @@ import PwaMeta from '../components/PwaMeta.astro';
       }
     </style>
   </head>
-  <body class="bg-linear-to-br from-[#0a38b8] via-[#1d4ed8] to-[#0284c7] min-h-screen flex flex-col justify-between items-center p-3 sm:p-6 lg:p-8 select-none text-slate-800 relative overflow-x-hidden">
+  <body class="min-h-screen min-h-dvh flex flex-col justify-between items-center py-2.5 sm:py-4 px-3 sm:px-6 select-none text-slate-800">
     
-    <!-- Background Atmosphere (High Performance GPU-accelerated) -->
-    <div class="fixed inset-0 pointer-events-none -z-0 overflow-hidden" style="transform: translateZ(0); will-change: transform;">
-      <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px); background-size: 24px 24px;"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(56,189,248,0.18)_0%,transparent_50%),radial-gradient(circle_at_85%_85%,rgba(14,165,233,0.18)_0%,transparent_50%)]"></div>
-    </div>
-
     <!-- Top Header -->
     <header class="w-full max-w-4xl flex items-center text-white py-2 z-10 shrink-0">
       <div class="flex items-center gap-2.5">
