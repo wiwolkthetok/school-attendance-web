@@ -232,10 +232,10 @@ komponen penting buat nampilin icon
           "navbar-breadcrumb-link",
         );
         if (breadcrumbLink) {
-          breadcrumbLink.removeAttribute("href");
-          breadcrumbLink.textContent = "Portal Guru";
+          breadcrumbLink.setAttribute("href", "/");
+          breadcrumbLink.textContent = "Dashboard";
           breadcrumbLink.className =
-            "text-slate-400 font-semibold cursor-default";
+            "hover:text-blue-600 transition-colors duration-200 shrink-0";
         }
       }
     } else {

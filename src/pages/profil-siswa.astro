@@ -14,6 +14,7 @@ const url = new URL(Astro.request.url);
 const paramId = url.searchParams.get('id') || '';
 const isGuruInitial = authSession === 'guru' || paramId.startsWith('GUR-');
 const isAdminInitial = authSession === 'admin';
+const isSiswaInitial = authSession === 'siswa';
 
 import Layout from "../layouts/Layout.astro";
 ---
@@ -29,15 +30,15 @@ import Layout from "../layouts/Layout.astro";
     aria-label="Sidebar Khusus Profil Siswa"
   >
     <div class="space-y-6">
-      <!-- Tombol Kembali ke Menu Utama Dashboard (Hanya Ditampilkan untuk Administrator) -->
-      <div id="sidebar-back-to-menu" class={`${isAdminInitial ? '' : 'hidden '}pb-3 border-b border-white/15`}>
+      <!-- Tombol Kembali ke Menu Utama Dashboard (Ditampilkan untuk Admin & Guru) -->
+      <div id="sidebar-back-to-menu" class={`${!isSiswaInitial ? '' : 'hidden '}pb-3 border-b border-white/15`}>
         <a
-          href="/siswa-guru"
+          href="/"
           class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition duration-200 hover:scale-[1.02] active:scale-[0.98] w-full border border-white/15 shadow-sm"
-          title="Kembali ke Daftar Siswa"
+          title="Kembali ke Menu Utama Dashboard"
         >
           <span class="material-symbols-outlined text-base">arrow_back</span>
-          <span>Data Siswa</span>
+          <span>Menu Utama</span>
         </a>
       </div>
 
@@ -268,13 +269,13 @@ import Layout from "../layouts/Layout.astro";
         <span class="bnav-label text-[10px] tracking-tight leading-tight transition-all duration-200 whitespace-nowrap text-slate-400 font-medium translate-y-0">Izin</span>
       </button>
 
-      <!-- 6A. Menu / Data Siswa (Khusus Admin / Guru) -->
+      <!-- 6A. Menu Utama (Khusus Admin / Guru / Waka / Kepsek) -->
       <a
-        href="/siswa-guru"
+        href="/"
         id="profile-mobile-back-link"
         data-astro-prefetch="load"
-        class="flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 text-slate-400 hover:text-blue-600 touch-manipulation cursor-pointer"
-        title="Kembali ke Data Siswa"
+        class={`${isSiswaInitial ? 'hidden ' : ''}flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 text-slate-400 hover:text-blue-600 touch-manipulation cursor-pointer`}
+        title="Kembali ke Menu Utama"
       >
         <div class="w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300 ease-out bg-transparent text-slate-400 group-hover:text-blue-600 translate-y-0">
           <span class="material-symbols-outlined text-[20px]">arrow_back</span>
@@ -286,7 +287,7 @@ import Layout from "../layouts/Layout.astro";
       <button
         type="button"
         id="profile-mobile-logout-btn"
-        class="hidden flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 cursor-pointer touch-manipulation"
+        class={`${isSiswaInitial ? 'flex ' : 'hidden '}flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 cursor-pointer touch-manipulation`}
         title="Keluar dari Aplikasi"
       >
         <div class="w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300 ease-out bg-transparent text-rose-500 group-hover:bg-rose-50 translate-y-0">
@@ -1493,17 +1494,20 @@ import Layout from "../layouts/Layout.astro";
         authCivitas = null;
         try { if (authCivitasRaw) authCivitas = JSON.parse(authCivitasRaw); } catch {}
 
-        // JIKA LOGIN SEBAGAI SISWA ATAU GURU: KUNCI HANYA KE DATA DIRI SENDIRI & SEMBUNYIKAN MENU ADMIN & SWITCHER
-        const isSelfCivitas = (authRole === 'siswa' || authRole === 'guru');
-        if (isSelfCivitas) {
-          if (authCivitas?.id) {
-            targetId = authCivitas.id;
-          }
+        // JIKA LOGIN SEBAGAI SISWA: KUNCI KE PROFIL SENDIRI & SEMBUNYIKAN MENU DASHBOARD & SWITCHER
+        if (authRole === 'siswa') {
+          if (authCivitas?.id) targetId = authCivitas.id;
           document.getElementById('sidebar-back-to-menu')?.classList.add('hidden');
           document.getElementById('top-civitas-switcher-bar')?.classList.add('hidden');
-        } else if (authRole === 'admin') {
+        } else {
+          // GURU, ADMIN, WAKA, KEPSEK DAPAT KEMBALI KE MENU UTAMA DASHBOARD
+          if (authRole === 'guru' && authCivitas?.id) targetId = authCivitas.id;
           document.getElementById('sidebar-back-to-menu')?.classList.remove('hidden');
-          document.getElementById('top-civitas-switcher-bar')?.classList.remove('hidden');
+          if (authRole === 'admin') {
+            document.getElementById('top-civitas-switcher-bar')?.classList.remove('hidden');
+          } else {
+            document.getElementById('top-civitas-switcher-bar')?.classList.add('hidden');
+          }
         }
 
         if (targetId) {
@@ -3800,15 +3804,23 @@ import Layout from "../layouts/Layout.astro";
         if (mobileLogoutBtn) {
           mobileLogoutBtn.classList.remove('hidden');
           mobileLogoutBtn.classList.add('flex');
-          mobileLogoutBtn.onclick = () => {
-            localStorage.removeItem('auth_civitas');
-            localStorage.removeItem('auth_role');
-            sessionStorage.removeItem('auth_active');
-            sessionStorage.removeItem('bypass_login');
-            document.cookie = 'auth_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
-            window.location.replace('/');
-          };
         }
+      } else {
+        if (mobileBackLink) mobileBackLink.style.display = '';
+        if (mobileLogoutBtn) {
+          mobileLogoutBtn.classList.add('hidden');
+          mobileLogoutBtn.classList.remove('flex');
+        }
+      }
+      if (mobileLogoutBtn) {
+        mobileLogoutBtn.onclick = () => {
+          localStorage.removeItem('auth_civitas');
+          localStorage.removeItem('auth_role');
+          sessionStorage.removeItem('auth_active');
+          sessionStorage.removeItem('bypass_login');
+          document.cookie = 'auth_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+          window.location.replace('/');
+        };
       }
 
       // Buka tab berdasarkan hash atau query jika ada
