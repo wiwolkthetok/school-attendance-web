@@ -13,7 +13,6 @@ if (!authSession) {
 const url = new URL(Astro.request.url);
 const paramId = url.searchParams.get('id') || '';
 const isGuruInitial = authSession === 'guru' || paramId.startsWith('GUR-');
-const isAdminInitial = authSession === 'admin';
 const canAccessDashboardInitial = authSession === 'admin';
 
 import Layout from "../layouts/Layout.astro";
@@ -302,22 +301,6 @@ import Layout from "../layouts/Layout.astro";
        AREA KONTEN UTAMA (FULL LEBAR TANPA SUB-SIDEBAR GANDA)
        ======================================================== -->
   <div class="flex flex-col gap-6 max-w-7xl mx-auto w-full">
-    
-    <!-- Top Bar: Switcher Civitas Cepat (Hanya Tampil untuk Administrator, Tersembunyi untuk Guru & Siswa) -->
-    <div id="top-civitas-switcher-bar" class={`${isAdminInitial ? '' : 'hidden '}flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/80 backdrop-blur-xl p-4 sm:p-5 rounded-3xl shadow-xs border border-slate-200/70`}>
-      <div class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-blue-600 text-xl">account_circle</span>
-        <div>
-          <h2 id="top-breadcrumb-title" class="text-sm font-black text-slate-900">Detail Profil Akademik Siswa</h2>
-          <p class="text-xs text-slate-500">Pilih siswa untuk meninjau data profil, kartu RFID, linimasa, dan akumulasi poin.</p>
-        </div>
-      </div>
-
-      <!-- Quick Switcher Civitas (Siswa & Guru) -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0" id="civitas-switcher-container">
-        <!-- Render dinamis via JS -->
-      </div>
-    </div>
 
     <!-- CONTAINER KONTEN MODULAR DINAMIS -->
     <div class="w-full">
@@ -1500,14 +1483,8 @@ import Layout from "../layouts/Layout.astro";
         if (!canAccessDashboard) {
           if (authCivitas?.id) targetId = authCivitas.id;
           document.getElementById('sidebar-back-to-menu')?.classList.add('hidden');
-          document.getElementById('top-civitas-switcher-bar')?.classList.add('hidden');
         } else {
           document.getElementById('sidebar-back-to-menu')?.classList.remove('hidden');
-          if (authRole === 'admin' && !authCivitas) {
-            document.getElementById('top-civitas-switcher-bar')?.classList.remove('hidden');
-          } else {
-            document.getElementById('top-civitas-switcher-bar')?.classList.add('hidden');
-          }
         }
 
         if (targetId) {
@@ -1710,23 +1687,7 @@ import Layout from "../layouts/Layout.astro";
     }
 
     function renderSwitcher() {
-      const topBar = document.getElementById('top-civitas-switcher-bar');
       const container = document.getElementById('civitas-switcher-container');
-
-      // Khusus Guru & Siswa: Sembunyikan top bar switcher civitas sepenuhnya (hanya buka profil pribadi)
-      if (authRole === 'siswa' || authRole === 'guru') {
-        if (topBar) topBar.classList.add('hidden');
-        return;
-      }
-
-      // Jika bukan admin, pastikan top bar tersembunyi
-      if (authRole !== 'admin') {
-        if (topBar) topBar.classList.add('hidden');
-        return;
-      }
-
-      // Khusus Administrator: Tampilkan switcher civitas untuk meninjau data civitas
-      if (topBar) topBar.classList.remove('hidden');
       if (!container) return;
 
       // 2. Mode Guru atau Umum (Tampilkan Switcher Civitas + Tombol Login/Logout)
