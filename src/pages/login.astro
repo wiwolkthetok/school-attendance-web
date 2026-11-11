@@ -558,9 +558,9 @@ import PwaMeta from '../components/PwaMeta.astro';
 
           // Simpan sesi autentikasi civitas di localStorage, sessionStorage, dan cookie
           localStorage.setItem('auth_civitas', JSON.stringify(data.civitas));
-          localStorage.setItem('auth_role', data.role);
+          localStorage.setItem('auth_role', data.canAccessDashboard ? 'admin' : data.role);
           sessionStorage.setItem('auth_active', 'true');
-          document.cookie = `auth_session=${encodeURIComponent(data.role)}; path=/; max-age=86400; SameSite=Lax`;
+          document.cookie = `auth_session=${encodeURIComponent(data.canAccessDashboard ? 'admin' : data.role)}; path=/; max-age=86400; SameSite=Lax`;
 
           if (submitBtn) {
             submitBtn.className = 'w-full py-3 px-6 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 cursor-pointer';

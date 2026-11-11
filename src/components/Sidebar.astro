@@ -297,8 +297,8 @@ komponen penting buat nampilin icon
       try { if (authRaw) civ = JSON.parse(authRaw); } catch {}
       const role = civ.role || authRole;
       const tag = civ.tag || '';
-      const isKepsek = tag === 'kepsek' || (civ.className && civ.className.toLowerCase().includes('kepala sekolah'));
-      const isWaka = tag === 'waka' || (civ.className && civ.className.toLowerCase().includes('waka'));
+      const isWaka = tag === 'waka' || (civ.className && (civ.className.toLowerCase().includes('waka') || civ.className.toLowerCase().includes('wakil')));
+      const isKepsek = !isWaka && (tag === 'kepsek' || (civ.className && civ.className.toLowerCase().includes('kepala sekolah')));
       const isAllowedAdmin = role === 'admin' || isKepsek || isWaka;
 
       const nameEl = document.getElementById('sidebar-user-name');
