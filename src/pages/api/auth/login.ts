@@ -2,16 +2,14 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { getStudents } from '../../../utils/attendanceStorage';
 
-// Helper pemfilter UID: Mengekstrak UID Decimal 9 digit dari input RFID
+// Helper pemfilter UID: Mengekstrak UID / ID kartu dari input tanpa memotong panjang digit
 function extractDecimalUid(raw: any): string {
   if (!raw) return '';
   const text = String(raw).trim();
-  if (text.toUpperCase().startsWith('ADM-') || /^(admin|piket)$/i.test(text)) return text.toUpperCase();
-  const decMatch = text.match(/(?:UID\s*Decimal|Decimal|Dec)\s*[:=]?\s*([0-9]{8,12})/i);
+  if (/^(admin|administrator|piket)$/i.test(text)) return text.toUpperCase();
+  const decMatch = text.match(/(?:UID\s*Decimal|Decimal|Dec)\s*[:=]?\s*([0-9]{6,14})/i);
   if (decMatch && decMatch[1]) return decMatch[1].trim();
-  const digitsOnly = text.replace(/[^0-9]/g, '');
-  if (digitsOnly.length >= 9) return digitsOnly.slice(0, 9);
-  return digitsOnly || text;
+  return text.trim();
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -51,7 +49,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // 2. Validasi Wajib untuk Siswa: Kedua field (Nama Lengkap & ID RFID) wajib diisi
+    // 2. Validasi Wajib: Kedua field (Nama Lengkap & ID RFID/NIP) wajib diisi
     console.log('\n==================================================');
     console.log('🔐 [LOGIN API] Percobaan Masuk Portal:');
     console.log('--------------------------------------------------');
@@ -65,7 +63,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           status: 'error',
-          message: 'Nama Lengkap dan ID Kartu RFID wajib diisi.',
+          message: 'Nama Lengkap dan ID Kartu RFID / NIP wajib diisi.',
         }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
@@ -73,14 +71,37 @@ export const POST: APIRoute = async ({ request }) => {
 
     const students = await getStudents();
 
-    // Helper pencocokan data (HANYA Nama Lengkap & ID RFID murni, NISN tidak diizinkan untuk login)
+    // Helper pencocokan data (RFID, ID Civitas, atau NIP/NISN)
     const cleanStr = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
     const matchRfid = (s: any, input: string) => {
       if (!input) return false;
-      const upperInput = input.trim().toUpperCase();
-      if (s.rfidUid && s.rfidUid.trim().toUpperCase() === upperInput) return true;
-      if (s.id && s.id.trim().toUpperCase() === upperInput) return true;
+      const rawInput = input.trim().toUpperCase();
+      const cleanInput = rawInput.replace(/^0+/, '');
+      const digitsInput = rawInput.replace(/[^0-9]/g, '');
+
+      // 1. Cocokkan dengan RFID UID (mendukung 9 digit, 10 digit, dan leading zero)
+      if (s.rfidUid) {
+        const sRfid = s.rfidUid.trim().toUpperCase();
+        const sRfidClean = sRfid.replace(/^0+/, '');
+        if (sRfid === rawInput || (cleanInput && sRfidClean === cleanInput)) return true;
+        if (digitsInput && sRfid.replace(/[^0-9]/g, '') === digitsInput) return true;
+      }
+
+      // 2. Cocokkan dengan ID sistem (misal: GUR-9968, STD-7764, ADM-001)
+      if (s.id) {
+        const sId = s.id.trim().toUpperCase();
+        if (sId === rawInput) return true;
+        if (digitsInput && sId.replace(/[^0-9]/g, '') === digitsInput) return true;
+      }
+
+      // 3. Cocokkan dengan NIP / NISN / Identifier
+      if (s.identifier) {
+        const sIdent = s.identifier.trim().toUpperCase();
+        const sIdentDigits = sIdent.replace(/[^0-9]/g, '');
+        if (sIdent === rawInput || (digitsInput && sIdentDigits === digitsInput)) return true;
+      }
+
       return false;
     };
 
@@ -95,7 +116,7 @@ export const POST: APIRoute = async ({ request }) => {
       return false;
     };
 
-    // Siswa/civitas WAJIB mencocokkan KEDUA DATA (Nama Lengkap dan ID RFID) pada satu siswa yang sama
+    // Cari civitas yang mencocokkan Nama dan Identitas (RFID / ID / NIP)
     const found = students.find((s) => matchRfid(s, rawRfid) && matchName(s, rawName));
 
     if (!found) {
@@ -112,8 +133,8 @@ export const POST: APIRoute = async ({ request }) => {
     console.log(`✅ [LOGIN] Berhasil: ${found.name} (${found.role})\n`);
 
     // Filter Hak Akses Dashboard Admin: HANYA admin, kepsek, dan waka yang diizinkan!
-    const isKepsek = found.tag === 'kepsek' || (found.className && found.className.toLowerCase().includes('kepala sekolah'));
-    const isWaka = found.tag === 'waka' || (found.className && found.className.toLowerCase().includes('waka'));
+    const isWaka = found.tag === 'waka' || (found.className && (found.className.toLowerCase().includes('waka') || found.className.toLowerCase().includes('wakil')));
+    const isKepsek = !isWaka && (found.tag === 'kepsek' || (found.className && found.className.toLowerCase().includes('kepala sekolah')));
     const isAdmin = found.role === 'admin';
     const canAccessDashboard = isAdmin || isKepsek || isWaka;
 
@@ -142,7 +163,7 @@ export const POST: APIRoute = async ({ request }) => {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-          'Set-Cookie': `auth_session=${canAccessDashboard ? 'admin' : 'siswa'}; Path=/; SameSite=Lax; Max-Age=86400`,
+          'Set-Cookie': `auth_session=${canAccessDashboard ? 'admin' : (found.role === 'guru' ? 'guru' : 'siswa')}; Path=/; SameSite=Lax; Max-Age=86400`,
         },
       }
     );
