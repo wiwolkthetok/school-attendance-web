@@ -2025,10 +2025,10 @@ import Layout from "../layouts/Layout.astro";
         } else if (civitasLogs.length > 0) {
           const latest = civitasLogs[civitasLogs.length - 1];
           if (latest.status === 'Bolos') {
-            bioPresensiStatus.textContent = 'Bolos (-10 Poin)';
+            bioPresensiStatus.textContent = 'Bolos (-20 Poin)';
             bioPresensiStatus.className = 'text-xs font-black text-rose-600 animate-pulse';
           } else if (latest.status === 'Hadir') {
-            bioPresensiStatus.textContent = 'Hadir Tepat Waktu';
+            bioPresensiStatus.textContent = latest.type === 'pulang' ? 'Sudah Pulang' : 'Hadir Tepat Waktu';
             bioPresensiStatus.className = 'text-xs font-black text-emerald-600';
           } else {
             bioPresensiStatus.textContent = latest.status;
@@ -2085,7 +2085,7 @@ import Layout from "../layouts/Layout.astro";
         }
         if (timelinePresensiDesc) {
           if (latest.status === 'Bolos') {
-            timelinePresensiDesc.textContent = `Tercatat presensi masuk pagi namun TIDAK melakukan presensi kepulangan (Bolos • Poin berkurang -10).`;
+            timelinePresensiDesc.textContent = `Tercatat presensi masuk pagi namun TIDAK melakukan presensi kepulangan (Bolos • Poin berkurang -20).`;
           } else {
             timelinePresensiDesc.textContent = `Tap ${latest.type || 'masuk'} pada pukul ${latest.time} WIB • Status: ${latest.status} (Gerbang Utama)`;
           }
