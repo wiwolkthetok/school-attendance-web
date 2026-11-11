@@ -2268,6 +2268,8 @@ const guruCount = 0;
       }
       if (btnGenUid) btnGenUid.classList.remove("hidden");
       resetAvatar();
+      const defaultGRadio = document.querySelector('input[name="gender-radio"][value="L"]') as HTMLInputElement;
+      if (defaultGRadio) defaultGRadio.checked = true;
       setRole("siswa", "");
       const tagSelect = document.getElementById(
         "student-tag-select",
@@ -2294,6 +2296,9 @@ const guruCount = 0;
       if (birthInput) birthInput.value = student.birthDate || "";
       if (emailInput) emailInput.value = student.email || "";
       if (phoneInput) phoneInput.value = student.phone || "";
+      const g = student.gender === 'P' ? 'P' : 'L';
+      const gRadio = document.querySelector(`input[name="gender-radio"][value="${g}"]`) as HTMLInputElement;
+      if (gRadio) gRadio.checked = true;
       const r = (
         student.role === "admin"
           ? "admin"
@@ -2382,11 +2387,14 @@ const guruCount = 0;
         return;
       }
 
+      const selectedGender = (document.querySelector('input[name="gender-radio"]:checked') as HTMLInputElement)?.value || "L";
+
       const payload = {
         id: idInput?.value || undefined,
         name: nameInput?.value?.trim() || "",
         identifier: identInput?.value?.trim() || "",
         role: selectedRole,
+        gender: selectedGender,
         category:
           catSelect?.value ||
           (selectedRole === "admin"
