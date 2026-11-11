@@ -48,16 +48,23 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
         var active = sessionStorage.getItem('auth_active');
         var bypass = sessionStorage.getItem('bypass_login');
         
-        var hasCookie = document.cookie.split(';').some(function (c) {
-          return c.trim().startsWith('auth_session=');
-        });
+        var authCookieVal = '';
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var part = cookies[i].trim();
+          if (part.indexOf('auth_session=') === 0) {
+            authCookieVal = decodeURIComponent(part.substring(13)).trim();
+            break;
+          }
+        }
+        var hasCookie = Boolean(authCookieVal && authCookieVal !== '""');
 
         var isAuth = Boolean((civ && role) || active || bypass || hasCookie);
 
-        // 1. Jika belum login: Sembunyikan halaman seketika & redirect ke /
-        if (!isAuth && path !== '/') {
+        // 1. Jika belum login: Sembunyikan halaman seketika & redirect langsung ke /login
+        if (!isAuth) {
           document.documentElement.style.display = 'none';
-          window.location.replace('/');
+          window.location.replace('/login');
           return;
         }
 
@@ -66,8 +73,9 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
           if (civ) civObj = JSON.parse(civ);
         } catch (e) {}
 
+        var effectiveRole = role || (civObj ? civObj.role : '') || authCookieVal;
         var isKepsekOrWaka = civObj && (civObj.tag === 'kepsek' || civObj.tag === 'waka');
-        var canAccessDashboard = role === 'admin' || isKepsekOrWaka || bypass;
+        var canAccessDashboard = effectiveRole === 'admin' || isKepsekOrWaka || bypass;
 
         // 2. Akses Dashboard: HANYA Admin, Kepsek, dan Waka! Pengguna lain diarahkan ke profil masing-masing
         var isAllowed = canAccessDashboard || path.startsWith('/profil-siswa');
@@ -79,9 +87,22 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
         }
       } catch (err) {
         document.documentElement.style.display = 'none';
-        window.location.replace('/');
+        window.location.replace('/login');
       }
     })();
+
+    // Global unified logout function
+    window.performLogout = function() {
+      try {
+        localStorage.removeItem('auth_civitas');
+        localStorage.removeItem('auth_role');
+        sessionStorage.removeItem('auth_active');
+        sessionStorage.removeItem('bypass_login');
+        document.cookie = 'auth_session=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+        fetch('/api/auth/logout', { method: 'POST', keepalive: true }).catch(function() {});
+      } catch (e) {}
+      window.location.replace('/login');
+    };
   </script>
 
   <style is:global>

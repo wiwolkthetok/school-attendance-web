@@ -9,7 +9,7 @@ export const prerender = false;
 
 const authSession = Astro.cookies.get('auth_session')?.value;
 if (!authSession) {
-  return Astro.redirect('/');
+  return Astro.redirect('/login');
 }
 if (authSession === 'siswa' || authSession === 'guru') {
   return Astro.redirect('/profil-siswa');

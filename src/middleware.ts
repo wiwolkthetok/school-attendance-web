@@ -31,16 +31,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // 2. Cek sesi autentikasi dari cookie
   const authSession = context.cookies.get('auth_session')?.value;
   if (!authSession) {
-    // Jika membuka halaman root (/), tampilkan portal login langsung tanpa ubah URL (rewrite)
-    if (pathname === '/') {
-      return context.rewrite('/login');
-    }
-    // Jika membuka halaman protected lain tanpa login, lempar kembali ke /
-    return context.redirect('/');
+    return context.redirect('/login');
   }
 
-  // 3. Jika role siswa membuka root (/), arahkan ke profil siswa
-  if (pathname === '/' && authSession === 'siswa') {
+  // 3. Jika role siswa atau guru biasa membuka root (/), arahkan ke profil siswa
+  if (pathname === '/' && (authSession === 'siswa' || authSession === 'guru')) {
     return context.redirect('/profil-siswa');
   }
 
