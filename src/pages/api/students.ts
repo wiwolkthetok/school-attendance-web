@@ -156,7 +156,7 @@ export const DELETE: APIRoute = async ({ request }) => {
       });
     }
 
-    const success = await deleteStudent(id);
+    await deleteStudent(id);
 
     attendanceEmitter.emit('attendance', { type: 'students_updated' });
 

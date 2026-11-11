@@ -7,7 +7,7 @@
  */
 
 import { archiveAndResetDailyLogs, checkAndApplyAlpa, checkAndApplyBolos, syncDailyAttendanceAndPermissions } from './attendanceStorage';
-import { getSchedulerState, saveSchedulerState, type SchedulerState } from './settingsStorage';
+import { getSchedulerState, saveSchedulerState } from './settingsStorage';
 import { attendanceEmitter } from './attendanceEvents';
 
 export interface CronWorkerStatus {
@@ -61,7 +61,7 @@ export function scheduleNextTarget() {
     activeTimer = null;
   }
 
-  const { dateStr, hour, minute, timeStr } = getWibNow();
+  const { dateStr, hour, minute } = getWibNow();
   const curMinutes = hour * 60 + minute;
   const state = getSchedulerState();
 
@@ -184,7 +184,7 @@ export function initCronWorker() {
   scheduleNextTarget();
 
   // Dengarkan sinyal jika pengaturan jadwal diubah dari UI web
-  attendanceEmitter.on('settings_updated', (newSettings) => {
+  attendanceEmitter.on('settings_updated', () => {
     console.log('[SCHEDULER MANDIRI] ⚡ Sinyal perubahan jadwal diterima! Menyetel ulang timer target...');
     scheduleNextTarget();
   });

@@ -49,6 +49,7 @@ Endpoint utama tempat mesin mikrokontroler (ESP32/Arduino) mengirimkan data hasi
   ```json
   {
     "status": "success",
+    "code": "SUCCESS_ONTIME",
     "message": "Presensi Masuk Tepat Waktu (Muhammad Farhan)",
     "data": {
       "id": "ATT-1793854855302",
@@ -62,7 +63,13 @@ Endpoint utama tempat mesin mikrokontroler (ESP32/Arduino) mengirimkan data hasi
       "status": "Hadir"
     },
     "points": 100,
-    "deduction": null
+    "deduction": null,
+    "lcd": {
+      "line1": "MUHAMMAD FARHAN",
+      "line2": "HADIR - POIN 100"
+    },
+    "beep": 1,
+    "gate": true
   }
   ```
 
@@ -70,6 +77,7 @@ Endpoint utama tempat mesin mikrokontroler (ESP32/Arduino) mengirimkan data hasi
   ```json
   {
     "status": "success",
+    "code": "SUCCESS_LATE",
     "message": "Presensi Masuk Terlambat (Muhammad Farhan) - Telat 12 menit. Poin berkurang -5 (Sisa 95 Poin).",
     "data": {
       "status": "Terlambat"
@@ -78,7 +86,13 @@ Endpoint utama tempat mesin mikrokontroler (ESP32/Arduino) mengirimkan data hasi
     "deduction": {
       "pointsDeducted": 5,
       "reason": "Terlambat 12 menit pada sesi pagi (Kategori 10 - 20 menit: -5 Poin)"
-    }
+    },
+    "lcd": {
+      "line1": "MUHAMMAD FARHAN",
+      "line2": "TELAT - POIN 95"
+    },
+    "beep": 2,
+    "gate": true
   }
   ```
 
@@ -86,7 +100,14 @@ Endpoint utama tempat mesin mikrokontroler (ESP32/Arduino) mengirimkan data hasi
   ```json
   {
     "status": "error",
-    "message": "ID/UID 999888777 belum terdaftar di sistem"
+    "code": "CARD_UNKNOWN",
+    "message": "ID/UID [999888777] belum terdaftar di sistem",
+    "lcd": {
+      "line1": "KARTU TDK ADA",
+      "line2": "HUBUNGI PETUGAS"
+    },
+    "beep": 3,
+    "gate": false
   }
   ```
 

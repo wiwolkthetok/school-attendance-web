@@ -1630,8 +1630,6 @@ import Layout from '../layouts/Layout.astro';
         const isHol = typeof (window as any).isSchoolHoliday === 'function' ? (window as any).isSchoolHoliday() : (new Date().getDay() === 0);
         const now = new Date();
         const curMinutes = now.getHours() * 60 + now.getMinutes();
-        const morningCutoff = 7 * 60 + 40; // 07:40 WIB (Batas toleransi gerbang pagi ditutup)
-        const isMorningClosed = curMinutes >= morningCutoff;
         const isAfternoonReached = curMinutes >= 13 * 60 + 30; // 13:30 WIB (Jadwal siang dimulai / Alpa resmi)
         const afternoonClosed = curMinutes >= 15 * 60; // 15:00 WIB (Batas jam siang berakhir)
 
@@ -2108,8 +2106,6 @@ import Layout from '../layouts/Layout.astro';
         // Mode Hari Ini (Hari Sekolah Aktif)
         const now = new Date();
         const curMinutes = now.getHours() * 60 + now.getMinutes();
-        const morningCutoff = 7 * 60 + 40; // 07:40 WIB (Batas Toleransi Gerbang Masuk Ditutup)
-        const isMorningClosed = curMinutes >= morningCutoff;
         const isAfternoonReached = curMinutes >= 13 * 60 + 30; // 13:30 WIB (Jadwal Siang / Alpa Resmi)
         const afternoonClosed = curMinutes >= 15 * 60; // 15:00 WIB (Batas Jam Siang Berakhir)
 
@@ -2566,7 +2562,7 @@ import Layout from '../layouts/Layout.astro';
 
     // Salin Ringkasan Sesuai Filter Generator ke WhatsApp
     async function copyGeneratedWhatsApp() {
-      const { filtered, hadirCount, telatCount, bolosCount, izinCount, alpaCount, belumCount, liburCount, isTodayHoliday, studentItems } = await prepareOfficialDocument();
+      const { filtered, hadirCount, telatCount, bolosCount, izinCount, liburCount, isTodayHoliday, studentItems } = await prepareOfficialDocument();
       const now = new Date();
       const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       const deptLabel = genDept === 'all' ? 'Semua Jurusan (AKL & RPL)' : (genDept === 'guru' ? 'Dewan Guru' : `Jurusan ${genDept.toUpperCase()}`);
@@ -2600,50 +2596,6 @@ _Dokumen resmi sah sistem presensi terintegrasi SI-HADIR IoT._`;
         });
       } else {
         prompt('Salin teks laporan berikut:', text);
-      }
-    }
-
-    // 3. Salin Ringkasan WhatsApp
-    function copyWhatsAppSummary() {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-      const hadir = document.getElementById('rekap-hadir')?.textContent || '0';
-      const terlambat = document.getElementById('rekap-terlambat')?.textContent || '0';
-      const bolos = document.getElementById('rekap-bolos')?.textContent || '0';
-      const izin = document.getElementById('rekap-izin')?.textContent || '0';
-      const alpa = document.getElementById('rekap-alpa')?.textContent || '0';
-      const belum = document.getElementById('rekap-belum')?.textContent || '0';
-
-      const rombelLabel = selectedClass === 'all' ? 'Semua Rombel & Guru' : (selectedClass === 'guru' ? 'Dewan Guru & Staf' : selectedClass);
-
-      const text = `*LAPORAN PRESENSI RESMI SMK MA'ARIF PADANG RATU*
-🎯 Sasaran Rombel: *${rombelLabel}*
-📅 Tanggal: ${dateStr}
-
-📊 *Ringkasan Kehadiran:*
-• Hadir Tepat Waktu : ${hadir} orang
-• Terlambat         : ${terlambat} orang
-• Bolos (-10 Poin)  : ${bolos} orang
-• Izin / Dispensasi : ${izin} orang
-• Alpa              : ${alpa} orang
-• Belum Absen       : ${belum} orang
-
-Total Log Presensi: ${getFilteredLogs().length} data (${filterTitles[currentFilter] || currentFilter}).
-_Laporan otomatis terverifikasi sistem SI-HADIR IoT & Turso Cloud._`;
-
-      if (navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-        navigator.clipboard.writeText(text).then(() => {
-          if (typeof (window as any).showToast === 'function') {
-            (window as any).showToast('Ringkasan WA berhasil disalin ke clipboard!', 'success');
-          } else {
-            alert('Ringkasan laporan presensi berhasil disalin! Anda bisa langsung menempelkannya (Paste) ke WhatsApp.');
-          }
-        }).catch(() => {
-          prompt('Salin teks laporan berikut untuk WhatsApp:', text);
-        });
-      } else {
-        prompt('Salin teks laporan berikut untuk WhatsApp:', text);
       }
     }
 

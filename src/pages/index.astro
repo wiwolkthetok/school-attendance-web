@@ -832,7 +832,6 @@ import Layout from "../layouts/Layout.astro";
         const now = new Date();
         const curMinutes = now.getHours() * 60 + now.getMinutes();
         const isAfternoonReached = curMinutes >= (13 * 60 + 30); // 13:30 WIB (Jadwal Siang / Alpa Resmi)
-        const isMorningClosed = curMinutes >= (7 * 60 + 40); // 07:40 WIB (Batas Toleransi Tutup Pagi)
         const card3Title = document.getElementById("metric-card3-title");
         if (card3Title) card3Title.textContent = isHol ? "Libur Sekolah" : (isAfternoonReached ? "Alpa (Tanpa Ket.)" : "Belum Hadir");
 

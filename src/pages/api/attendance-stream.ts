@@ -2,7 +2,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { attendanceEmitter } from '../../utils/attendanceEvents';
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async () => {
   let onAttendance: (data: any) => void;
   let heartbeatInterval: ReturnType<typeof setInterval>;
 
