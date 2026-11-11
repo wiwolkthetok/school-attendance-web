@@ -1338,52 +1338,81 @@ const guruCount = 0;
           );
         });
 
+        const masukTimeStr = masukLog?.time ? masukLog.time.substring(0, 5) : '';
+        const pulangTimeStr = pulangLog?.time ? pulangLog.time.substring(0, 5) : '';
+
         let statusBadgeHtml = "";
 
         if (activePerm) {
           statusBadgeHtml = `
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-purple-900 bg-purple-100 border border-purple-300 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs">
-              <span class="w-2 h-2 rounded-full bg-purple-600"></span>
-              Izin (${activePerm.categoryLabel || "Sah"})
-            </span>
+            <div class="inline-flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-purple-50 text-purple-700 border-purple-200 shrink-0">
+                IZIN
+              </span>
+              <span class="text-[11px] font-medium text-slate-600 whitespace-nowrap">
+                ${activePerm.categoryLabel || "Sah"}
+              </span>
+            </div>
           `;
         } else if (pulangLog && pulangLog.status === "Bolos") {
           statusBadgeHtml = `
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-rose-900 bg-rose-100 border border-rose-300 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs animate-pulse">
-              <span class="w-2 h-2 rounded-full bg-rose-600"></span>
-              Bolos (-20)
-            </span>
+            <div class="inline-flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200 shrink-0">
+                BOLOS
+              </span>
+              <span class="text-[11px] font-mono text-slate-500 whitespace-nowrap">
+                ${masukTimeStr ? `Masuk ${masukTimeStr} • ` : ''}Tanpa Pulang
+              </span>
+            </div>
           `;
         } else if (masukLog && pulangLog) {
+          const isLate = masukLog.status === "Terlambat";
           statusBadgeHtml = `
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="inline-flex items-center gap-1 text-[10px] font-bold ${masukLog.status === "Terlambat" ? "text-amber-800 bg-amber-100 border-amber-300" : (masukLog.status === "Alpa" ? "text-purple-800 bg-purple-100 border-purple-300" : "text-emerald-800 bg-emerald-100 border-emerald-300")} border px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
-                Masuk ${masukLog.time}
+            <div class="inline-flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase ${isLate ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-emerald-50 text-emerald-700 border-emerald-200"} shrink-0">
+                ${isLate ? "TERLAMBAT" : "HADIR"}
               </span>
-              <span class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-800 bg-blue-100 border border-blue-300 px-2 sm:px-2.5 py-0.5 rounded-full shadow-xs">
-                Pulang ${pulangLog.time}
+              <span class="text-[11px] font-mono text-slate-600 whitespace-nowrap">
+                ${masukTimeStr} → ${pulangTimeStr}
               </span>
             </div>
           `;
         } else if (masukLog) {
           const isLate = masukLog.status === "Terlambat";
           const isAlpa = masukLog.status === "Alpa";
-          const badgeClass = isAlpa
-            ? "text-purple-900 bg-purple-100 border-purple-300"
-            : (isLate ? "text-amber-900 bg-amber-100 border-amber-300" : "text-emerald-900 bg-emerald-100 border-emerald-300");
-          const dotClass = isAlpa ? "bg-purple-600" : (isLate ? "bg-amber-600" : "bg-emerald-600");
-          statusBadgeHtml = `
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold ${badgeClass} border px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs">
-              <span class="w-2 h-2 rounded-full ${dotClass}"></span>
-              ${masukLog.status} (${masukLog.time})
-            </span>
-          `;
+          if (isAlpa) {
+            statusBadgeHtml = `
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300 shrink-0">
+                  ALPA
+                </span>
+                <span class="text-[11px] text-slate-400 whitespace-nowrap">
+                  Tanpa Keterangan
+                </span>
+              </div>
+            `;
+          } else {
+            statusBadgeHtml = `
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase ${isLate ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-emerald-50 text-emerald-700 border-emerald-200"} shrink-0">
+                  ${isLate ? "TERLAMBAT" : "HADIR"}
+                </span>
+                <span class="text-[11px] font-mono text-slate-600 whitespace-nowrap">
+                  Masuk ${masukTimeStr}
+                </span>
+              </div>
+            `;
+          }
         } else if (pulangLog) {
           statusBadgeHtml = `
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-900 bg-blue-100 border border-blue-300 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs">
-              <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-              Pulang (${pulangLog.time})
-            </span>
+            <div class="inline-flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-sky-50 text-sky-700 border-sky-200 shrink-0">
+                PULANG
+              </span>
+              <span class="text-[11px] font-mono text-slate-600 whitespace-nowrap">
+                Tap ${pulangTimeStr}
+              </span>
+            </div>
           `;
         } else {
           const isAlumni =
@@ -1393,17 +1422,25 @@ const guruCount = 0;
 
           if (isAlumni) {
             statusBadgeHtml = `
-              <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs">
-                <span class="material-symbols-outlined text-[13px] text-slate-400">school</span>
-                Alumni
-              </span>
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-600 border-slate-200 shrink-0">
+                  ALUMNI
+                </span>
+                <span class="text-[11px] text-slate-400 whitespace-nowrap">
+                  Lulus
+                </span>
+              </div>
             `;
           } else {
             statusBadgeHtml = `
-              <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-300 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shadow-xs">
-                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                Belum Hadir
-              </span>
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-50 text-slate-500 border-slate-200 shrink-0">
+                  BELUM
+                </span>
+                <span class="text-[11px] text-slate-400 whitespace-nowrap">
+                  Belum Hadir
+                </span>
+              </div>
             `;
           }
         }
