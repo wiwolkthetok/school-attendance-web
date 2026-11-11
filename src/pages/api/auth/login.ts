@@ -71,38 +71,25 @@ export const POST: APIRoute = async ({ request }) => {
 
     const students = await getStudents();
 
-    // Helper pencocokan data (RFID, ID Civitas, atau NIP/NISN)
+    // Helper pencocokan data: MURNI HANYA KARTU RFID (Strict RFID Only)
     const cleanStr = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
     const matchRfid = (s: any, input: string) => {
-      if (!input) return false;
+      if (!input || !s.rfidUid) return false;
       const rawInput = input.trim().toUpperCase();
       const cleanInput = rawInput.replace(/^0+/, '');
       const digitsInput = rawInput.replace(/[^0-9]/g, '');
 
-      // 1. Cocokkan dengan RFID UID (mendukung 9 digit, 10 digit, dan leading zero)
-      if (s.rfidUid) {
-        const sRfid = s.rfidUid.trim().toUpperCase();
-        const sRfidClean = sRfid.replace(/^0+/, '');
-        if (sRfid === rawInput || (cleanInput && sRfidClean === cleanInput)) return true;
-        if (digitsInput && sRfid.replace(/[^0-9]/g, '') === digitsInput) return true;
-      }
+      const sRfid = s.rfidUid.trim().toUpperCase();
+      const sRfidClean = sRfid.replace(/^0+/, '');
+      const sRfidDigits = sRfid.replace(/[^0-9]/g, '');
 
-      // 2. Cocokkan dengan ID sistem (misal: GUR-9968, STD-7764, ADM-001)
-      if (s.id) {
-        const sId = s.id.trim().toUpperCase();
-        if (sId === rawInput) return true;
-        if (digitsInput && sId.replace(/[^0-9]/g, '') === digitsInput) return true;
-      }
-
-      // 3. Cocokkan dengan NIP / NISN / Identifier
-      if (s.identifier) {
-        const sIdent = s.identifier.trim().toUpperCase();
-        const sIdentDigits = sIdent.replace(/[^0-9]/g, '');
-        if (sIdent === rawInput || (digitsInput && sIdentDigits === digitsInput)) return true;
-      }
-
-      return false;
+      // Wajib mencocokkan nomor chip RFID (mendukung 9 digit, 10 digit, dan leading zero)
+      return (
+        sRfid === rawInput ||
+        (cleanInput && sRfidClean === cleanInput) ||
+        (digitsInput && sRfidDigits === digitsInput)
+      );
     };
 
     const matchName = (s: any, input: string) => {
@@ -116,7 +103,7 @@ export const POST: APIRoute = async ({ request }) => {
       return false;
     };
 
-    // Cari civitas yang mencocokkan Nama dan Identitas (RFID / ID / NIP)
+    // Cari civitas yang mencocokkan Nama dan ID Kartu RFID murni
     const found = students.find((s) => matchRfid(s, rawRfid) && matchName(s, rawName));
 
     if (!found) {
