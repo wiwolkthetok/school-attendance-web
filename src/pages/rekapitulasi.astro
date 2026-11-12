@@ -2731,97 +2731,79 @@ import Layout from '../layouts/Layout.astro';
         });
         liburCount = studentItems.length;
       } else if (genTime === 'today') {
-        // Mode Hari Ini (Hari Sekolah Aktif)
-        const now = new Date();
-        const curMinutes = now.getHours() * 60 + now.getMinutes();
-        const [pulangH, pulangM] = (cachedSettings?.jamPulang || '13:30').split(':').map(Number);
-        const [tutupH, tutupM] = (cachedSettings?.jamTutupPulang || '15:00').split(':').map(Number);
-        const isAfternoonReached = curMinutes >= (pulangH * 60 + pulangM);
-        const afternoonClosed = curMinutes >= (tutupH * 60 + tutupM);
+        // Mode Hari Ini (Hanya menampilkan rekaman data yang benar-benar ada di log presensi)
+        if (filteredLogs.length === 0) {
+          studentItems = [];
+          hadirCount = 0;
+          telatCount = 0;
+          izinCount = 0;
+          bolosCount = 0;
+        } else {
+          // Kelompokkan rekaman presensi hari ini per siswa
+          const logMap = new Map<string, any[]>();
+          filteredLogs.forEach((l: any) => {
+            const key = (l.rfidUid || l.name || '').trim().toUpperCase();
+            if (!logMap.has(key)) logMap.set(key, []);
+            logMap.get(key)!.push(l);
+          });
 
-        const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
-        const approvedPermits = cachedPermits.filter(
-          (p: any) => p.status === 'Disetujui' && p.startDate <= todayStr && (p.endDate || p.startDate) >= todayStr
-        );
-        const permitStudentIds = new Set(approvedPermits.map((p: any) => p.studentId));
-        const permitByStudentId = new Map(approvedPermits.map((p: any) => [p.studentId, p]));
+          // Hanya ambil siswa yang memiliki riwayat log hari ini
+          const attendedStudents = targetStudents.filter((s: any) => {
+            const keyRfid = (s.rfidUid || '').trim().toUpperCase();
+            const keyName = (s.name || '').trim().toUpperCase();
+            return logMap.has(keyRfid) || logMap.has(keyName);
+          });
 
-        // Kelompokkan rekaman presensi hari ini per siswa
-        const logMap = new Map<string, any[]>();
-        filteredLogs.forEach((l: any) => {
-          const key = (l.rfidUid || l.name || '').trim().toUpperCase();
-          if (!logMap.has(key)) logMap.set(key, []);
-          logMap.get(key)!.push(l);
-        });
+          studentItems = attendedStudents.map((s: any) => {
+            const keyRfid = (s.rfidUid || '').trim().toUpperCase();
+            const keyName = (s.name || '').trim().toUpperCase();
+            const sLogs = logMap.get(keyRfid) || logMap.get(keyName) || [];
+            const masukLog = sLogs.find((l: any) => l.type === 'masuk');
+            const pulangLog = sLogs.find((l: any) => l.type === 'pulang');
 
-        studentItems = targetStudents.map((s: any) => {
-          const keyRfid = (s.rfidUid || '').trim().toUpperCase();
-          const keyName = (s.name || '').trim().toUpperCase();
-          const sLogs = logMap.get(keyRfid) || logMap.get(keyName) || [];
-          const masukLog = sLogs.find((l: any) => l.type === 'masuk');
-          const pulangLog = sLogs.find((l: any) => l.type === 'pulang');
+            const pts = getStudentPoints(s.rfidUid, s.id, 'siswa');
+            const ptsText = pts >= 100 ? '100 Poin' : (pts >= 75 ? `${pts} P (SP-1)` : `${pts} P (SP-2)`);
 
-          const hasPermit = permitStudentIds.has(s.id);
-          const studentPermit = permitByStudentId.get(s.id);
+            let status = 'Hadir';
+            let timeText = '-';
 
-          const pts = getStudentPoints(s.rfidUid, s.id, 'siswa');
-          const ptsText = pts >= 100 ? '100 Poin' : (pts >= 75 ? `${pts} P (SP-1)` : `${pts} P (SP-2)`);
-
-          let status = 'Hadir';
-          let timeText = '-';
-
-          if (hasPermit) {
-            // Siswa memiliki surat izin/dispensasi sah yang disetujui
-            status = studentPermit?.type || 'Izin';
-            timeText = `${status} Resmi`;
-          } else if (masukLog) {
-            // Siswa melakukan absen pagi
-            timeText = `${masukLog.time.slice(0, 5)} WIB (masuk)`;
-            if (pulangLog) {
-              // Absen Pagi ADA + Absen Siang ADA (Kunci label Terlambat jika pagi terlambat)
-              status = masukLog.status === 'Terlambat' ? 'Terlambat' : 'Hadir';
-              timeText = `${masukLog.time.slice(0, 5)} - ${pulangLog.time.slice(0, 5)} WIB`;
-            } else if (afternoonClosed || masukLog.status === 'Bolos') {
-              // Absen Pagi ADA + Siang Belum & Jam Siang Berakhir -> Status: BOLOS
-              status = 'Bolos';
-            } else {
-              status = masukLog.status === 'Terlambat' ? 'Terlambat' : 'Hadir';
+            if (masukLog) {
+              timeText = `${masukLog.time.slice(0, 5)} WIB (masuk)`;
+              if (pulangLog) {
+                status = masukLog.status === 'Terlambat' ? 'Terlambat' : (pulangLog.status === 'Bolos' ? 'Bolos' : 'Hadir');
+                timeText = `${masukLog.time.slice(0, 5)} - ${pulangLog.time.slice(0, 5)} WIB`;
+              } else if (masukLog.status === 'Bolos') {
+                status = 'Bolos';
+              } else {
+                status = masukLog.status === 'Terlambat' ? 'Terlambat' : 'Hadir';
+              }
+            } else if (pulangLog) {
+              status = pulangLog.status || 'Hadir';
+              timeText = `${pulangLog.time.slice(0, 5)} WIB (siang)`;
             }
-          } else if (pulangLog && pulangLog.status === 'Alpa') {
-            // Siswa tidak absen pagi namun tap di siang hari -> Status tetap ALPA (Opsi B)
-            status = 'Alpa';
-            timeText = `${pulangLog.time.slice(0, 5)} WIB (siang)`;
-          } else {
-            // Siswa tidak ada rekaman absen pagi
-            if (isAfternoonReached) {
-              // Jadwal siang sudah dibuka (lewat 13:30 WIB) -> Status otomatis ALPA
-              status = 'Alpa';
-            } else {
-              status = 'Belum Hadir';
-            }
-          }
 
-          const statusDisplay = status === 'Bolos' ? 'Bolos (-10P)' : status;
+            const statusDisplay = status === 'Bolos' ? 'Bolos (-10P)' : status;
 
-          return {
-            id: s.id,
-            rfidUid: s.rfidUid,
-            nisn: s.identifier || '-',
-            name: s.name,
-            className: s.className || '-',
-            time: timeText,
-            status,
-            statusDisplay,
-            pts,
-            ptsText,
-            statusPoinText: `${statusDisplay} • ${ptsText}`
-          };
-        });
+            return {
+              id: s.id,
+              rfidUid: s.rfidUid,
+              nisn: s.identifier || '-',
+              name: s.name,
+              className: s.className || '-',
+              time: timeText,
+              status,
+              statusDisplay,
+              pts,
+              ptsText,
+              statusPoinText: `${statusDisplay} • ${ptsText}`
+            };
+          });
 
-        hadirCount = studentItems.filter((it: any) => it.status === 'Hadir').length;
-        telatCount = studentItems.filter((it: any) => it.status === 'Terlambat').length;
-        izinCount = studentItems.filter((it: any) => it.status === 'Izin' || it.status === 'Sakit' || it.status === 'Dispensasi').length;
-        bolosCount = studentItems.filter((it: any) => it.status === 'Bolos').length;
+          hadirCount = studentItems.filter((it: any) => it.status === 'Hadir').length;
+          telatCount = studentItems.filter((it: any) => it.status === 'Terlambat').length;
+          izinCount = studentItems.filter((it: any) => it.status === 'Izin' || it.status === 'Sakit' || it.status === 'Dispensasi').length;
+          bolosCount = studentItems.filter((it: any) => it.status === 'Bolos').length;
+        }
       } else {
         // Mode Arsip (1 Minggu, 1 Bulan, 1 Tahun)
         studentItems = filteredLogs.map((l: any) => {

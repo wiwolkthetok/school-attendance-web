@@ -1310,11 +1310,6 @@ const guruCount = 0;
         const masukTimeStr = masukLog?.time ? masukLog.time.substring(0, 5) : '';
         const pulangTimeStr = pulangLog?.time ? pulangLog.time.substring(0, 5) : '';
 
-        const now = new Date();
-        const curMinutes = now.getHours() * 60 + now.getMinutes();
-        const isAfternoonReached = curMinutes >= 13 * 60 + 30; // 13:30 WIB (gerbang pagi ditutup / Alpa resmi)
-        const afternoonClosed = curMinutes >= 15 * 60; // 15:00 WIB (sesi kepulangan berakhir)
-
         let statusBadgeHtml = "";
 
         if (activePerm) {
@@ -1379,18 +1374,6 @@ const guruCount = 0;
                 </span>
               </div>
             `;
-          } else if (afternoonClosed && item.role === "siswa") {
-            // Siswa hadir pagi tapi tidak absen pulang setelah batas sesi pulang ditutup (Bolos)
-            statusBadgeHtml = `
-              <div class="inline-flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200 shrink-0">
-                  BOLOS
-                </span>
-                <span class="text-[11px] font-mono text-slate-500 whitespace-nowrap">
-                  Masuk ${masukTimeStr} • Tanpa Pulang
-                </span>
-              </div>
-            `;
           } else {
             statusBadgeHtml = `
               <div class="inline-flex items-center gap-2">
@@ -1442,18 +1425,6 @@ const guruCount = 0;
                 </span>
                 <span class="text-[11px] text-slate-400 whitespace-nowrap">
                   Lulus
-                </span>
-              </div>
-            `;
-          } else if (isAfternoonReached && item.role === "siswa") {
-            // Waktu sudah lewat gerbang pagi tutup (13:30 WIB), otomatis Alpa
-            statusBadgeHtml = `
-              <div class="inline-flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300 shrink-0">
-                  ALPA
-                </span>
-                <span class="text-[11px] text-slate-400 whitespace-nowrap">
-                  Tanpa Keterangan
                 </span>
               </div>
             `;
