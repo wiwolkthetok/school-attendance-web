@@ -77,7 +77,7 @@ export function saveSchedulerState(state: Partial<SchedulerState>): SchedulerSta
 
 let cachedSettings: SchoolSettings | null = null;
 let cachedSettingsTime = 0;
-const SETTINGS_CACHE_TTL = 3 * 1000;
+const SETTINGS_CACHE_TTL = 60 * 1000;
 
 export function invalidateSettingsCache(): void {
   cachedSettings = null;

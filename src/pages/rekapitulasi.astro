@@ -1854,7 +1854,11 @@ import Layout from '../layouts/Layout.astro';
         set('rekap-log-footer-text', `Menampilkan ${displayLogs.length} data presensi (${filterTitles[currentFilter] || currentFilter})`);
 
         // Update 3 Bar Kehadiran per Jurusan & Guru Hari Ini
-        const absenUids = new Set(todayLogs.map((l: any) => (l.rfidUid || '').trim().toUpperCase()));
+        const absenUids = new Set(
+          todayLogs
+            .filter((l: any) => l.status === 'Hadir' || l.status === 'Terlambat' || l.status === 'Pulang')
+            .map((l: any) => (l.rfidUid || '').trim().toUpperCase())
+        );
         const aklTotal = cachedStudents.filter((s: any) => s.role !== 'guru' && s.className && s.className.includes('AKL') && !s.className.toLowerCase().includes('alumni') && !s.className.toLowerCase().includes('lulus'));
         const aklHadir = aklTotal.filter((s: any) => absenUids.has((s.rfidUid || '').trim().toUpperCase()));
         const aklPct = aklTotal.length ? Math.round((aklHadir.length / aklTotal.length) * 100) : 0;
@@ -2398,7 +2402,7 @@ import Layout from '../layouts/Layout.astro';
         cursor.setDate(cursor.getDate() - 1);
       }
 
-      trend7dData = pastSchoolDays.map((day, idx) => {
+      trend7dData = pastSchoolDays.map((day) => {
         const dayLogs = allLogs.filter((l: any) => l.date === day.iso && (l.role === 'siswa' || !l.role));
 
         if (dayLogs.length > 0) {
@@ -2434,18 +2438,15 @@ import Layout from '../layouts/Layout.astro';
           };
         }
 
-        const baselinePcts = [100, 91, 100, 86, 100, 100];
-        const fallbackPct = baselinePcts[idx] || 95;
-        const fallbackHadir = Math.round((fallbackPct / 100) * totalStudents);
         return {
           date: day.dateLabel,
           dayName: day.dayName,
           fullDate: day.iso,
-          hadir: fallbackHadir,
-          terlambat: fallbackPct < 100 ? 1 : 0,
-          alpa: totalStudents - fallbackHadir,
+          hadir: 0,
+          terlambat: 0,
+          alpa: totalStudents,
           total: totalStudents,
-          percentage: fallbackPct,
+          percentage: 0,
         };
       });
 
@@ -2461,7 +2462,7 @@ import Layout from '../layouts/Layout.astro';
         { label: 'Mgg 4', name: 'W4', start: 22, end: 31 },
       ];
 
-      trend30dData = weeks.map((w, idx) => {
+      trend30dData = weeks.map((w) => {
         const weekLogs = allLogs.filter((l: any) => {
           if (!l.date) return false;
           const [y, m, d] = l.date.split('-').map(Number);
@@ -2490,17 +2491,14 @@ import Layout from '../layouts/Layout.astro';
           };
         }
 
-        const fallbackWeekly = [95, 91, 98, 93];
-        const fPct = fallbackWeekly[idx] || 94;
-        const fHadir = Math.round((fPct / 100) * totalExpected);
         return {
           date: w.label,
           dayName: w.name,
-          hadir: fHadir,
-          terlambat: 2,
-          alpa: totalExpected - fHadir,
+          hadir: 0,
+          terlambat: 0,
+          alpa: totalExpected,
           total: totalExpected,
-          percentage: fPct,
+          percentage: 0,
         };
       });
 

@@ -76,7 +76,7 @@ import PwaMeta from '../components/PwaMeta.astro';
     </header>
 
     <!-- Main Center Card Container -->
-    <main class="w-full max-w-4xl my-auto py-4 z-10 flex items-center justify-center">
+    <main class="w-full max-w-4xl my-auto py-4 z-10 flex items-center justify-center" data-reveal>
       <div class="w-full bg-linear-to-br from-[#0a38b8] via-[#124adb] to-[#1e58e8] rounded-[2rem] p-1.5 shadow-2xl flex flex-col lg:flex-row relative border border-white/20" style="transform: translateZ(0);">
         
         <!-- ====================================================
@@ -1085,6 +1085,10 @@ import PwaMeta from '../components/PwaMeta.astro';
           }
         }
       });
+    </script>
+    <script>
+      const el = document.querySelector('[data-reveal]');
+      if (el) { requestAnimationFrame(() => el.classList.add('revealed')); }
     </script>
   </body>
 </html>

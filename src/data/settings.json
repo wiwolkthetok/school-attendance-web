@@ -8,11 +8,11 @@
   "spBk": "Akumulasi 3 Hari Alpa",
   "waTemplate": "Yth. Bapak/Ibu Wali Murid dari {nama_siswa} ({kelas}).\nAnanda telah hadir di SMK pada pukul {jam_masuk} WIB dengan status: [{status}].",
   "scheduler": {
-    "lastAlpaDate": "2026-11-11",
-    "lastBolosDate": "2026-11-11",
+    "lastAlpaDate": "2026-11-12",
+    "lastBolosDate": "2026-11-12",
     "lastArchivedDate": "2026-11-09",
-    "nextRunType": "alpa",
-    "nextRunTime": "2026-11-12 13:30:00 WIB (Penetapan Siswa Alpa)",
-    "lastStatusMessage": "Timer aktif: Menunggu jadwal berikutnya dalam ~0.72 jam (2026-11-12 13:30:00 WIB (Penetapan Siswa Alpa))"
+    "nextRunType": "archive",
+    "nextRunTime": "2026-11-12 23:00:00 WIB (Arsip & Reset Harian)",
+    "lastStatusMessage": "Timer aktif: Menunggu jadwal berikutnya dalam ~5.76 jam (2026-11-12 23:00:00 WIB (Arsip & Reset Harian))"
   }
 }

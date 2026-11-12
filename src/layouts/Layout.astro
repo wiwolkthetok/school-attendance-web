@@ -183,7 +183,7 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
       <Navbar title={title} />
 
       <!-- DINAMIS CONTENT INJECTION DENGAN TAG <slot /> -->
-      <div class="p-3.5 sm:p-6 lg:p-8 space-y-6 flex-1 pb-24 md:pb-8">
+      <div class="p-3.5 sm:p-6 lg:p-8 space-y-6 flex-1 pb-24 md:pb-8" id="page-content">
         <slot />
       </div>
     </main>
@@ -481,6 +481,30 @@ const { title, activeNav = 'data-presensi' } = Astro.props;
     }, 12000);
 
     console.log('%c📡 [SI-HADIR IoT Tester Ready - Hybrid Realtime]', 'background: #2563eb; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 6px;');
+  </script>
+
+  <script>
+    const pc = document.getElementById('page-content');
+    if (pc) {
+      const kids = Array.from(pc.children).filter(
+        el => !el.id?.includes('modal') && !el.classList.contains('fixed') && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE'
+      );
+      kids.forEach(el => el.setAttribute('data-reveal', ''));
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const idx = kids.indexOf(e.target as Element);
+            const delay = Math.min(idx * 110, 660);
+            (e.target as HTMLElement).style.animationDelay = `${delay}ms`;
+            e.target.classList.add('revealed');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08 });
+
+      kids.forEach(el => io.observe(el));
+    }
   </script>
 </body>
 </html>

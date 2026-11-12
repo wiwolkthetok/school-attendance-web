@@ -44,7 +44,7 @@ const items = isGuruSession ? guruNavItems : adminNavItems;
 
 <nav
   aria-label="Navigasi Bawah Mobile"
-  class="fixed bottom-0 inset-x-0 z-40 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:hidden select-none safe-bottom transition-all duration-200 touch-manipulation"
+  class="fixed bottom-0 inset-x-0 z-40 w-full bg-white border-t border-slate-200 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] md:hidden select-none safe-bottom touch-manipulation"
   id="bottom-nav-root"
 >
   <div class={`grid ${isGuruSession ? "grid-cols-3 max-w-sm mx-auto" : "grid-cols-6"} items-center px-1 py-1.5 w-full`}>
@@ -117,21 +117,19 @@ const items = isGuruSession ? guruNavItems : adminNavItems;
 </style>
 
 <script>
-  // Pre-load semua rute navigasi di background agar perpindahan halaman seketika
-  const targetRoutes = [
-    "/",
-    "/jadwal",
-    "/izin-dispensasi",
-    "/siswa-guru",
-    "/rekapitulasi",
-    "/pengaturan",
-    "/profil-siswa",
-  ];
-  targetRoutes.forEach((route) => {
-    const link = document.createElement("link");
-    link.rel = "prefetch";
-    link.href = route;
-    document.head.appendChild(link);
+  // Prefetch pintar saat tombol disentuh/ditekan (on-demand), bukan borongan di awal
+  document.querySelectorAll('#bottom-nav-root a[href]').forEach((el) => {
+    const triggerPrefetch = () => {
+      const href = el.getAttribute('href');
+      if (href && !href.startsWith('#') && !document.querySelector(`link[rel="prefetch"][href="${href}"]`)) {
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = href;
+        document.head.appendChild(link);
+      }
+    };
+    el.addEventListener('touchstart', triggerPrefetch, { passive: true, once: true });
+    el.addEventListener('mouseenter', triggerPrefetch, { once: true });
   });
 
   // Tombol Logout Mobile
