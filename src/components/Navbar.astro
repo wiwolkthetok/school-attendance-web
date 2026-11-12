@@ -116,15 +116,15 @@ komponen penting buat nampilin icon
         <span id="navbar-login-text" class="hidden xs:inline">Login</span>
       </a>
 
-      <!-- Tombol Logout Warna Hijau di Navbar Sebelah Kanan -->
+      <!-- Tombol Logout Warna Hijau di Navbar Sebelah Kanan (Tampil di Mobile & Desktop) -->
       <button
         id="navbar-logout-btn"
         type="button"
-        class="hidden items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all cursor-pointer active:scale-95"
+        class="hidden items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all cursor-pointer active:scale-95"
         title="Klik untuk Logout / Keluar"
       >
         <span class="material-symbols-outlined text-sm">logout</span>
-        <span id="navbar-logout-text" class="hidden xs:inline">Logout</span>
+        <span id="navbar-logout-text" class="text-xs font-bold">Logout</span>
       </button>
     </div>
   </div>
@@ -170,18 +170,20 @@ komponen penting buat nampilin icon
     const logoutBtn = document.getElementById("navbar-logout-btn");
     const logoutText = document.getElementById("navbar-logout-text");
 
-    if (authRaw || authRole) {
+    const hasAuthCookie = document.cookie.split(';').some(c => c.trim().startsWith('auth_session=') && !c.trim().endsWith('='));
+
+    if (authRaw || authRole || hasAuthCookie) {
       let civ: any = { name: "Admin", role: "admin", tag: "" };
       try {
         if (authRaw) civ = JSON.parse(authRaw);
       } catch {}
 
-      // Sembunyikan tombol login, tampilkan tombol Logout hijau di sebelah kanan
+      // Sembunyikan tombol login, tampilkan tombol Logout hijau di sebelah kanan (Mobile & Desktop)
       if (loginBtn) loginBtn.classList.add("hidden");
 
       if (logoutBtn) {
-        logoutBtn.classList.remove("hidden", "flex");
-        logoutBtn.classList.add("hidden", "md:flex");
+        logoutBtn.classList.remove("hidden");
+        logoutBtn.classList.add("flex");
         if (logoutText) {
           logoutText.textContent = `Logout`;
         }

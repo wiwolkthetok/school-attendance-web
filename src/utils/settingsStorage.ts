@@ -36,7 +36,7 @@ export const DEFAULT_SETTINGS: SchoolSettings = {
   waTemplate: 'Yth. Bapak/Ibu Wali Murid dari {nama_siswa} ({kelas}).\nAnanda telah hadir di SMK pada pukul {jam_masuk} WIB dengan status: [{status}].',
 };
 
-function readRawSettingsJson(): Record<string, any> {
+export function readRawSettingsJson(): Record<string, any> {
   try {
     if (fs.existsSync(settingsPath)) {
       return JSON.parse(fs.readFileSync(settingsPath, 'utf-8'));

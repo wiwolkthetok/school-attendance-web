@@ -19,120 +19,116 @@ import Layout from "../layouts/Layout.astro";
 <Layout title="Data Presensi" activeNav="data-presensi">
   <!-- 3 KARTU METRIK UTAMA -->
   <section
-    class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-5"
+    class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4"
     data-purpose="percentage-metric-cards"
   >
-    <!-- KARTU 1: VIVID BLUE (Siswa Hadir Tepat Waktu) -->
+    <!-- KARTU 1: Siswa Hadir Tepat Waktu -->
     <div
-      class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-4 sm:p-6 shadow-sm border border-white/10 flex flex-col justify-between min-h-[140px] sm:min-h-[160px] transition-transform hover:-translate-y-0.5 duration-200"
+      class="rounded-xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between min-h-[135px] sm:min-h-[145px]"
     >
-      <div class="relative z-10">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-blue-100">
-          Siswa Hadir
-        </h3>
-        <div class="mt-2 flex items-baseline gap-2">
+      <div>
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-semibold text-slate-600">Siswa Hadir</h3>
+          <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-700 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded">
+            HADIR
+          </span>
+        </div>
+        <div class="mt-2.5 flex items-baseline gap-2">
           <span
             id="metric-hadir-pct"
-            class="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight">0%</span
+            class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 font-mono"
+            >0%</span
           >
           <span
             id="metric-hadir-count"
-            class="text-xs font-semibold text-blue-100">0 / 0 Siswa</span
+            class="text-xs font-medium text-slate-500 font-mono"
+            >0 / 0 Siswa</span
           >
         </div>
       </div>
-      <div class="relative z-10 mt-3 sm:mt-4">
+      <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">Presensi tepat waktu</span>
         <a
           href="/siswa-guru"
-          class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 transition text-white"
+          class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition"
         >
-          <span>Lebih Lanjut</span>
-          <span class="material-symbols-outlined text-sm">Arrow_Right</span>
+          <span>Detail</span>
+          <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
         </a>
-      </div>
-      <!-- Minimalist Icon Watermark -->
-      <div
-        class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-20"
-      >
-        <span class="material-symbols-outlined text-6xl sm:text-7xl select-none"
-          >check_circle</span
-        >
       </div>
     </div>
 
-    <!-- KARTU 2: CYAN / SKY BLUE (Siswa Terlambat) -->
+    <!-- KARTU 2: Siswa Terlambat -->
     <div
-      class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-cyan-600 to-sky-600 text-white p-4 sm:p-6 shadow-sm border border-white/10 flex flex-col justify-between min-h-[140px] sm:min-h-[160px] transition-transform hover:-translate-y-0.5 duration-200"
+      class="rounded-xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between min-h-[135px] sm:min-h-[145px]"
     >
-      <div class="relative z-10">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-cyan-100">
-          Terlambat
-        </h3>
-        <div class="mt-2 flex items-baseline gap-2">
+      <div>
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-semibold text-slate-600">Terlambat</h3>
+          <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-amber-700 bg-amber-50 border border-amber-200/70 px-2 py-0.5 rounded">
+            TERLAMBAT
+          </span>
+        </div>
+        <div class="mt-2.5 flex items-baseline gap-2">
           <span
             id="metric-terlambat-pct"
-            class="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight">0%</span
+            class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 font-mono"
+            >0%</span
           >
           <span
             id="metric-terlambat-count"
-            class="text-xs font-semibold text-cyan-100">0 / 0 Siswa</span
+            class="text-xs font-medium text-slate-500 font-mono"
+            >0 / 0 Siswa</span
           >
         </div>
       </div>
-      <div class="relative z-10 mt-3 sm:mt-4">
+      <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">Lewat batas jam masuk</span>
         <a
           href="/siswa-guru"
-          class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 transition text-white"
+          class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition"
         >
-          <span>Lebih lanjut</span>
-          <span class="material-symbols-outlined text-sm">Arrow_Right</span>
+          <span>Detail</span>
+          <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
         </a>
-      </div>
-      <!-- Minimalist Icon Watermark -->
-      <div
-        class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-20"
-      >
-        <span class="material-symbols-outlined text-6xl sm:text-7xl select-none"
-          >schedule</span
-        >
       </div>
     </div>
 
-    <!-- KARTU 3: SLATE (Belum Absen / Libur) -->
+    <!-- KARTU 3: Belum Hadir / Alpa -->
     <div
-      class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-600 to-slate-800 text-white p-4 sm:p-6 shadow-sm border border-white/10 flex flex-col justify-between min-h-[140px] sm:min-h-[160px] transition-transform hover:-translate-y-0.5 duration-200"
+      class="rounded-xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between min-h-[135px] sm:min-h-[145px]"
     >
-      <div class="relative z-10">
-        <h3 id="metric-card3-title" class="text-xs font-bold uppercase tracking-wider text-slate-200">
-          Belum Absen
-        </h3>
-        <div class="mt-2 flex items-baseline gap-2">
+      <div>
+        <div class="flex items-center justify-between">
+          <h3 id="metric-card3-title" class="text-xs font-semibold text-slate-600">
+            Belum Hadir
+          </h3>
+          <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded">
+            STATUS
+          </span>
+        </div>
+        <div class="mt-2.5 flex items-baseline gap-2">
           <span
             id="metric-belum-pct"
-            class="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight">100%</span
+            class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 font-mono"
+            >100%</span
           >
           <span
             id="metric-belum-count"
-            class="text-xs font-semibold text-slate-200">0 / 0 Siswa</span
+            class="text-xs font-medium text-slate-500 font-mono"
+            >0 / 0 Siswa</span
           >
         </div>
       </div>
-      <div class="relative z-10 mt-3 sm:mt-4">
+      <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">Menunggu scan RFID</span>
         <a
           href="/siswa-guru"
-          class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 transition text-white"
+          class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition"
         >
-          <span>Lebih Lanjut</span>
-          <span class="material-symbols-outlined text-sm">Arrow_Right</span>
+          <span>Detail</span>
+          <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
         </a>
-      </div>
-      <!-- Minimalist Icon Watermark -->
-      <div
-        class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-20"
-      >
-        <span class="material-symbols-outlined text-6xl sm:text-7xl select-none"
-          >person_off</span
-        >
       </div>
     </div>
   </section>
@@ -141,24 +137,24 @@ import Layout from "../layouts/Layout.astro";
   <section class="space-y-4" id="table-section">
     <!-- Main Card Container -->
     <div
-      class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-7 shadow-xs border border-slate-200/80 space-y-5 sm:space-y-6"
+      class="bg-white rounded-xl p-4 sm:p-6 shadow-xs border border-slate-200/80 space-y-5"
     >
       <!-- Section Header -->
       <div
-        class="flex flex-row items-center justify-between gap-3 pb-3 sm:pb-4 border-b border-slate-100"
+        class="flex flex-row items-center justify-between gap-3 pb-3 border-b border-slate-100"
       >
         <div>
           <h2
-            class="text-sm sm:text-base lg:text-lg font-black text-slate-900 tracking-tight"
+            class="text-sm sm:text-base font-semibold text-slate-900 tracking-tight"
           >
             Statistik Kehadiran
           </h2>
-          <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">Presensi siswa hari ini.</p>
+          <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Presensi siswa hari ini</p>
         </div>
         <div>
           <a
             href="/rekapitulasi"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold transition border border-slate-200 hover:border-blue-200 shadow-2xs active:scale-95"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-medium transition border border-slate-200 shadow-2xs active:scale-95"
           >
             <span class="material-symbols-outlined text-base">summarize</span>
             <span class="hidden xs:inline">Rekapitulasi</span>
@@ -168,495 +164,269 @@ import Layout from "../layouts/Layout.astro";
 
       <!-- REALTIME LIVE FEED GERBANG RFID -->
       <div
-        class="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3 sm:p-4 space-y-2.5"
+        class="rounded-lg border border-slate-200/80 bg-slate-50/60 p-3 sm:p-4 space-y-2.5"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="relative flex h-2 w-2">
               <span
-                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
-              ></span>
-              <span
-                class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"
+                class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 ring-2 ring-emerald-500/20"
               ></span>
             </span>
             <h3
-              class="text-xs font-bold text-slate-800 uppercase tracking-wider"
+              class="text-xs font-semibold text-slate-800"
             >
-              ABSEN TERBARU
+              Absen Terbaru
             </h3>
           </div>
           <span
-            class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 border border-emerald-200/80 rounded"
+            class="text-[10px] font-mono font-medium text-slate-500"
           >
-            REALTIME
+            Live Monitor
           </span>
         </div>
 
         <div
           id="live-feed-container"
-          class="space-y-2 max-h-48 overflow-y-auto"
+          class="space-y-1.5 max-h-52 overflow-y-auto"
         >
           <div
             id="live-feed-empty"
             class="text-center py-4 text-xs text-slate-400 font-medium"
           >
-            belum ada yang absen hari ini...
+            Belum ada aktivitas presensi
           </div>
         </div>
       </div>
 
-      <!-- 4 Grid Circular Donut Statistics -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 pt-1">
-        <!-- DIAGRAM 1: Rasio Kehadiran Keseluruhan -->
-        <div
-          class="rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-5 bg-white shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-        >
+      <!-- 4 Grid Circular Donut Statistics (Native High-Performance Interactive SVG) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1">
+        <!-- DIAGRAM 1: Rasio Kehadiran Siswa -->
+        <div class="rounded-xl border border-slate-200/80 p-4 sm:p-5 bg-white shadow-xs flex flex-col justify-between transition-all">
           <div class="flex items-center justify-between mb-3">
             <div>
-              <h3
-                class="text-sm font-bold text-slate-900 flex items-center gap-2"
-              >
+              <h3 class="text-xs sm:text-sm font-semibold text-slate-900 flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-                Rasio Kehadiran siswa
+                Rasio Kehadiran Siswa
               </h3>
-              <p id="d1-subtitle" class="text-[11px] text-slate-400 mt-0.5">
-                Presensi siswa hari ini.
-              </p>
+              <p id="d1-subtitle" class="text-[11px] text-slate-500 mt-0.5">Presensi siswa hari ini</p>
             </div>
-            <span
-              id="d1-badge"
-              class="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded"
-              >0 Scan</span
-            >
+            <span id="d1-badge" class="text-[10px] font-mono font-bold tracking-wider uppercase border border-slate-200 text-slate-600 bg-slate-100 px-2 py-0.5 rounded">0 Scan</span>
           </div>
 
-          <div
-            class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-2"
-          >
-            <div
-              class="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center"
-            >
-              <svg
-                id="d1-svg"
-                class="w-full h-full -rotate-90"
-                viewBox="0 0 100 100"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="38"
-                  fill="none"
-                  stroke="#e2e8f0"
-                  stroke-width="12"></circle>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-2">
+            <div class="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center">
+              <svg id="d1-svg" class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#f1f5f9" stroke-width="10"></circle>
               </svg>
-              <div
-                class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none"
-              >
-                <span
-                  id="d1-center-pct"
-                  class="text-2xl font-black tracking-tight text-slate-900 leading-none"
-                  >0.0%</span
-                >
-                <span
-                  class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider"
-                  >Kehadiran</span
-                >
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                <span id="d1-center-pct" class="text-2xl font-semibold tracking-tight text-slate-900 font-mono leading-none">0.0%</span>
+                <span class="text-[9px] font-medium text-slate-400 mt-1 uppercase tracking-wider">Kehadiran</span>
               </div>
             </div>
 
             <div class="space-y-1.5 w-full max-w-xs sm:max-w-[280px] text-xs">
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-blue-600 shrink-0"
-                  ></span>
+                  <span class="w-2 h-2 rounded-full bg-blue-600 shrink-0"></span>
                   <span class="text-slate-600 font-medium">Hadir Tepat</span>
                 </div>
-                <span id="d1-tepat-waktu" class="font-bold text-slate-900"
-                  >0 (0.0%)</span
-                >
+                <span id="d1-tepat-waktu" class="font-mono font-semibold text-slate-900">0 (0.0%)</span>
               </div>
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-cyan-500 shrink-0"
-                  ></span>
+                  <span class="w-2 h-2 rounded-full bg-cyan-500 shrink-0"></span>
                   <span class="text-slate-600 font-medium">Terlambat</span>
                 </div>
-                <span id="d1-terlambat" class="font-bold text-slate-900"
-                  >0 (0.0%)</span
-                >
+                <span id="d1-terlambat" class="font-mono font-semibold text-slate-900">0 (0.0%)</span>
               </div>
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"
-                  ></span>
+                  <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
                   <span class="text-slate-600 font-medium">Izin / Disp</span>
                 </div>
-                <span id="d1-izin" class="font-bold text-slate-900"
-                  >0 (0.0%)</span
-                >
+                <span id="d1-izin" class="font-mono font-semibold text-slate-900">0 (0.0%)</span>
               </div>
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"
-                  ></span>
-                  <span class="text-slate-600 font-medium">Sakit & Alpa</span>
+                  <span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span>
+                  <span class="text-slate-600 font-medium">Sakit, Alpa & Bolos</span>
                 </div>
-                <span id="d1-sakit-alpa" class="font-bold text-slate-900"
-                  >0 (0.0%)</span
-                >
+                <span id="d1-sakit-alpa" class="font-mono font-semibold text-slate-900">0 (0.0%)</span>
               </div>
             </div>
           </div>
 
-          <div
-            class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400"
-          >
-            <span>Target: <strong class="text-slate-700">90%</strong></span>
-            <span id="d1-footer-status" class="text-blue-600 font-bold">-</span>
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <span>Target: <strong class="text-slate-700 font-mono">90%</strong></span>
+            <span id="d1-footer-status" class="text-slate-400 font-semibold">-</span>
           </div>
         </div>
 
         <!-- DIAGRAM 2: Kehadiran Jurusan -->
-        <div
-          class="rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-5 bg-white shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-        >
+        <div class="rounded-xl border border-slate-200/80 p-4 sm:p-5 bg-white shadow-xs flex flex-col justify-between transition-all">
           <div class="flex items-center justify-between mb-3">
             <div>
-              <h3
-                class="text-sm font-bold text-slate-900 flex items-center gap-2"
-              >
+              <h3 class="text-xs sm:text-sm font-semibold text-slate-900 flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
                 Kehadiran Jurusan
               </h3>
-              <p id="d2-subtitle" class="text-[11px] text-slate-400 mt-0.5">
-                Persentase RPL & AKL.
-              </p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Persentase RPL & AKL</p>
             </div>
-            <span
-              class="text-[10px] font-mono font-bold tracking-wider uppercase text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded"
-              >2 Jurusan</span
-            >
+            <span class="text-[10px] font-mono font-bold tracking-wider uppercase border border-blue-200 text-blue-700 bg-blue-50 px-2 py-0.5 rounded">2 Jurusan</span>
           </div>
 
-          <div
-            class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-2"
-          >
-            <div
-              class="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center"
-            >
-              <svg
-                id="d2-svg"
-                class="w-full h-full -rotate-90"
-                viewBox="0 0 100 100"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="38"
-                  fill="none"
-                  stroke="#e2e8f0"
-                  stroke-width="12"></circle>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-2">
+            <div class="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center">
+              <svg id="d2-svg" class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#f1f5f9" stroke-width="10"></circle>
               </svg>
-              <div
-                class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none"
-              >
-                <span
-                  id="d2-center-pct"
-                  class="text-xl font-black tracking-tight text-slate-900 leading-none"
-                  >0.0%</span
-                >
-                <span
-                  class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider"
-                  >Rata-rata</span
-                >
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                <span id="d2-center-pct" class="text-2xl font-semibold tracking-tight text-slate-900 font-mono leading-none">0.0%</span>
+                <span class="text-[9px] font-medium text-slate-400 mt-1 uppercase tracking-wider">Rata-rata</span>
               </div>
             </div>
 
-            <div class="space-y-2 w-full max-w-xs sm:max-w-[280px] text-xs">
-              <div
-                class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+            <div class="space-y-1.5 w-full max-w-xs sm:max-w-[280px] text-xs">
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-sm bg-blue-500 shrink-0"
-                  ></span>
-                  <span class="text-slate-800 font-bold">RPL</span>
+                  <span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
+                  <span class="text-slate-600 font-medium">RPL</span>
                 </div>
-                <span id="d2-rpl-val" class="font-black text-blue-600 font-mono"
-                  >0.0%</span
-                >
+                <span id="d2-rpl-val" class="font-mono font-semibold text-slate-900">0.0%</span>
               </div>
-              <div
-                class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-sm bg-purple-500 shrink-0"
-                  ></span>
-                  <span class="text-slate-800 font-bold">AKL</span>
+                  <span class="w-2 h-2 rounded-full bg-purple-500 shrink-0"></span>
+                  <span class="text-slate-600 font-medium">AKL</span>
                 </div>
-                <span
-                  id="d2-akl-val"
-                  class="font-black text-purple-600 font-mono">0.0%</span
-                >
+                <span id="d2-akl-val" class="font-mono font-semibold text-slate-900">0.0%</span>
               </div>
             </div>
           </div>
 
-          <div
-            class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400"
-          >
-            <span
-              >Terdisiplin: <strong id="d2-best-jurusan" class="text-slate-700"
-                >-</strong
-              ></span
-            >
-            <span id="d2-footer-status" class="text-emerald-600 font-bold"
-              >-</span
-            >
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <span>Terdisiplin: <strong id="d2-best-jurusan" class="text-slate-700 font-mono">-</strong></span>
+            <span id="d2-footer-status" class="text-slate-600 font-medium">-</span>
           </div>
         </div>
 
         <!-- DIAGRAM 3: Izin & Sakit -->
-        <div
-          class="rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-5 bg-white shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-        >
+        <div class="rounded-xl border border-slate-200/80 p-4 sm:p-5 bg-white shadow-xs flex flex-col justify-between transition-all">
           <div class="flex items-center justify-between mb-3">
             <div>
-              <h3
-                class="text-sm font-bold text-slate-900 flex items-center gap-2"
-              >
+              <h3 class="text-xs sm:text-sm font-semibold text-slate-900 flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                 Izin & Sakit
               </h3>
-              <p id="d3-subtitle" class="text-[11px] text-slate-400 mt-0.5">
-                Rincian perizinan siswa.
-              </p>
+              <p id="d3-subtitle" class="text-[11px] text-slate-500 mt-0.5">Rincian perizinan siswa</p>
             </div>
-            <span
-              id="d3-badge"
-              class="text-[10px] font-mono font-bold tracking-wider uppercase text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded"
-              >0 Berkas</span
-            >
+            <span id="d3-badge" class="text-[10px] font-mono font-bold tracking-wider uppercase border border-rose-200 text-rose-700 bg-rose-50 px-2 py-0.5 rounded">0 Berkas</span>
           </div>
 
-          <div
-            class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-2"
-          >
-            <div
-              class="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center"
-            >
-              <svg
-                id="d3-svg"
-                class="w-full h-full -rotate-90"
-                viewBox="0 0 100 100"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="38"
-                  fill="none"
-                  stroke="#e2e8f0"
-                  stroke-width="12"></circle>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-2">
+            <div class="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center">
+              <svg id="d3-svg" class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#f1f5f9" stroke-width="10"></circle>
               </svg>
-              <div
-                class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none"
-              >
-                <span
-                  id="d3-center-pct"
-                  class="text-2xl font-black tracking-tight text-slate-900 leading-none"
-                  >100%</span
-                >
-                <span
-                  class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider"
-                  >Izin Sah</span
-                >
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                <span id="d3-center-pct" class="text-2xl font-semibold tracking-tight text-slate-900 font-mono leading-none">100%</span>
+                <span class="text-[9px] font-medium text-slate-400 mt-1 uppercase tracking-wider">Izin Sah</span>
               </div>
             </div>
 
             <div class="space-y-1.5 w-full max-w-xs sm:max-w-[280px] text-xs">
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"
-                  ></span>
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
                   <span class="text-slate-600 font-medium">Sakit</span>
                 </div>
-                <span id="d3-sakit" class="font-bold text-slate-900"
-                  >0 (0%)</span
-                >
+                <span id="d3-sakit" class="font-mono font-semibold text-slate-900">0 (0%)</span>
               </div>
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"
-                  ></span>
+                  <span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
                   <span class="text-slate-600 font-medium">Dispensasi</span>
                 </div>
-                <span id="d3-dispensasi" class="font-bold text-slate-900"
-                  >0 (0%)</span
-                >
+                <span id="d3-dispensasi" class="font-mono font-semibold text-slate-900">0 (0%)</span>
               </div>
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"
-                  ></span>
+                  <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
                   <span class="text-slate-600 font-medium">Izin</span>
                 </div>
-                <span id="d3-keluarga" class="font-bold text-slate-900"
-                  >0 (0%)</span
-                >
+                <span id="d3-keluarga" class="font-mono font-semibold text-slate-900">0 (0%)</span>
               </div>
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"
-                  ></span>
+                  <span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span>
                   <span class="text-slate-600 font-medium">Alpa</span>
                 </div>
-                <span id="d3-alpa" class="font-bold text-rose-600">0 (0%)</span>
+                <span id="d3-alpa" class="font-mono font-semibold text-rose-600">0 (0%)</span>
               </div>
             </div>
           </div>
 
-          <a
-            href="/izin-dispensasi"
-            class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 hover:text-blue-600 transition group"
-          >
-            <span id="d3-footer-verifikasi"
-              >Valid: <strong id="d3-verifikasi-count" class="text-emerald-700"
-                >0 / 0</strong
-              ></span
-            >
-            <span
-              id="d3-footer-pending"
-              class="text-blue-600 font-bold group-hover:underline flex items-center gap-1"
-              >0 Perlu Dicek <span class="material-symbols-outlined text-[13px]"
-                >arrow_forward</span
-              ></span
-            >
+          <a href="/izin-dispensasi" class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 hover:text-blue-600 transition group">
+            <span id="d3-footer-verifikasi">Valid: <strong id="d3-verifikasi-count" class="text-slate-700 font-mono">0 / 0</strong></span>
+            <span id="d3-footer-pending" class="text-blue-600 font-medium group-hover:underline flex items-center gap-1">
+              0 Perlu Dicek <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+            </span>
           </a>
         </div>
 
-        <!-- DIAGRAM 4: Disiplin Jam Kedatangan -->
-        <div
-          class="rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-5 bg-white shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-        >
+        <!-- DIAGRAM 4: Jam Kedatangan -->
+        <div class="rounded-xl border border-slate-200/80 p-4 sm:p-5 bg-white shadow-xs flex flex-col justify-between transition-all">
           <div class="flex items-center justify-between mb-3">
             <div>
-              <h3
-                class="text-sm font-bold text-slate-900 flex items-center gap-2"
-              >
+              <h3 class="text-xs sm:text-sm font-semibold text-slate-900 flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                 Jam Kedatangan
               </h3>
-              <p id="d4-subtitle" class="text-[11px] text-slate-400 mt-0.5">
-                Ketepatan waktu siswa.
-              </p>
+              <p id="d4-subtitle" class="text-[11px] text-slate-500 mt-0.5">Ketepatan waktu siswa</p>
             </div>
-            <span
-              id="d4-badge"
-              class="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded"
-              >Grade -</span
-            >
+            <span id="d4-badge" class="text-[10px] font-mono font-bold tracking-wider uppercase border border-slate-200 text-slate-600 bg-slate-100 px-2 py-0.5 rounded">Grade -</span>
           </div>
 
-          <div
-            class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-2"
-          >
-            <div
-              class="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center"
-            >
-              <svg
-                id="d4-svg"
-                class="w-full h-full -rotate-90"
-                viewBox="0 0 100 100"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="38"
-                  fill="none"
-                  stroke="#e2e8f0"
-                  stroke-width="12"></circle>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 my-2">
+            <div class="relative w-36 h-36 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center">
+              <svg id="d4-svg" class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#f1f5f9" stroke-width="10"></circle>
               </svg>
-              <div
-                class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none"
-              >
-                <span
-                  id="d4-center-pct"
-                  class="text-2xl font-black tracking-tight text-emerald-600 leading-none"
-                  >0.0%</span
-                >
-                <span
-                  class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-wider"
-                  >Tepat Waktu</span
-                >
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                <span id="d4-center-pct" class="text-2xl font-semibold tracking-tight text-slate-900 font-mono leading-none">0.0%</span>
+                <span class="text-[9px] font-medium text-slate-400 mt-1 uppercase tracking-wider">Tepat Waktu</span>
               </div>
             </div>
 
             <div class="space-y-1.5 w-full max-w-xs sm:max-w-[280px] text-xs">
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"
-                  ></span>
-                  <div class="text-slate-800 font-bold">&lt; 07:00 WIB</div>
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                  <span class="text-slate-600 font-medium">&lt; 07:00 WIB</span>
                 </div>
-                <span id="d4-awal" class="font-bold text-emerald-600"
-                  >0 (0.0%)</span
-                >
+                <span id="d4-awal" class="font-mono font-semibold text-slate-900">0 (0.0%)</span>
               </div>
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"
-                  ></span>
-                  <div class="text-slate-800 font-bold">07:00 - 07:15</div>
+                  <span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
+                  <span class="text-slate-600 font-medium">07:00 - 07:15</span>
                 </div>
-                <span id="d4-standar" class="font-bold text-blue-600"
-                  >0 (0.0%)</span
-                >
+                <span id="d4-standar" class="font-mono font-semibold text-slate-900">0 (0.0%)</span>
               </div>
-              <div
-                class="flex items-center justify-between p-1.5 rounded-xl bg-slate-50 border border-slate-100"
-              >
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50/70 border border-slate-100/90 hover:bg-slate-100/70 transition">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"
-                  ></span>
-                  <div class="text-slate-800 font-bold">&gt; 07:15 WIB</div>
+                  <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+                  <span class="text-slate-600 font-medium">&gt; 07:15 WIB</span>
                 </div>
-                <span id="d4-lewat" class="font-bold text-amber-600"
-                  >0 (0.0%)</span
-                >
+                <span id="d4-lewat" class="font-mono font-semibold text-slate-900">0 (0.0%)</span>
               </div>
             </div>
           </div>
 
-          <div
-            class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400"
-          >
-            <span
-              >Puncak: <strong id="d4-puncak-range" class="text-slate-700"
-                >-</strong
-              ></span
-            >
-            <span id="d4-footer-rata" class="text-slate-500 font-medium">-</span
-            >
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <span>Puncak: <strong id="d4-puncak-range" class="text-slate-700 font-mono">-</strong></span>
+            <span id="d4-footer-rata" class="text-slate-600 font-medium font-mono">Rata-rata -</span>
           </div>
         </div>
       </div>
@@ -664,6 +434,7 @@ import Layout from "../layouts/Layout.astro";
   </section>
 
   <script>
+    let cachedIndexSettings: any = null;
     function renderDonutSvg(
       svgEl: SVGSVGElement | null,
       segments: { count: number; color: string }[],
@@ -672,15 +443,15 @@ import Layout from "../layouts/Layout.astro";
       const C = 238.76;
       const total = segments.reduce((sum, s) => sum + s.count, 0);
       if (total <= 0) {
-        svgEl.innerHTML = `<circle cx="50" cy="50" r="38" fill="none" stroke="#e2e8f0" stroke-width="12"></circle>`;
+        svgEl.innerHTML = `<circle cx="50" cy="50" r="38" fill="none" stroke="#f1f5f9" stroke-width="10"></circle>`;
         return;
       }
       let offset = 0;
-      let html = `<circle cx="50" cy="50" r="38" fill="none" stroke="#f1f5f9" stroke-width="12"></circle>`;
+      let html = `<circle cx="50" cy="50" r="38" fill="none" stroke="#f1f5f9" stroke-width="10"></circle>`;
       segments.forEach((seg) => {
         if (seg.count <= 0) return;
         const arc = (seg.count / total) * C;
-        html += `<circle cx="50" cy="50" r="38" fill="none" stroke="${seg.color}" stroke-width="12" stroke-dasharray="${arc.toFixed(2)} ${C}" stroke-dashoffset="${(-offset).toFixed(2)}" stroke-linecap="round"></circle>`;
+        html += `<circle cx="50" cy="50" r="38" fill="none" stroke="${seg.color}" stroke-width="10" stroke-dasharray="${arc.toFixed(2)} ${C}" stroke-dashoffset="${(-offset).toFixed(2)}" stroke-linecap="round"></circle>`;
         offset += arc;
       });
       svgEl.innerHTML = html;
@@ -744,7 +515,18 @@ import Layout from "../layouts/Layout.astro";
             .map((p: any) => p.studentId),
         );
 
-        // Kategorisasi siswa hari ini
+        // Deteksi siswa yang terkena sanksi Bolos kepulangan hari ini
+        const bolosSet = new Set<string>();
+        logs.forEach((l: any) => {
+          if (l.type === "pulang" && l.status === "Bolos") {
+            const u = cleanUid(l.rfidUid);
+            if (u) bolosSet.add(u);
+            const std = studentList.find((s: any) => cleanUid(s.rfidUid) === u || s.name === l.name);
+            if (std?.id) bolosSet.add(std.id.toUpperCase());
+          }
+        });
+
+        // Kategorisasi presensi siswa hari ini
         const hadirSet = new Set<string>();
         const terlambatSet = new Set<string>();
         const izinLogSet = new Set<string>();
@@ -752,6 +534,10 @@ import Layout from "../layouts/Layout.astro";
 
         siswaMasukLogs.forEach((l: any) => {
           const u = cleanUid(l.rfidUid);
+          if (bolosSet.has(u)) {
+            // Siswa terdeteksi bolos pulang, jangan dihitung sebagai hadir penuh
+            return;
+          }
           if (l.status === "Hadir") hadirSet.add(u);
           else if (l.status === "Terlambat") terlambatSet.add(u);
           else if (l.status === "Sakit") sakitLogSet.add(u);
@@ -761,37 +547,42 @@ import Layout from "../layouts/Layout.astro";
 
         let hadirCount = 0;
         let terlambatCount = 0;
+        let bolosCount = 0;
         let totalIzinDisp = 0;
         let totalSakit = 0;
         let alpaCount = 0;
 
-        const rplStudents = studentList.filter(
-          (s: any) =>
-            (s.category && s.category.toLowerCase().includes("rpl")) ||
-            (s.className && s.className.toUpperCase().includes("RPL")),
-        );
-        const aklStudents = studentList.filter(
-          (s: any) =>
-            (s.category && s.category.toLowerCase().includes("akl")) ||
-            (s.className && s.className.toUpperCase().includes("AKL")),
-        );
+        // Penentuan Jurusan Akurat & Bebas Duplikasi
+        const getJurusan = (s: any) => {
+          const cls = (s.className || "").toUpperCase();
+          if (cls.includes("RPL")) return "rpl";
+          if (cls.includes("AKL")) return "akl";
+          const cat = (s.category || "").toLowerCase();
+          if (cat.includes("rpl")) return "rpl";
+          if (cat.includes("akl")) return "akl";
+          return "akl";
+        };
+
+        const rplStudents = studentList.filter((s: any) => getJurusan(s) === "rpl");
+        const aklStudents = studentList.filter((s: any) => getJurusan(s) === "akl");
 
         let rplHadir = 0;
         let aklHadir = 0;
 
         studentList.forEach((s: any) => {
           const u = cleanUid(s.rfidUid);
-          const isRpl =
-            (s.category && s.category.toLowerCase().includes("rpl")) ||
-            (s.className && s.className.toUpperCase().includes("RPL"));
+          const sId = (s.id || "").toUpperCase();
+          const jur = getJurusan(s);
 
-          if (hadirSet.has(u)) {
+          if (bolosSet.has(u) || (sId && bolosSet.has(sId))) {
+            bolosCount++;
+          } else if (hadirSet.has(u)) {
             hadirCount++;
-            if (isRpl) rplHadir++;
+            if (jur === "rpl") rplHadir++;
             else aklHadir++;
           } else if (terlambatSet.has(u)) {
             terlambatCount++;
-            if (isRpl) rplHadir++;
+            if (jur === "rpl") rplHadir++;
             else aklHadir++;
           } else if (izinDispPermStudentIds.has(s.id) || izinLogSet.has(u)) {
             totalIzinDisp++;
@@ -803,7 +594,7 @@ import Layout from "../layouts/Layout.astro";
         });
 
         const totalHadir = hadirCount + terlambatCount;
-        const belumCount = totalStudents - totalHadir; // Belum hadir di gerbang
+        const belumCount = totalStudents - totalHadir; // Belum hadir / Bolos / Alpa
 
         const topHadirPct =
           totalStudents > 0
@@ -813,9 +604,15 @@ import Layout from "../layouts/Layout.astro";
           totalStudents > 0
             ? ((terlambatCount / totalStudents) * 100).toFixed(0)
             : "0";
+
+        const now = new Date();
+        const curMinutes = now.getHours() * 60 + now.getMinutes();
+        const [pHour, pMin] = (cachedIndexSettings?.jamPulang || '13:30').split(':').map(Number);
+        const isAfternoonReached = curMinutes >= (pHour * 60 + pMin);
+        const unexcusedCount = isAfternoonReached ? (alpaCount + bolosCount) : belumCount;
         const topBelumPct =
           totalStudents > 0
-            ? ((belumCount / totalStudents) * 100).toFixed(0)
+            ? ((unexcusedCount / totalStudents) * 100).toFixed(0)
             : "100";
 
         // Update Kartu Metrik Ringkas Atas
@@ -829,11 +626,14 @@ import Layout from "../layouts/Layout.astro";
         const elBelumCount = document.getElementById("metric-belum-count");
 
         const isHol = typeof (window as any).isSchoolHoliday === 'function' ? (window as any).isSchoolHoliday() : (new Date().getDay() === 0);
-        const now = new Date();
-        const curMinutes = now.getHours() * 60 + now.getMinutes();
-        const isAfternoonReached = curMinutes >= (13 * 60 + 30); // 13:30 WIB (Jadwal Siang / Alpa Resmi)
         const card3Title = document.getElementById("metric-card3-title");
-        if (card3Title) card3Title.textContent = isHol ? "Libur Sekolah" : (isAfternoonReached ? "Alpa (Tanpa Ket.)" : "Belum Hadir");
+        if (card3Title) {
+          card3Title.textContent = isHol
+            ? "Libur Sekolah"
+            : (isAfternoonReached
+              ? (bolosCount > 0 ? "Alpa & Bolos" : "Alpa (Tanpa Ket.)")
+              : "Belum Hadir");
+        }
 
         if (elHadirPct) elHadirPct.textContent = `${topHadirPct}%`;
         if (elHadirCount)
@@ -846,7 +646,7 @@ import Layout from "../layouts/Layout.astro";
           elBelumCount.textContent = isHol && totalHadir === 0
             ? `${totalStudents} / ${totalStudents} Siswa (Minggu)`
             : (isAfternoonReached
-              ? `${alpaCount} / ${totalStudents} Siswa (Alpa)`
+              ? `${unexcusedCount} / ${totalStudents} Siswa (${bolosCount > 0 ? "Alpa/Bolos" : "Alpa"})`
               : `${belumCount} / ${totalStudents} Siswa`);
 
         // Update Live Feed List
@@ -876,39 +676,31 @@ import Layout from "../layouts/Layout.astro";
                       ? "bg-amber-50 text-amber-700 border-amber-200"
                       : "bg-emerald-50 text-emerald-700 border-emerald-200";
 
-                const avatarBg = isBolos
-                  ? "bg-rose-600"
-                  : isAlpa
-                    ? "bg-purple-700"
-                    : isLate
-                      ? "bg-amber-500"
-                      : "bg-emerald-600";
-
                 const showUid =
                   isAdminUser && log.role !== "admin" && Boolean(log.rfidUid);
                 const subInfo = showUid
                   ? `${log.className} • UID: ${log.rfidUid}`
                   : log.className;
                 return `
-                <div class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-xs animate-toast gap-2">
-                  <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                    <div class="w-8 h-8 rounded-lg ${avatarBg} text-white font-black text-xs flex items-center justify-center shrink-0">
-                      ${log.name
+                <div class="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200/80 shadow-2xs gap-2">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-7 h-7 rounded bg-slate-100 border border-slate-200/80 text-slate-700 font-mono font-bold text-[11px] flex items-center justify-center shrink-0">
+                      ${(log.name || "Siswa")
                         .split(" ")
                         .map((n: string) => n[0])
                         .slice(0, 2)
                         .join("")}
                     </div>
                     <div class="min-w-0">
-                      <p class="font-bold text-xs text-slate-800 truncate">${log.name}</p>
-                      <p class="text-[10px] text-slate-400 font-medium truncate">${subInfo}</p>
+                      <p class="font-medium text-xs text-slate-900 truncate">${log.name || "Siswa"}</p>
+                      <p class="text-[10px] text-slate-500 font-mono truncate">${subInfo}</p>
                     </div>
                   </div>
-                  <div class="text-right flex items-center gap-1.5 sm:gap-2 shrink-0">
+                  <div class="text-right flex items-center gap-2 shrink-0">
                     <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase ${badgeClass} shrink-0">
                       ${log.status}
                     </span>
-                    <span class="text-xs font-mono font-medium text-slate-600">${log.time ? log.time.slice(0, 5) : "-"} WIB</span>
+                    <span class="text-xs font-mono text-slate-500">${log.time ? log.time.slice(0, 5) : "-"} WIB</span>
                   </div>
                 </div>
               `;
@@ -920,7 +712,7 @@ import Layout from "../layouts/Layout.astro";
         // ==========================================
         // PERHITUNGAN AKURAT 4 DIAGRAM STATISTIK
         // ==========================================
-        const sakitAlpaCount = totalSakit + alpaCount;
+        const sakitAlpaCount = totalSakit + alpaCount + bolosCount;
 
         // DIAGRAM 1: Rasio Kehadiran Keseluruhan
         const d1Sub = document.getElementById("d1-subtitle");
@@ -1015,10 +807,17 @@ import Layout from "../layouts/Layout.astro";
           aklStudents.length > 0
             ? ((aklHadir / aklStudents.length) * 100).toFixed(1)
             : "0.0";
-        const avgJurusan = (
-          (parseFloat(rplPct) + parseFloat(aklPct)) /
-          2
-        ).toFixed(1);
+        let avgJurusan = "0.0";
+        if (rplStudents.length > 0 && aklStudents.length > 0) {
+          avgJurusan = (
+            (parseFloat(rplPct) + parseFloat(aklPct)) /
+            2
+          ).toFixed(1);
+        } else if (rplStudents.length > 0) {
+          avgJurusan = rplPct;
+        } else if (aklStudents.length > 0) {
+          avgJurusan = aklPct;
+        }
 
         const d2Svg = document.getElementById("d2-svg") as SVGSVGElement | null;
         const d2Center = document.getElementById("d2-center-pct");
@@ -1209,8 +1008,8 @@ import Layout from "../layouts/Layout.astro";
             d4Rata.textContent = "Rata-rata: -";
           } else {
             const totalMinutes = gateTapLogs.reduce((acc: number, l: any) => {
-              const [h, m] = l.time.split(":").map(Number);
-              return acc + (h * 60 + (m || 0));
+              const [h, m] = (l.time || "00:00").split(":").map(Number);
+              return acc + ((h || 0) * 60 + (m || 0));
             }, 0);
             const avgMin = Math.round(totalMinutes / totalScan);
             const avgH = String(Math.floor(avgMin / 60)).padStart(2, "0");
@@ -1245,21 +1044,25 @@ import Layout from "../layouts/Layout.astro";
     // 2. Background Sync: Ambil data terbaru & simpan ke cache lokal
     async function updateDashboardMetrics() {
       try {
-        const [studentsRes, logsRes, permsRes] = await Promise.all([
+        const [studentsRes, logsRes, permsRes, setRes] = await Promise.all([
           fetch("/api/students"),
           fetch("/api/attendance?t=" + Date.now()),
           fetch("/api/permissions"),
+          fetch("/api/settings"),
         ]);
         const students = await studentsRes.json();
         const logs = await logsRes.json();
         const permissions = await permsRes.json();
+        cachedIndexSettings = await setRes.json().catch(() => null);
         
-        try {
-          localStorage.setItem("dashboard_metrics_cache", JSON.stringify({ students, logs, permissions }));
-          localStorage.setItem("civitas_data_cache", JSON.stringify({ students, logs, permissions }));
-        } catch (e) {}
+        if (Array.isArray(students) && Array.isArray(logs)) {
+          try {
+            localStorage.setItem("dashboard_metrics_cache", JSON.stringify({ students, logs, permissions: permissions || [] }));
+            localStorage.setItem("civitas_data_cache", JSON.stringify({ students, logs, permissions: permissions || [] }));
+          } catch (e) {}
 
-        renderDashboardData(students, logs, permissions);
+          renderDashboardData(students, logs, permissions || []);
+        }
       } catch (err) {
         console.error("Error updating dashboard metrics:", err);
       }

@@ -17,7 +17,7 @@ export const GET: APIRoute = async ({ request }) => {
 
     dateLogs.forEach((l) => {
       const u = l.rfidUid.toUpperCase();
-      if (l.type === 'masuk') morningMap.set(u, l);
+      if (l.type === 'masuk' && l.status !== 'Alpa') morningMap.set(u, l);
       if (l.type === 'pulang') {
         afternoonSet.add(u);
         if (l.status === 'Bolos') bolosSet.add(u);
@@ -33,7 +33,7 @@ export const GET: APIRoute = async ({ request }) => {
         const u = s.rfidUid.toUpperCase();
         if (morningMap.has(u)) {
           if (bolosSet.has(u)) {
-            confirmedBolos.push({ student: s, masukLog: morningMap.get(u), status: 'Sudah Dihukum Bolos (-20 Poin)' });
+            confirmedBolos.push({ student: s, masukLog: morningMap.get(u), status: 'Sudah Dihukum Bolos (-10 Poin)' });
           } else if (!afternoonSet.has(u)) {
             pendingBolos.push({ student: s, masukLog: morningMap.get(u), status: 'Belum Presensi Pulang' });
           }
@@ -78,8 +78,8 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({
       status: 'success',
       message: studentId
-        ? `Siswa ${result.penalizedStudents[0]?.name || studentId} berhasil ditindaklanjuti dan dipotong 20 poin disiplin.`
-        : `Evaluasi bolos selesai: ${result.bolosCount} siswa dikategorikan bolos dan dipotong 20 poin.`,
+        ? `Siswa ${result.penalizedStudents[0]?.name || studentId} berhasil ditindaklanjuti dan dipotong 10 poin disiplin.`
+        : `Evaluasi bolos selesai: ${result.bolosCount} siswa dikategorikan bolos dan dipotong 10 poin.`,
       data: result,
     }), {
       headers: { 'Content-Type': 'application/json' },

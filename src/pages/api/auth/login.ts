@@ -134,7 +134,13 @@ export const POST: APIRoute = async ({ request }) => {
           ? 'Administrator Sekolah'
           : (found.role === 'guru' ? 'Dewan Guru' : (isAlumni ? 'Alumni Sekolah' : 'Peserta Didik (Siswa)'))));
 
-    const redirectUrl = canAccessDashboard ? '/' : `/profil-siswa?id=${found.id}&auth=true`;
+    // Arah Pengalihan (Redirect) Berdasarkan Peran & Tag Civitas:
+    // 1. Waka Kesiswaan, Kepala Sekolah, & Administrator Sekolah -> Halaman Dashboard Utama (/)
+    // 2. Dewan Guru (Reguler) -> Jadwal & Agenda KBM (/jadwal)
+    // 3. Siswa / Peserta Didik -> Kartu & Profil Digital Siswa (/profil-siswa)
+    const redirectUrl = canAccessDashboard
+      ? '/'
+      : (found.role === 'guru' ? '/jadwal' : `/profil-siswa?id=${found.id}&auth=true`);
 
     return new Response(
       JSON.stringify({

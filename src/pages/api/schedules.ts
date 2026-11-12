@@ -10,7 +10,31 @@ export const GET: APIRoute = async ({ request }) => {
     const category = url.searchParams.get('category');
     const visibility = url.searchParams.get('visibility');
 
+    const cookieHeader = request.headers.get('cookie') || '';
+    const isStaff = cookieHeader.includes('auth_session=admin') || cookieHeader.includes('auth_session=guru');
+
     let list = await getSchedules();
+
+    // Proteksi privasi: jika bukan staf (siswa / guest), sembunyikan agenda khusus guru dan yang belum masuk H-x
+    if (!isStaff) {
+      const now = new Date();
+      const todayStr = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+      const todayDate = new Date(todayStr + 'T00:00:00');
+
+      list = list.filter((s) => {
+        if (s.visibility === 'guru') return false;
+        const leadDays = Number(s.notifyLeadDays ?? 0);
+        if (leadDays > 0) {
+          const startStr = s.startDate || s.date || '';
+          if (startStr) {
+            const startDate = new Date(startStr + 'T00:00:00');
+            const diffDays = Math.ceil((startDate.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24));
+            if (diffDays > leadDays) return false;
+          }
+        }
+        return true;
+      });
+    }
 
     if (day && day !== 'all') {
       list = list.filter((s) => s.day.toLowerCase() === day.toLowerCase());
@@ -25,7 +49,7 @@ export const GET: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify(list), {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=60',
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate',
       },
     });
   } catch (err: any) {
@@ -38,6 +62,15 @@ export const GET: APIRoute = async ({ request }) => {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    const cookieHeader = request.headers.get('cookie') || '';
+    const isStaff = cookieHeader.includes('auth_session=admin') || cookieHeader.includes('auth_session=guru');
+    if (!isStaff) {
+      return new Response(
+        JSON.stringify({ status: 'error', message: 'Akses ditolak: Hanya staf atau admin yang berhak mengelola agenda.' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const body = await request.json().catch(() => ({}));
     const title = (body.title || '').trim();
     const day = (body.day || 'Senin').trim();
@@ -85,6 +118,15 @@ export const POST: APIRoute = async ({ request }) => {
 
 export const DELETE: APIRoute = async ({ request }) => {
   try {
+    const cookieHeader = request.headers.get('cookie') || '';
+    const isStaff = cookieHeader.includes('auth_session=admin') || cookieHeader.includes('auth_session=guru');
+    if (!isStaff) {
+      return new Response(
+        JSON.stringify({ status: 'error', message: 'Akses ditolak: Hanya staf atau admin yang berhak menghapus agenda.' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     const url = new URL(request.url);
     const clearAll = url.searchParams.get('all') === 'true';
 

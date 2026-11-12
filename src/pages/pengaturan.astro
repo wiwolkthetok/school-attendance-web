@@ -18,29 +18,24 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Pengaturan Sistem" activeNav="pengaturan">
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-6 max-w-7xl mx-auto w-full">
     <!-- Top Action Bar -->
     <div
-      class="p-5 sm:p-6 bg-white/80 backdrop-blur-xl rounded-3xl shadow-xs border border-slate-200/70 flex flex-col md:flex-row md:items-center justify-between gap-4"
+      class="p-5 sm:p-6 bg-white rounded-xl shadow-xs border border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-4"
     >
       <div>
-        <div
-          class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-1"
-        >
+        <div class="flex items-center gap-2 mb-1">
           <span
-            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold text-[11px]"
+            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold text-[11px]"
           >
-            <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"
-            ></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
             Server Online
           </span>
         </div>
-        <h1
-          class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight"
-        >
+        <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
           Pengaturan Sistem
         </h1>
-        <p class="text-xs text-slate-500 mt-1">
+        <p class="text-xs text-slate-400 mt-0.5">
           Konfigurasi jam operasional dan notifikasi presensi.
         </p>
       </div>
@@ -48,311 +43,395 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex items-center gap-2">
         <button
           id="btn-reset-settings"
-          class="px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-xl shadow-xs transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          type="button"
+          class="px-3.5 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer"
         >
           Reset Default
         </button>
         <button
           id="btn-save-settings"
-          class="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-1"
+          type="button"
+          class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-2xs transition cursor-pointer active:scale-95 flex items-center gap-1.5"
         >
-          Simpan
+          <span class="material-symbols-outlined text-sm">save</span>
+          <span>Simpan</span>
         </button>
       </div>
     </div>
 
     <!-- Grid 1: Operational Hours & Vocational Rules -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
       <!-- Card 1: Jam Operasional Gerbang -->
       <section
-        class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-5"
+        class="bg-white rounded-xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-4 flex flex-col justify-between"
       >
-        <div
-          class="flex items-start justify-between border-b border-slate-100 pb-4"
-        >
-          <div class="flex items-center gap-3">
-            <div
-              class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"></path>
-              </svg>
-            </div>
-            <div>
-              <h2 class="text-sm font-bold text-slate-900">
-                Jam Operasional
-              </h2>
-              <p class="text-xs text-slate-500">
-                Waktu gerbang dan toleransi presensi.
-              </p>
-            </div>
-          </div>
-          <span
-            class="px-2.5 py-0.5 text-[10px] bg-slate-100 text-slate-700 font-bold rounded-full border border-slate-200"
-            >KBM Reguler</span
+        <div class="space-y-4">
+          <div
+            class="flex items-start justify-between border-b border-slate-100 pb-3"
           >
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold"
+              >
+                <span class="material-symbols-outlined text-lg">schedule</span>
+              </div>
+              <div>
+                <h2 class="text-sm font-bold text-slate-900">
+                  Jam Operasional
+                </h2>
+                <p class="text-xs text-slate-400">
+                  Waktu gerbang dan toleransi presensi.
+                </p>
+              </div>
+            </div>
+            <span
+              class="px-2.5 py-0.5 text-[10px] bg-slate-100 text-slate-600 font-semibold rounded-full border border-slate-200/60"
+            >
+              KBM Reguler
+            </span>
+          </div>
+
+          <!-- Section Sesi Pagi -->
+          <div>
+            <span class="text-[10px] uppercase font-mono tracking-wider text-slate-400 block mb-2 font-semibold">
+              Sesi Masuk Pagi
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label
+                  for="jam-buka-input"
+                  class="block text-[11px] font-medium text-slate-600 mb-1"
+                >
+                  Buka Gerbang
+                </label>
+                <input
+                  id="jam-buka-input"
+                  class="w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+                  type="time"
+                  value="06:15"
+                />
+              </div>
+              <div>
+                <label
+                  for="jam-masuk-input"
+                  class="block text-[11px] font-medium text-slate-600 mb-1"
+                >
+                  Bel Masuk (Tepat)
+                </label>
+                <input
+                  id="jam-masuk-input"
+                  class="w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+                  type="time"
+                  value="07:30"
+                />
+              </div>
+              <div>
+                <label
+                  for="jam-toleransi-input"
+                  class="block text-[11px] font-medium text-amber-700 mb-1 flex items-center justify-between"
+                >
+                  <span>Tutup Toleransi</span>
+                  <span class="text-[9px] px-1 rounded bg-amber-50 border border-amber-200 font-mono">Telat</span>
+                </label>
+                <input
+                  id="jam-toleransi-input"
+                  class="w-full text-xs font-mono font-semibold text-amber-900 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-amber-500 transition"
+                  type="time"
+                  value="07:40"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Sesi Pulang -->
+          <div class="pt-2 border-t border-slate-100">
+            <span class="text-[10px] uppercase font-mono tracking-wider text-slate-400 block mb-2 font-semibold">
+              Sesi Kepulangan
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label
+                  for="jam-pulang-input"
+                  class="block text-[11px] font-medium text-slate-600 mb-1"
+                >
+                  Buka Sesi Pulang
+                </label>
+                <input
+                  id="jam-pulang-input"
+                  class="w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+                  type="time"
+                  value="13:30"
+                />
+              </div>
+              <div>
+                <label
+                  for="jam-tutup-pulang-input"
+                  class="block text-[11px] font-medium text-rose-700 mb-1 flex items-center justify-between"
+                >
+                  <span>Tutup Pulang</span>
+                  <span class="text-[9px] px-1 rounded bg-rose-50 border border-rose-200 font-mono">Batas Bolos</span>
+                </label>
+                <input
+                  id="jam-tutup-pulang-input"
+                  class="w-full text-xs font-mono font-semibold text-rose-900 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-rose-500 transition"
+                  type="time"
+                  value="15:00"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div>
-            <label
-              for="jam-buka-input"
-              class="block text-xs font-bold text-slate-700 mb-1.5"
-              >Buka Gerbang</label
-            >
-            <input
-              id="jam-buka-input"
-              class="w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 shadow-inner"
-              type="time"
-              value="06:15"
-            />
-          </div>
-          <div>
-            <label
-              for="jam-masuk-input"
-              class="block text-xs font-bold text-slate-700 mb-1.5"
-              >Bel Masuk (Tepat Waktu)</label
-            >
-            <input
-              id="jam-masuk-input"
-              class="w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 shadow-inner"
-              type="time"
-              value="07:30"
-            />
-          </div>
-          <div>
-            <label
-              for="jam-toleransi-input"
-              class="block text-xs font-bold text-slate-700 mb-1.5"
-              >Batas Toleransi (Tutup Pagi)</label
-            >
-            <input
-              id="jam-toleransi-input"
-              class="w-full text-xs font-mono font-bold text-amber-800 bg-amber-50/50 border border-amber-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 shadow-inner"
-              type="time"
-              value="07:40"
-            />
-          </div>
-          <div>
-            <label
-              for="jam-pulang-input"
-              class="block text-xs font-bold text-slate-700 mb-1.5"
-              >Buka Sesi Pulang</label
-            >
-            <input
-              id="jam-pulang-input"
-              class="w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 shadow-inner"
-              type="time"
-              value="13:30"
-            />
-          </div>
-          <div>
-            <label
-              for="jam-tutup-pulang-input"
-              class="block text-xs font-bold text-slate-700 mb-1.5"
-              >Tutup Sesi Pulang (Batas Bolos)</label
-            >
-            <input
-              id="jam-tutup-pulang-input"
-              class="w-full text-xs font-mono font-bold text-rose-800 bg-rose-50/50 border border-rose-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all duration-200 shadow-inner"
-              type="time"
-              value="15:00"
-            />
-          </div>
-        </div>
-
+        <!-- Preset Cepat Demo -->
         <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-1.5 text-slate-500 text-[11px] font-semibold">
+          <span class="text-slate-400 text-[11px] font-medium flex items-center gap-1">
             <span class="material-symbols-outlined text-sm text-blue-600">tune</span>
             <span>Preset Cepat Demo:</span>
-          </div>
+          </span>
           <div class="flex flex-wrap gap-1.5">
-            <button type="button" id="btn-preset-resmi" class="px-2.5 py-1 text-[11px] font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition">
-              Standar Sekolah
+            <button
+              type="button"
+              id="btn-preset-resmi"
+              class="px-2.5 py-1 text-[11px] font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition cursor-pointer"
+            >
+              Standar
             </button>
-            <button type="button" id="btn-preset-demo-hadir" class="px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition">
-              🎯 Demo Hadir (Sekarang)
+            <button
+              type="button"
+              id="btn-preset-demo-hadir"
+              class="px-2.5 py-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 rounded-md transition cursor-pointer"
+            >
+              Hadir Sekarang
             </button>
-            <button type="button" id="btn-preset-demo-telat" class="px-2.5 py-1 text-[11px] font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition">
-              ⏰ Demo Telat (Sekarang)
+            <button
+              type="button"
+              id="btn-preset-demo-telat"
+              class="px-2.5 py-1 text-[11px] font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 rounded-md transition cursor-pointer"
+            >
+              Telat Sekarang
             </button>
-            <button type="button" id="btn-preset-demo-pulang" class="px-2.5 py-1 text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition">
-              🌇 Demo Pulang (Sekarang)
+            <button
+              type="button"
+              id="btn-preset-demo-pulang"
+              class="px-2.5 py-1 text-[11px] font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 rounded-md transition cursor-pointer"
+            >
+              Pulang Sekarang
             </button>
           </div>
         </div>
       </section>
 
-      <!-- Card 2: Aturan Presensi Jurusan -->
+      <!-- Card 2: Aturan Presensi Jurusan & Batas SP -->
       <section
-        class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-5"
+        class="bg-white rounded-xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-4 flex flex-col justify-between"
       >
-        <div
-          class="flex items-start justify-between border-b border-slate-100 pb-4"
-        >
-          <div class="flex items-center gap-3">
-            <div
-              class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+        <div class="space-y-4">
+          <div
+            class="flex items-start justify-between border-b border-slate-100 pb-3"
+          >
+            <div class="flex items-center gap-2.5">
+              <div
+                class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold"
               >
-                <path
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"></path>
-              </svg>
+                <span class="material-symbols-outlined text-lg">gavel</span>
+              </div>
+              <div>
+                <h2 class="text-sm font-bold text-slate-900">
+                  Batas Peringatan SP
+                </h2>
+                <p class="text-xs text-slate-400">
+                  Kriteria teguran dan panggilan BK.
+                </p>
+              </div>
+            </div>
+            <span
+              class="px-2.5 py-0.5 text-[10px] bg-indigo-50 text-indigo-700 font-semibold rounded-full border border-indigo-200/60"
+            >
+              Kedisiplinan
+            </span>
+          </div>
+
+          <!-- Select Inputs -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label
+                for="sp-wali-select"
+                class="block text-[11px] font-medium text-slate-600 mb-1"
+              >
+                SP Wali Kelas
+              </label>
+              <select
+                id="sp-wali-select"
+                class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+              >
+                <option value="3 Hari Terlambat Berturut-turut" selected>3 Hari Telat Berturut</option>
+                <option value="5 Hari Terlambat dalam 1 Bulan">5 Hari Telat / Bulan</option>
+              </select>
             </div>
             <div>
-              <h2 class="text-sm font-bold text-slate-900">
-                Batas Peringatan SP
-              </h2>
-              <p class="text-xs text-slate-500">
-                Kriteria teguran dan panggilan BK.
-              </p>
+              <label
+                for="sp-bk-select"
+                class="block text-[11px] font-medium text-slate-600 mb-1"
+              >
+                Panggilan BK
+              </label>
+              <select
+                id="sp-bk-select"
+                class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+              >
+                <option value="Akumulasi 3 Hari Alpa" selected>3 Hari Alpa</option>
+                <option value="Akumulasi 5 Hari Alpa dalam 1 Semester">5 Hari Alpa / Semester</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Information Tiles to Balance Card Height -->
+          <div class="space-y-2 pt-1">
+            <span class="text-[10px] uppercase font-mono tracking-wider text-slate-400 block font-semibold">
+              Skema Konsekuensi Kedisiplinan
+            </span>
+            <div class="grid grid-cols-1 gap-2 text-xs">
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/60 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  <span class="font-medium text-slate-700">Teguran Wali Kelas</span>
+                </div>
+                <span class="text-[11px] font-mono text-slate-400">Notifikasi WhatsApp</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/60 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                  <span class="font-medium text-slate-700">Panggilan Orang Tua / BK</span>
+                </div>
+                <span class="text-[11px] font-mono text-slate-400">Surat Resmi</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/60 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  <span class="font-medium text-slate-700">Evaluasi Bolos Siang</span>
+                </div>
+                <span class="text-[11px] font-mono text-slate-400 font-bold text-rose-600">-10 Poin</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label
-              for="sp-wali-select"
-              class="block text-xs font-bold text-slate-700 mb-1.5"
-              >SP Wali Kelas</label
-            >
-            <select
-              id="sp-wali-select"
-              class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 shadow-inner"
-            >
-              <option value="3 Hari Terlambat Berturut-turut" selected>3 Hari Telat Berturut</option>
-              <option value="5 Hari Terlambat dalam 1 Bulan">5 Hari Telat / Bulan</option>
-            </select>
-          </div>
-          <div>
-            <label
-              for="sp-bk-select"
-              class="block text-xs font-bold text-slate-700 mb-1.5"
-              >Panggilan BK</label
-            >
-            <select
-              id="sp-bk-select"
-              class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 shadow-inner"
-            >
-              <option value="Akumulasi 3 Hari Alpa" selected>3 Hari Alpa</option>
-              <option value="Akumulasi 5 Hari Alpa dalam 1 Semester">5 Hari Alpa / Semester</option>
-            </select>
-          </div>
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+          <span>Otomatisasi Poin Aktif</span>
+          <span class="text-emerald-600 font-semibold flex items-center gap-1">
+            <span class="material-symbols-outlined text-xs">check_circle</span>
+            Sinkron Realtime
+          </span>
         </div>
       </section>
     </div>
 
     <!-- Card 3: WhatsApp Gateway Integration with Accessible Textarea -->
     <section
-      class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-5"
+      class="bg-white rounded-xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-4"
     >
       <div
-        class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4"
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3"
       >
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
           <div
-            class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold"
+            class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold"
           >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"></path>
-            </svg>
+            <span class="material-symbols-outlined text-lg">chat</span>
           </div>
           <div>
             <h2 class="text-sm font-bold text-slate-900">
               Notifikasi WhatsApp
             </h2>
-            <p class="text-xs text-slate-500">
+            <p class="text-xs text-slate-400">
               Kirim presensi otomatis ke nomor wali.
             </p>
           </div>
         </div>
         <div
-          class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-100 border border-emerald-300 rounded-xl text-xs font-bold text-emerald-900"
+          class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200/80 rounded-full text-xs font-semibold text-emerald-800"
         >
-          <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
           <span>Gateway Aktif</span>
         </div>
       </div>
 
-      <div
-        class="bg-slate-50 p-4 sm:p-5 rounded-2xl space-y-3 border border-slate-200/70"
-      >
-        <label
-          for="wa-template-area"
-          class="text-xs font-bold text-slate-800 block"
-          >Template Pesan</label
-        >
+      <div class="space-y-2">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <label
+            for="wa-template-area"
+            class="text-[11px] font-medium text-slate-600 uppercase font-mono tracking-wider block"
+          >
+            Template Pesan
+          </label>
+          <div class="flex items-center gap-1 text-[10px] font-mono text-slate-400">
+            <span>Variabel:</span>
+            <code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">&#123;nama_siswa&#125;</code>
+            <code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">&#123;kelas&#125;</code>
+            <code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">&#123;jam_masuk&#125;</code>
+            <code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">&#123;status&#125;</code>
+          </div>
+        </div>
         <textarea
           id="wa-template-area"
           rows={3}
-          class="w-full text-xs font-mono p-3.5 bg-white border border-slate-300 rounded-xl leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 shadow-inner"
-          >Yth. Bapak/Ibu Wali Murid dari &#123;nama_siswa&#125;
-          (&#123;kelas&#125;). Ananda telah hadir di SMK pada pukul
-          &#123;jam_masuk&#125; WIB dengan status: [&#123;status&#125;].</textarea
-        >
+          class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-200 rounded-lg leading-relaxed focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+        >Yth. Bapak/Ibu Wali Murid dari &#123;nama_siswa&#125; (&#123;kelas&#125;). Ananda telah hadir di SMK pada pukul &#123;jam_masuk&#125; WIB dengan status: [&#123;status&#125;].</textarea>
       </div>
     </section>
 
     <!-- Card 4: Backup Data & Keamanan -->
     <section
-      class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-4"
+      class="bg-white rounded-xl border border-slate-200/80 shadow-xs p-5 sm:p-6"
     >
       <div
-        class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4"
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
       >
-        <div>
-          <h2 class="text-sm font-bold text-slate-900">
-            Pencadangan Data
-          </h2>
-          <p class="text-xs text-slate-500">
-            Backup data presensi ke berkas SQL.
-          </p>
+        <div class="flex items-center gap-2.5">
+          <div
+            class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold"
+          >
+            <span class="material-symbols-outlined text-lg">database</span>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900">
+              Pencadangan Data
+            </h2>
+            <p class="text-xs text-slate-400">
+              Cadangkan rekaman presensi dan konfigurasi ke berkas lokal.
+            </p>
+          </div>
         </div>
         <button
-          class="px-4 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-xl transition-all duration-200 inline-flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-slate-500 active:scale-95"
+          type="button"
+          id="btn-download-backup"
+          class="px-3.5 py-2 text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
         >
-          <svg
-            class="w-4 h-4 text-slate-700"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"></path>
-          </svg>
-          <span>Unduh Backup</span>
+          <span class="material-symbols-outlined text-sm text-slate-600">download</span>
+          <span>Unduh Cadangan</span>
         </button>
       </div>
+    </section>
+
+    <!-- Card 5: Sesi Akun & Keluar Sistem -->
+    <section class="bg-white rounded-xl border border-rose-100/80 shadow-xs p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold shrink-0">
+          <span class="material-symbols-outlined text-xl">logout</span>
+        </div>
+        <div>
+          <h2 class="text-sm font-bold text-slate-900">Sesi Akun & Logout</h2>
+          <p class="text-xs text-slate-500">Akhiri sesi login civitas akademik pada perangkat ini secara aman.</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        id="btn-settings-logout"
+        class="px-4 py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition inline-flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
+      >
+        <span class="material-symbols-outlined text-sm">logout</span>
+        <span>Keluar Sistem</span>
+      </button>
     </section>
   </div>
 
@@ -410,9 +489,39 @@ import Layout from "../layouts/Layout.astro";
       }
     }
 
+    function toMinutes(timeStr: string): number {
+      const [h, m] = (timeStr || "00:00").split(":").map(Number);
+      return (h || 0) * 60 + (m || 0);
+    }
+
     async function saveSettings() {
       if (!btnSave) return;
       const originalText = btnSave.innerHTML;
+      const origClass = "px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-2xs transition cursor-pointer active:scale-95 flex items-center gap-1.5";
+
+      const b = toMinutes(jamBukaInput?.value || "06:15");
+      const m = toMinutes(jamMasukInput?.value || "07:30");
+      const t = toMinutes(jamToleransiInput?.value || "07:40");
+      const p = toMinutes(jamPulangInput?.value || "13:30");
+      const tp = toMinutes(jamTutupPulangInput?.value || "15:00");
+
+      if (b >= m) {
+        alert("Jam Buka Gerbang harus lebih awal dari Bel Masuk.");
+        return;
+      }
+      if (m >= t) {
+        alert("Bel Masuk harus lebih awal dari Tutup Toleransi (Telat).");
+        return;
+      }
+      if (t >= p) {
+        alert("Tutup Toleransi Masuk harus lebih awal dari Buka Sesi Pulang.");
+        return;
+      }
+      if (p >= tp) {
+        alert("Buka Sesi Pulang harus lebih awal dari Tutup Pulang.");
+        return;
+      }
+
       btnSave.disabled = true;
       btnSave.innerHTML = `
         <span class="inline-flex items-center gap-1.5">
@@ -439,17 +548,24 @@ import Layout from "../layouts/Layout.astro";
         });
         if (res.ok) {
           btnSave.className =
-            "px-4 py-2 text-xs font-bold text-white bg-emerald-600 rounded-xl shadow-md transition-all duration-200";
+            "px-4 py-2 text-xs font-semibold text-white bg-emerald-600 rounded-lg shadow-2xs transition-all flex items-center gap-1.5";
           btnSave.innerHTML = "Tersimpan! ✓";
           setTimeout(() => {
             btnSave.disabled = false;
-            btnSave.className =
-              "px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-1";
+            btnSave.className = origClass;
             btnSave.innerHTML = originalText;
           }, 2000);
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(errData.message || "Gagal menyimpan pengaturan.");
+          btnSave.disabled = false;
+          btnSave.className = origClass;
+          btnSave.innerHTML = originalText;
         }
-      } catch {
+      } catch (err: any) {
+        alert("Koneksi gagal: " + err.message);
         btnSave.disabled = false;
+        btnSave.className = origClass;
         btnSave.innerHTML = originalText;
       }
     }
@@ -462,7 +578,12 @@ import Layout from "../layouts/Layout.astro";
         const res = await fetch("/api/settings", { method: "DELETE" });
         if (res.ok) {
           await loadSettings();
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(errData.message || "Gagal mereset pengaturan.");
         }
+      } catch (err: any) {
+        alert("Gagal mereset: " + err.message);
       } finally {
         btnReset.disabled = false;
       }
@@ -512,6 +633,63 @@ import Layout from "../layouts/Layout.astro";
     document.getElementById("btn-preset-demo-hadir")?.addEventListener("click", () => applyPreset("hadir"));
     document.getElementById("btn-preset-demo-telat")?.addEventListener("click", () => applyPreset("telat"));
     document.getElementById("btn-preset-demo-pulang")?.addEventListener("click", () => applyPreset("pulang"));
+
+    document.getElementById("btn-download-backup")?.addEventListener("click", async () => {
+      const btn = document.getElementById("btn-download-backup") as HTMLButtonElement | null;
+      const origText = btn ? btn.innerHTML : "";
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">sync</span><span>Mencadangkan...</span>';
+      }
+      try {
+        const [stdRes, attRes, prmRes] = await Promise.all([
+          fetch('/api/students').then(r => r.json()).catch(() => []),
+          fetch('/api/attendance').then(r => r.json()).catch(() => []),
+          fetch('/api/permissions').then(r => r.json()).catch(() => [])
+        ]);
+        const backupData = {
+          settings: {
+            jamBuka: jamBukaInput?.value,
+            jamMasuk: jamMasukInput?.value,
+            jamToleransi: jamToleransiInput?.value,
+            jamPulang: jamPulangInput?.value,
+            jamTutupPulang: jamTutupPulangInput?.value,
+            spWali: spWaliSelect?.value,
+            spBk: spBkSelect?.value,
+            waTemplate: waTemplateArea?.value,
+          },
+          students: stdRes,
+          attendance: attRes,
+          permissions: prmRes,
+          exportedAt: new Date().toISOString(),
+        };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+        const downloadAnchor = document.createElement("a");
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `backup-absensi-smk-${new Date().toLocaleDateString('en-CA')}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origText;
+        }
+      }
+    });
+
+    document.getElementById("btn-settings-logout")?.addEventListener("click", () => {
+      if (typeof (window as any).performLogout === "function") {
+        (window as any).performLogout();
+      } else {
+        localStorage.removeItem("auth_civitas");
+        localStorage.removeItem("auth_role");
+        sessionStorage.removeItem("auth_active");
+        sessionStorage.removeItem("bypass_login");
+        document.cookie = "auth_session=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
+        window.location.replace("/login");
+      }
+    });
 
     btnSave?.addEventListener("click", saveSettings);
     btnReset?.addEventListener("click", resetSettings);

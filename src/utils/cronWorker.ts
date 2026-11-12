@@ -7,7 +7,7 @@
  */
 
 import { archiveAndResetDailyLogs, checkAndApplyAlpa, checkAndApplyBolos, syncDailyAttendanceAndPermissions } from './attendanceStorage';
-import { getSchedulerState, saveSchedulerState } from './settingsStorage';
+import { getSchedulerState, saveSchedulerState, readRawSettingsJson } from './settingsStorage';
 import { attendanceEmitter } from './attendanceEvents';
 
 export interface CronWorkerStatus {
@@ -64,28 +64,33 @@ export function scheduleNextTarget() {
   const { dateStr, hour, minute } = getWibNow();
   const curMinutes = hour * 60 + minute;
   const state = getSchedulerState();
+  const rawSettings = readRawSettingsJson();
+  const [alpaH, alpaM] = (rawSettings.jamPulang || '13:30').split(':').map(Number);
+  const [bolosH, bolosM] = (rawSettings.jamTutupPulang || '15:00').split(':').map(Number);
+  const alpaMinutes = alpaH * 60 + alpaM;
+  const bolosMinutes = bolosH * 60 + bolosM;
 
   let nextType: 'alpa' | 'bolos' | 'archive' = 'alpa';
   let targetDate = dateStr;
-  let targetHour = 13;
-  let targetMinute = 30;
-  let targetLabel = `${dateStr} 13:30:00 WIB (Penetapan Siswa Alpa)`;
+  let targetHour = alpaH;
+  let targetMinute = alpaM;
+  let targetLabel = `${dateStr} ${rawSettings.jamPulang || '13:30'}:00 WIB (Penetapan Siswa Alpa)`;
 
-  // 1. Cek apakah penetapan Alpa hari ini (13:30 WIB) belum jalan & waktu masih sebelum 13:30
-  if (state.lastAlpaDate !== dateStr && curMinutes < 13 * 60 + 30) {
+  // 1. Cek apakah penetapan Alpa hari ini belum jalan & waktu masih sebelum jam buka kepulangan
+  if (state.lastAlpaDate !== dateStr && curMinutes < alpaMinutes) {
     nextType = 'alpa';
     targetDate = dateStr;
-    targetHour = 13;
-    targetMinute = 30;
-    targetLabel = `${dateStr} 13:30:00 WIB (Penetapan Siswa Alpa)`;
+    targetHour = alpaH;
+    targetMinute = alpaM;
+    targetLabel = `${dateStr} ${rawSettings.jamPulang || '13:30'}:00 WIB (Penetapan Siswa Alpa)`;
   }
-  // 2. Cek apakah evaluasi bolos hari ini (15:00 WIB) belum jalan & waktu masih sebelum jam 15:00
-  else if (state.lastBolosDate !== dateStr && curMinutes < 15 * 60) {
+  // 2. Cek apakah evaluasi bolos hari ini belum jalan & waktu masih sebelum tutup pulang
+  else if (state.lastBolosDate !== dateStr && curMinutes < bolosMinutes) {
     nextType = 'bolos';
     targetDate = dateStr;
-    targetHour = 15;
-    targetMinute = 0;
-    targetLabel = `${dateStr} 15:00:00 WIB (Deteksi Siswa Bolos Kepulangan)`;
+    targetHour = bolosH;
+    targetMinute = bolosM;
+    targetLabel = `${dateStr} ${rawSettings.jamTutupPulang || '15:00'}:00 WIB (Deteksi Siswa Bolos Kepulangan)`;
   }
   // 3. Cek apakah arsip harian hari ini (23:00 WIB) belum jalan & waktu masih sebelum jam 23:00
   else if (state.lastArchivedDate !== dateStr && curMinutes < 23 * 60) {
@@ -95,15 +100,15 @@ export function scheduleNextTarget() {
     targetMinute = 0;
     targetLabel = `${dateStr} 23:00:00 WIB (Arsip & Reset Harian)`;
   }
-  // 4. Tugas hari ini selesai (atau sudah lewat 23:00), jadwalkan untuk besok jam 13:30 WIB
+  // 4. Tugas hari ini selesai (atau sudah lewat 23:00), jadwalkan untuk besok
   else {
     const tomorrow = new Date(Date.now() + 24 * 3600 * 1000);
     const tomorrowDateStr = tomorrow.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
     nextType = 'alpa';
     targetDate = tomorrowDateStr;
-    targetHour = 13;
-    targetMinute = 30;
-    targetLabel = `${tomorrowDateStr} 13:30:00 WIB (Penetapan Siswa Alpa)`;
+    targetHour = alpaH;
+    targetMinute = alpaM;
+    targetLabel = `${tomorrowDateStr} ${rawSettings.jamPulang || '13:30'}:00 WIB (Penetapan Siswa Alpa)`;
   }
 
   const delayMs = getMsUntilWibTarget(targetDate, targetHour, targetMinute, 0);

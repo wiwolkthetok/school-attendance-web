@@ -107,7 +107,21 @@ export const POST: APIRoute = async ({ request }) => {
 
             if (curDateStr < todayWib) {
               // Persetujuan Susulan untuk Tanggal Lampau:
-              // Masukkan atau perbaiki status di attendance_history menjadi 'Izin' (menggugurkan Alpa)
+              // 1. Gugurkan status Alpa & Bolos lampau dari attendance_history
+              await turso.execute({
+                sql: `DELETE FROM attendance_history 
+                      WHERE date = ? AND (rfid_uid = ? OR name = ?) AND (status = 'Alpa' OR status = 'Bolos');`,
+                args: [curDateStr, studentUid, updated.name],
+              });
+
+              // 2. Pulihkan poin kedisiplinan yang terlanjur terpotong akibat sanksi bolos pada tanggal tersebut
+              await turso.execute({
+                sql: `DELETE FROM point_deductions 
+                      WHERE date = ? AND (student_id = ? OR rfid_uid = ?) AND id LIKE 'DED-BOLOS-%';`,
+                args: [curDateStr, updated.studentId, studentUid],
+              });
+
+              // 3. Masukkan rekaman sah 'Izin' ke attendance_history
               await turso.execute({
                 sql: `
                   INSERT OR REPLACE INTO attendance_history (id, rfid_uid, name, class_name, role, date, time, type, status)
@@ -116,15 +130,23 @@ export const POST: APIRoute = async ({ request }) => {
                 args: [permLogId, studentUid, updated.name, updated.className, studentRole, curDateStr, '07:00:00', 'masuk', 'Izin'],
               });
             } else if (curDateStr === todayWib) {
-              // Tanggal Hari Ini: Masukkan ke attendance_logs hari ini
-              const currentLogs = await getLogs();
-              const existingAlpa = currentLogs.find((l) => l.date === todayWib && (l.rfidUid === studentUid || l.name === updated.name) && l.status === 'Alpa');
-              const alreadyLogged = currentLogs.some((l) => l.date === todayWib && (l.rfidUid === studentUid || l.name === updated.name) && l.status !== 'Alpa');
+              // Tanggal Hari Ini:
+              // 1. Pulihkan poin bolos hari ini jika sempat terbit
+              await turso.execute({
+                sql: `DELETE FROM point_deductions 
+                      WHERE date = ? AND (student_id = ? OR rfid_uid = ?) AND id LIKE 'DED-BOLOS-%';`,
+                args: [todayWib, updated.studentId, studentUid],
+              });
 
-              if (existingAlpa) {
-                // Perbarui status Alpa menjadi Izin karena surat izin telah disetujui guru piket
+              // 2. Masukkan ke attendance_logs hari ini & perbarui status Alpa/Bolos
+              const currentLogs = await getLogs();
+              const existingAlpaOrBolos = currentLogs.find((l) => l.date === todayWib && (l.rfidUid === studentUid || l.name === updated.name) && (l.status === 'Alpa' || l.status === 'Bolos'));
+              const alreadyLogged = currentLogs.some((l) => l.date === todayWib && (l.rfidUid === studentUid || l.name === updated.name) && l.status !== 'Alpa' && l.status !== 'Bolos');
+
+              if (existingAlpaOrBolos) {
+                // Perbarui status Alpa/Bolos menjadi Izin
                 await saveLog({
-                  id: existingAlpa.id,
+                  id: existingAlpaOrBolos.id,
                   rfidUid: studentUid,
                   name: updated.name,
                   className: updated.className,
@@ -170,6 +192,31 @@ export const POST: APIRoute = async ({ request }) => {
             sql: `DELETE FROM attendance_history WHERE id LIKE ?;`,
             args: [permLogPrefix],
           });
+
+          // Jika penolakan terjadi hari ini dan waktu >= 13:30 WIB (gerbang pagi tutup), tetapkan Alpa jika siswa belum absen
+          if (updated.startDate <= todayWib && (updated.endDate || updated.startDate) >= todayWib) {
+            const now = new Date();
+            const curMinutes = now.getHours() * 60 + now.getMinutes();
+            if (curMinutes >= 13 * 60 + 30) {
+              const currentLogs = await getLogs();
+              const hasMorning = currentLogs.some((l) => l.date === todayWib && (l.rfidUid === updated.studentId || l.name === updated.name) && l.type === 'masuk' && l.status !== 'Alpa');
+              if (!hasMorning) {
+                const students = await getStudents();
+                const std = students.find((s) => s.id === updated.studentId || s.name?.toLowerCase() === updated.name.toLowerCase());
+                await saveLog({
+                  id: `ATT-ALPA-${updated.studentId}-${todayWib}`,
+                  rfidUid: std?.rfidUid || updated.studentId,
+                  name: updated.name,
+                  className: updated.className,
+                  role: (std?.role === 'guru' ? 'guru' : 'siswa'),
+                  date: todayWib,
+                  time: '07:40:00',
+                  type: 'masuk',
+                  status: 'Alpa',
+                });
+              }
+            }
+          }
         } catch {}
       }
 

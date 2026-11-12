@@ -20,130 +20,124 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="Kelola Izin & Dispensasi" activeNav="izin-dispensasi">
   <div class="flex flex-col gap-4 sm:gap-6">
     <!-- Header Summary & Metrik -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
+    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-4">
       <!-- Card 1: Menunggu Verifikasi -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-4 sm:p-5 text-white card-glow-blue transition-transform duration-200 hover:-translate-y-1">
-        <div class="relative z-10 flex items-start justify-between">
-          <div>
-            <span class="text-[11px] sm:text-xs font-bold tracking-wide uppercase text-blue-200">Menunggu Verifikasi</span>
-            <div class="mt-2 sm:mt-3 flex items-baseline gap-2">
-              <h3 id="perm-stat-menunggu" class="text-2xl sm:text-3xl font-black tracking-tight">0</h3>
-              <span class="text-xs font-medium text-blue-100">Pengajuan Berkas</span>
-            </div>
-            <p class="mt-1 text-[11px] sm:text-xs text-blue-100/90 font-medium">Perlu persetujuan piket/admin</p>
+      <div class="rounded-xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between min-h-[135px]">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-600">Menunggu Verifikasi</span>
+            <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-amber-700 bg-amber-50 border border-amber-200/70 px-2 py-0.5 rounded">
+              MENUNGGU
+            </span>
           </div>
-          <div class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 opacity-90 drop-shadow-md" aria-hidden="true">
-            <svg class="w-full h-full" fill="none" viewBox="0 0 80 80">
-              <ellipse cx="40" cy="22" fill="white" fill-opacity="0.95" rx="28" ry="12"></ellipse>
-              <ellipse cx="40" cy="40" fill="white" fill-opacity="0.6" rx="28" ry="12"></ellipse>
-              <ellipse cx="40" cy="58" fill="white" fill-opacity="0.3" rx="28" ry="12"></ellipse>
-            </svg>
+          <div class="mt-2.5 flex items-baseline gap-2">
+            <h3 id="perm-stat-menunggu" class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 font-mono">0</h3>
+            <span class="text-xs font-medium text-slate-500 font-mono">Pengajuan Berkas</span>
           </div>
+          <p class="mt-1 text-xs text-slate-400">Perlu persetujuan piket/admin</p>
         </div>
-        <div class="mt-4 sm:mt-5 flex items-center justify-between pt-2.5 sm:pt-3 bg-white/10 -mx-4 -mb-4 sm:-mx-5 sm:-mb-5 px-4 sm:px-5 py-2 sm:py-2.5">
-          <span class="text-[10px] sm:text-[11px] text-blue-100">Verifikasi berkas presensi</span>
-          <span class="px-2 py-0.5 rounded-lg bg-white/20 text-white text-[9px] sm:text-[10px] font-bold">Realtime</span>
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Verifikasi berkas presensi</span>
+          <span class="text-[10px] font-mono text-emerald-600 font-medium">Realtime</span>
         </div>
       </div>
 
-      <!-- Card 2: Disetujui Hari Ini -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sky-500 to-cyan-500 p-4 sm:p-5 text-white card-glow-cyan transition-transform duration-200 hover:-translate-y-1">
-        <div class="relative z-10 flex items-start justify-between">
-          <div>
-            <span class="text-[11px] sm:text-xs font-bold tracking-wide uppercase text-cyan-100">Disetujui Sah</span>
-            <div class="mt-2 sm:mt-3 flex items-baseline gap-2">
-              <h3 id="perm-stat-disetujui" class="text-2xl sm:text-3xl font-black tracking-tight">0</h3>
-              <span class="text-xs font-medium text-cyan-100">Dokumen Sah</span>
-            </div>
-            <p class="mt-1 text-[11px] sm:text-xs text-cyan-100/90 font-medium">Siswa terbebas dari status alpa</p>
+      <!-- Card 2: Disetujui Sah -->
+      <div class="rounded-xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between min-h-[135px]">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-600">Disetujui Sah</span>
+            <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-700 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded">
+              DISETUJUI
+            </span>
           </div>
-          <div class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 opacity-90 drop-shadow-md" aria-hidden="true">
-            <svg class="w-full h-full" fill="none" viewBox="0 0 80 80">
-              <path d="M40 10L68 24L40 38L12 24L40 10Z" fill="white" fill-opacity="0.95"></path>
-              <path d="M12 36L40 50L68 36L62 42L40 54L18 42L12 36Z" fill="white" fill-opacity="0.7"></path>
-              <path d="M12 50L40 64L68 50L62 56L40 68L18 56L12 50Z" fill="white" fill-opacity="0.4"></path>
-            </svg>
+          <div class="mt-2.5 flex items-baseline gap-2">
+            <h3 id="perm-stat-disetujui" class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 font-mono">0</h3>
+            <span class="text-xs font-medium text-slate-500 font-mono">Dokumen Sah</span>
           </div>
+          <p class="mt-1 text-xs text-slate-400">Siswa terbebas dari status alpa</p>
         </div>
-        <div class="mt-4 sm:mt-5 flex items-center justify-between pt-2.5 sm:pt-3 bg-white/10 -mx-4 -mb-4 sm:-mx-5 sm:-mb-5 px-4 sm:px-5 py-2 sm:py-2.5">
-          <span class="text-[10px] sm:text-[11px] text-cyan-100">Otomatis masuk rekapitulasi</span>
-          <a href="/rekapitulasi" class="px-2.5 sm:px-3 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white text-[11px] sm:text-xs font-bold transition-all duration-200">
-            Lihat Rekap →
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Otomatis masuk rekapitulasi</span>
+          <a href="/rekapitulasi" class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition">
+            <span>Rekap</span>
+            <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
           </a>
         </div>
       </div>
 
-      <!-- Card 3: Ditolak & Selesai (Arsip) -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 p-4 sm:p-5 text-white card-glow-green transition-transform duration-200 hover:-translate-y-1 sm:col-span-2 md:col-span-1">
-        <div class="relative z-10 flex items-start justify-between">
-          <div>
-            <span class="text-[11px] sm:text-xs font-bold tracking-wide uppercase text-emerald-100">Ditolak / Arsip</span>
-            <div class="mt-2 sm:mt-3 flex items-baseline gap-2">
-              <h3 id="perm-stat-ditolak" class="text-2xl sm:text-3xl font-black tracking-tight">0</h3>
-              <span class="text-xs font-medium text-emerald-100">Berkas Diarsipkan</span>
-            </div>
-            <p class="mt-1 text-[11px] sm:text-xs text-emerald-100/90 font-medium">Selesai atau ditolak oleh piket</p>
+      <!-- Card 3: Ditolak -->
+      <div class="rounded-xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-xs flex flex-col justify-between min-h-[135px] sm:col-span-2 md:col-span-1">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-600">Ditolak / Batal</span>
+            <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-rose-700 bg-rose-50 border border-rose-200/70 px-2 py-0.5 rounded">
+              DITOLAK
+            </span>
           </div>
-          <div class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 opacity-90 drop-shadow-md" aria-hidden="true">
-            <svg class="w-full h-full" fill="none" viewBox="0 0 80 80">
-              <circle cx="40" cy="40" fill="none" opacity="0.85" r="26" stroke="white" stroke-dasharray="14 10" stroke-linecap="round" stroke-width="8"></circle>
-              <circle cx="40" cy="40" fill="white" opacity="0.95" r="12"></circle>
-            </svg>
+          <div class="mt-2.5 flex items-baseline gap-2">
+            <h3 id="perm-stat-ditolak" class="text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900 font-mono">0</h3>
+            <span class="text-xs font-medium text-slate-500 font-mono">Berkas Ditolak</span>
           </div>
+          <p class="mt-1 text-xs text-slate-400">Tidak disetujui oleh guru piket</p>
         </div>
-        <div class="mt-4 sm:mt-5 flex items-center justify-between pt-2.5 sm:pt-3 bg-white/10 -mx-4 -mb-4 sm:-mx-5 sm:-mb-5 px-4 sm:px-5 py-2 sm:py-2.5">
-          <span class="text-[10px] sm:text-[11px] text-emerald-100">Status tercatat di sistem</span>
-          <span class="px-2 py-0.5 rounded-lg bg-white/20 text-white text-[9px] sm:text-[10px] font-bold">Arsip</span>
+        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+          <span>Status tercatat di sistem</span>
+          <span class="text-[10px] font-mono text-slate-500">Arsip</span>
         </div>
       </div>
     </section>
 
-    <!-- Folder Tabs & Controls with Accessible Ring-Focus Search -->
+    <!-- Folder Tabs & Controls -->
     <section class="space-y-0">
-      <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-0 select-none no-scrollbar">
-        <button id="tab-all" data-category="all" class="tab-category tab-notch-active whitespace-nowrap shrink-0 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-bold text-slate-900 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+      <div class="flex items-center gap-1 overflow-x-auto pb-0 select-none no-scrollbar">
+        <button id="tab-all" data-category="all" class="tab-category tab-notch-active whitespace-nowrap shrink-0 px-3.5 sm:px-4 py-2 text-xs font-semibold text-slate-900 transition-colors flex items-center gap-1.5 focus:outline-none">
           <span>Semua Permohonan</span>
-          <span id="count-all" class="px-2 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-900 font-extrabold border border-blue-200">0</span>
+          <span id="count-all" class="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-blue-100 text-blue-900">0</span>
         </button>
-        <button id="tab-sakit" data-category="sakit" class="tab-category tab-notch-inactive whitespace-nowrap shrink-0 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        <button id="tab-sakit" data-category="sakit" class="tab-category tab-notch-inactive whitespace-nowrap shrink-0 px-3.5 sm:px-4 py-2 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1.5 focus:outline-none">
           <span>Izin Sakit</span>
-          <span id="count-sakit" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200 text-slate-800 font-bold">0</span>
+          <span id="count-sakit" class="px-1.5 py-0.2 rounded text-[10px] font-mono font-medium bg-slate-200 text-slate-700">0</span>
         </button>
-        <button id="tab-dispensasi" data-category="dispensasi" class="tab-category tab-notch-inactive whitespace-nowrap shrink-0 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        <button id="tab-dispensasi" data-category="dispensasi" class="tab-category tab-notch-inactive whitespace-nowrap shrink-0 px-3.5 sm:px-4 py-2 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1.5 focus:outline-none">
           <span>Dispensasi</span>
-          <span id="count-dispensasi" class="px-2 py-0.5 rounded-full text-[10px] bg-amber-100 text-amber-900 font-bold border border-amber-200">0</span>
+          <span id="count-dispensasi" class="px-1.5 py-0.2 rounded text-[10px] font-mono font-medium bg-slate-200 text-slate-700">0</span>
         </button>
-        <button id="tab-keluarga" data-category="keluarga" class="tab-category tab-notch-inactive whitespace-nowrap shrink-0 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        <button id="tab-keluarga" data-category="keluarga" class="tab-category tab-notch-inactive whitespace-nowrap shrink-0 px-3.5 sm:px-4 py-2 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1.5 focus:outline-none">
           <span>Urusan Keluarga</span>
-          <span id="count-keluarga" class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200 text-slate-800 font-bold">0</span>
+          <span id="count-keluarga" class="px-1.5 py-0.2 rounded text-[10px] font-mono font-medium bg-slate-200 text-slate-700">0</span>
         </button>
       </div>
 
-      <div class="bg-white rounded-b-2xl sm:rounded-b-3xl rounded-tr-2xl sm:rounded-tr-3xl p-3.5 sm:p-5 lg:p-6 shadow-xs border border-slate-200/70 space-y-3 sm:space-y-4">
-        <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4">
-          <div class="relative flex-1 max-w-full lg:max-w-lg">
+      <div class="bg-white rounded-b-xl rounded-tr-xl p-3.5 sm:p-4 shadow-xs border border-slate-200/80">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+          <div class="relative flex-1 max-w-full sm:max-w-md">
             <label for="search-izin-input" class="sr-only">Pencarian Izin dan Dispensasi</label>
-            <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none" aria-hidden="true">search</span>
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none" aria-hidden="true">search</span>
             <input
               id="search-izin-input"
-              class="w-full pl-10 pr-9 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 shadow-inner"
-              placeholder="Cari nama siswa, guru, kelas, atau perihal..."
+              class="w-full pl-9 pr-3 py-2 bg-slate-50/80 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/30 transition-colors"
+              placeholder="Cari siswa, guru, kelas, atau perihal..."
               type="search"
             />
           </div>
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+          <div class="flex items-center gap-2">
             <button
               type="button"
               id="btn-cleanup-total"
-              class="w-full sm:w-auto px-3.5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 transition-all duration-200 flex items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-rose-500 active:scale-95 cursor-pointer shadow-xs"
+              class="px-3 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-medium text-xs border border-rose-200/80 transition-colors flex items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-rose-500 active:scale-95 cursor-pointer shadow-2xs"
               title="Pembersihan Total: Hapus berkas ditolak & arsipkan yang selesai"
             >
               <span class="material-symbols-outlined text-base text-rose-600">delete_sweep</span>
-              <span id="btn-cleanup-text">Bersihkan Permohonan</span>
+              <span id="btn-cleanup-text">Bersihkan</span>
             </button>
-            <button id="btn-open-modal" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-md shadow-blue-500/20 hover:bg-blue-700 transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-1 cursor-pointer">
+            <button
+              id="btn-open-modal"
+              type="button"
+              class="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-2xs transition-colors active:scale-95 flex items-center justify-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+            >
               <span class="material-symbols-outlined text-base">add_circle</span>
-              <span>+ Buat Permohonan Baru</span>
+              <span>Permohonan Baru</span>
             </button>
           </div>
         </div>
@@ -156,73 +150,124 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </div>
 
-  <!-- Modal Dialog: Buat Permohonan Baru -->
+  <!-- Modal Dialog: Buat Permohonan Baru (Multi-Step Form) -->
   <div id="perm-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl border border-slate-200 space-y-4 sm:space-y-5 animate-in fade-in duration-200 my-auto max-h-[92vh] overflow-y-auto">
+    <div class="bg-white rounded-xl max-w-lg w-full p-4 sm:p-6 shadow-xl border border-slate-200 space-y-4 animate-in fade-in duration-200 my-auto max-h-[92vh] overflow-y-auto">
+      <!-- Modal Header -->
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
-          <span class="material-symbols-outlined text-blue-600 text-lg sm:text-xl">note_add</span>
-          <span>Formulir Izin & Dispensasi</span>
-        </h3>
-        <button id="btn-close-modal" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
-          <span class="material-symbols-outlined">close</span>
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-blue-600 text-lg">note_add</span>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-900">Buat Permohonan</h3>
+            <p class="text-[11px] text-slate-500">Form pengajuan izin & dispensasi</p>
+          </div>
+        </div>
+        <button id="btn-close-modal" type="button" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition" title="Tutup">
+          <span class="material-symbols-outlined text-lg">close</span>
         </button>
       </div>
 
-      <form id="perm-form" class="space-y-4">
-        <div>
-          <label for="perm-student-select" class="block text-xs font-bold text-slate-700 mb-1.5">Pilih Siswa / Guru *</label>
-          <select id="perm-student-select" required class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-inner">
-            <option value="">-- Pilih Siswa atau Guru --</option>
-          </select>
-        </div>
+      <!-- Step Indicator Bar -->
+      <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-lg text-xs select-none">
+        <button type="button" id="step-btn-1" class="step-indicator-btn py-1.5 px-3 rounded-md transition-all flex items-center justify-center gap-1.5 bg-white text-slate-800 shadow-xs font-semibold cursor-pointer">
+          <span id="step-badge-1" class="w-4 h-4 rounded-full bg-blue-600 text-white text-[10px] flex items-center justify-center font-mono">1</span>
+          <span>Data Pemohon</span>
+        </button>
+        <button type="button" id="step-btn-2" class="step-indicator-btn py-1.5 px-3 rounded-md transition-all flex items-center justify-center gap-1.5 text-slate-500 font-medium hover:text-slate-800 cursor-pointer">
+          <span id="step-badge-2" class="w-4 h-4 rounded-full bg-slate-200 text-slate-600 text-[10px] flex items-center justify-center font-mono">2</span>
+          <span>Waktu & Alasan</span>
+        </button>
+      </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <form id="perm-form">
+        <!-- STEP 1: Data Diri / Pemohon -->
+        <div id="form-step-1" class="space-y-3.5">
+          <div class="p-3 rounded-lg bg-blue-50/60 border border-blue-100/80 text-xs text-blue-900">
+            <p class="font-semibold flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm text-blue-600">person</span>
+              <span>Langkah 1: Identitas Pemohon</span>
+            </p>
+            <p class="text-[11px] text-blue-700/90 mt-0.5">Pilih siswa atau guru yang mengajukan permohonan beserta kategori izin.</p>
+          </div>
+
           <div>
-            <label for="perm-category-select" class="block text-xs font-bold text-slate-700 mb-1.5">Kategori Permohonan *</label>
-            <select id="perm-category-select" required class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-inner">
-              <option value="sakit">Izin Sakit (Surat Dokter)</option>
-              <option value="dispensasi" selected>Dispensasi (Lomba / PKL)</option>
-              <option value="keluarga">Urusan Keluarga</option>
+            <label for="perm-student-select" class="block text-xs font-medium text-slate-700 mb-1">Pilih Siswa / Guru <span class="text-rose-500">*</span></label>
+            <select id="perm-student-select" required class="w-full text-xs font-normal text-slate-800 bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/30">
+              <option value="">-- Pilih Siswa atau Guru --</option>
             </select>
+            <p id="perm-student-error" class="hidden mt-1 text-[11px] text-rose-600 font-medium">Silakan pilih nama pemohon terlebih dahulu.</p>
           </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="perm-category-select" class="block text-xs font-medium text-slate-700 mb-1">Kategori Izin <span class="text-rose-500">*</span></label>
+              <select id="perm-category-select" required class="w-full text-xs font-normal text-slate-800 bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/30">
+                <option value="sakit">Izin Sakit</option>
+                <option value="dispensasi" selected>Dispensasi</option>
+                <option value="keluarga">Urusan Keluarga</option>
+              </select>
+            </div>
+            <div>
+              <label for="perm-status-select" class="block text-xs font-medium text-slate-700 mb-1">Status Persetujuan <span class="text-rose-500">*</span></label>
+              <select id="perm-status-select" required class="w-full text-xs font-normal text-slate-800 bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/30">
+                <option value="Disetujui" selected>Langsung Disetujui</option>
+                <option value="Menunggu">Menunggu Verifikasi</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+            <button type="button" id="btn-cancel-modal" class="px-3.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+              Batal
+            </button>
+            <button type="button" id="btn-step-next" class="px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors flex items-center gap-1 cursor-pointer">
+              <span>Lanjut</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Detail Waktu & Alasan -->
+        <div id="form-step-2" class="hidden space-y-3.5">
+          <div class="p-3 rounded-lg bg-blue-50/60 border border-blue-100/80 text-xs text-blue-900">
+            <p class="font-semibold flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm text-blue-600">calendar_month</span>
+              <span>Langkah 2: Waktu & Alasan</span>
+            </p>
+            <p class="text-[11px] text-blue-700/90 mt-0.5">Tentukan tanggal izin dan jelaskan perihal atau keperluan dispensasi.</p>
+          </div>
+
           <div>
-            <label for="perm-status-select" class="block text-xs font-bold text-slate-700 mb-1.5">Status Persetujuan *</label>
-            <select id="perm-status-select" required class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-inner">
-              <option value="Disetujui" selected>Langsung Disetujui</option>
-              <option value="Menunggu">Menunggu Verifikasi</option>
-            </select>
+            <label for="perm-title-input" class="block text-xs font-medium text-slate-700 mb-1">Perihal / Alasan <span class="text-rose-500">*</span></label>
+            <input id="perm-title-input" required placeholder="Contoh: Dispensasi Lomba Web Technologies LKS" class="w-full text-xs font-normal text-slate-800 bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/30" />
           </div>
-        </div>
 
-        <div>
-          <label for="perm-title-input" class="block text-xs font-bold text-slate-700 mb-1.5">Perihal / Alasan Lengkap *</label>
-          <input id="perm-title-input" required placeholder="Contoh: Dispensasi Lomba Web Technologies LKS" class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-inner" />
-        </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="perm-start-input" class="block text-xs font-medium text-slate-700 mb-1">Mulai Tanggal <span class="text-rose-500">*</span></label>
+              <input id="perm-start-input" type="date" required class="w-full text-xs font-mono font-normal text-slate-800 bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/30" />
+            </div>
+            <div>
+              <label for="perm-end-input" class="block text-xs font-medium text-slate-700 mb-1">Sampai Tanggal <span class="text-rose-500">*</span></label>
+              <input id="perm-end-input" type="date" required class="w-full text-xs font-mono font-normal text-slate-800 bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/30" />
+            </div>
+          </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label for="perm-start-input" class="block text-xs font-bold text-slate-700 mb-1.5">Mulai Tanggal *</label>
-            <input id="perm-start-input" type="date" required class="w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-inner" />
+            <label for="perm-attach-input" class="block text-xs font-medium text-slate-700 mb-1">Catatan Lampiran <span class="text-slate-400 font-normal">(Opsional)</span></label>
+            <input id="perm-attach-input" placeholder="Contoh: Surat Tugas Resmi No: 421.5/318/SMK" class="w-full text-xs font-normal text-slate-800 bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/30" />
           </div>
-          <div>
-            <label for="perm-end-input" class="block text-xs font-bold text-slate-700 mb-1.5">Sampai Tanggal *</label>
-            <input id="perm-end-input" type="date" required class="w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-inner" />
+
+          <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+            <button type="button" id="btn-step-prev" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors flex items-center gap-1 cursor-pointer">
+              <span class="material-symbols-outlined text-sm">arrow_back</span>
+              <span>Kembali</span>
+            </button>
+            <button type="submit" id="btn-submit-perm" class="px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors flex items-center gap-1 cursor-pointer">
+              <span class="material-symbols-outlined text-sm">check</span>
+              <span>Simpan Permohonan</span>
+            </button>
           </div>
-        </div>
-
-        <div>
-          <label for="perm-attach-input" class="block text-xs font-bold text-slate-700 mb-1.5">Catatan Lampiran / Dokumen Pendukung</label>
-          <input id="perm-attach-input" placeholder="Contoh: Surat Tugas Resmi No: 421.5/318/SMK" class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-inner" />
-        </div>
-
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
-          <button type="button" id="btn-cancel-modal" class="flex-1 sm:flex-initial px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-all text-center">
-            Batal
-          </button>
-          <button type="submit" id="btn-submit-perm" class="flex-1 sm:flex-initial px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all text-center">
-            Simpan Permohonan
-          </button>
         </div>
       </form>
     </div>
@@ -230,41 +275,33 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- Modal Dialog: Detail Permohonan Izin & Pratinjau Foto Bukti (Khusus Guru / Read-Only) -->
   <div id="detail-perm-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-xl w-full p-4 sm:p-6 md:p-7 shadow-2xl border border-slate-200 space-y-3.5 sm:space-y-4 animate-in fade-in duration-200 my-auto max-h-[92vh] overflow-y-auto">
+    <div class="bg-white rounded-xl max-w-xl w-full p-4 sm:p-6 shadow-xl border border-slate-200 space-y-3.5 animate-in fade-in duration-200 my-auto max-h-[92vh] overflow-y-auto">
       <!-- Modal Header -->
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-xs">
-            <span class="material-symbols-outlined text-2xl">description</span>
+          <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+            <span class="material-symbols-outlined text-lg">description</span>
           </div>
           <div>
-            <h3 class="text-base font-extrabold text-slate-900">Rincian & Bukti Izin Siswa</h3>
-            <p class="text-[11px] text-slate-500">Peninjauan berkas permohonan surat izin / dispensasi</p>
+            <h3 class="text-sm font-semibold text-slate-900">Rincian Permohonan</h3>
+            <p class="text-[11px] text-slate-500">Peninjauan berkas izin / dispensasi</p>
           </div>
         </div>
-        <button id="btn-close-detail-modal" type="button" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-xl hover:bg-slate-100 transition" title="Tutup">
-          <span class="material-symbols-outlined text-xl">close</span>
+        <button id="btn-close-detail-modal" type="button" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition" title="Tutup">
+          <span class="material-symbols-outlined text-lg">close</span>
         </button>
       </div>
 
-      <!-- Info Banner: Guru Tidak Bisa Edit (Read-Only) -->
-      <div class="p-3 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-2.5 text-[11px] text-amber-900 leading-relaxed">
-        <span class="material-symbols-outlined text-base text-amber-600 shrink-0 mt-0.5">lock</span>
-        <span>
-          <strong>Kebijakan Sekolah (Read-Only):</strong> Pihak guru tidak dapat mengedit isi pengajuan siswa. Guru hanya berhak <strong>Menyetujui</strong> atau <strong>Menolak</strong>. Pengeditan hanya dapat dilakukan oleh siswa sebelum disetujui.
-        </span>
-      </div>
-
       <!-- Siswa Profile Card -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 p-3.5 sm:p-4 rounded-2xl bg-blue-50/60 border border-blue-100/80">
-        <div class="flex items-center gap-3">
-          <div id="detail-student-avatar" class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md shrink-0">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 rounded-lg bg-slate-50 border border-slate-200/80">
+        <div class="flex items-center gap-2.5">
+          <div id="detail-student-avatar" class="w-9 h-9 rounded-lg bg-slate-200 text-slate-700 font-mono font-bold flex items-center justify-center text-xs shrink-0">
             S
           </div>
           <div class="min-w-0">
-            <h4 id="detail-student-name" class="text-sm font-extrabold text-slate-900 truncate">-</h4>
-            <p class="text-xs text-slate-500 font-medium truncate">
-              <span id="detail-student-class" class="font-bold text-slate-700">-</span> • NIS: <span id="detail-student-id" class="font-mono text-slate-600">-</span>
+            <h4 id="detail-student-name" class="text-xs font-semibold text-slate-900 truncate">-</h4>
+            <p class="text-[11px] text-slate-500 truncate">
+              <span id="detail-student-class" class="font-medium text-slate-700">-</span> • NIS: <span id="detail-student-id" class="font-mono text-slate-600">-</span>
             </p>
           </div>
         </div>
@@ -274,78 +311,74 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <!-- Detail Grid: Kategori & Tanggal -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 text-xs">
-        <div class="p-3 sm:p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70">
-          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Kategori Permohonan</span>
-          <p id="detail-perm-category" class="font-bold text-slate-800 mt-1 flex items-center gap-1.5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+        <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/70">
+          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Kategori</span>
+          <p id="detail-perm-category" class="font-semibold text-slate-800 mt-0.5 flex items-center gap-1.5">
             <span class="material-symbols-outlined text-sm text-blue-600">badge</span>
             <span>-</span>
           </p>
         </div>
-        <div class="p-3 sm:p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70">
-          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Rentang Tanggal & Durasi</span>
-          <p id="detail-perm-dates" class="font-bold text-slate-800 mt-1 font-mono text-[11px]">
+        <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/70">
+          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Rentang Waktu</span>
+          <p id="detail-perm-dates" class="font-semibold text-slate-800 mt-0.5 font-mono text-[11px]">
             -
           </p>
         </div>
       </div>
 
       <!-- Alasan / Keterangan Lengkap Siswa -->
-      <div class="space-y-1.5">
-        <label class="text-xs font-bold text-slate-700 flex items-center gap-1">
-          <span class="material-symbols-outlined text-sm text-slate-500">format_quote</span>
-          <span>Alasan / Keterangan dari Siswa:</span>
-        </label>
-        <div id="detail-perm-reason" class="p-3 sm:p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-800 leading-relaxed font-medium select-text break-words">
+      <div class="space-y-1">
+        <label class="text-xs font-medium text-slate-700">Keterangan / Alasan:</label>
+        <div id="detail-perm-reason" class="p-3 rounded-lg bg-slate-50 border border-slate-200/80 text-xs text-slate-800 leading-relaxed font-normal select-text break-words">
           -
         </div>
       </div>
 
       <!-- Catatan Lampiran Dokumen -->
       <div class="flex items-center gap-2 text-xs text-slate-600 px-1 truncate">
-        <span class="material-symbols-outlined text-sm text-emerald-600 shrink-0">task</span>
+        <span class="material-symbols-outlined text-sm text-slate-400 shrink-0">task</span>
         <span class="truncate">Dokumen: <strong id="detail-perm-attach" class="text-slate-800 font-semibold">-</strong></span>
       </div>
 
       <!-- Bukti Foto Surat / Dispensasi -->
       <div class="space-y-2 pt-1 border-t border-slate-100">
         <div class="flex items-center justify-between">
-          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm text-blue-600">image</span>
-            <span>Foto Bukti Surat / Keterangan Dokter:</span>
+          <label class="text-xs font-medium text-slate-700 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-slate-500">image</span>
+            <span>Foto Bukti Surat / Keterangan:</span>
           </label>
-          <span id="detail-photo-tag" class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md"></span>
+          <span id="detail-photo-tag" class="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200"></span>
         </div>
         
         <!-- Preview Container Jika Ada Foto -->
-        <div id="detail-photo-container" class="rounded-2xl border border-slate-200 overflow-hidden bg-slate-900/5 p-3 flex flex-col items-center justify-center">
-          <img id="detail-photo-img" src="" alt="Foto Bukti Izin" class="max-h-60 sm:max-h-72 rounded-xl object-contain shadow-sm cursor-pointer hover:opacity-95 transition" title="Klik untuk membuka di tab baru" />
-          <div class="mt-3 flex items-center justify-center gap-2 flex-wrap w-full">
-            <a id="detail-photo-link" href="#" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs">
+        <div id="detail-photo-container" class="rounded-lg border border-slate-200 overflow-hidden bg-slate-50 p-2.5 flex flex-col items-center justify-center">
+          <img id="detail-photo-img" src="" alt="Foto Bukti Izin" class="max-h-60 sm:max-h-72 rounded-lg object-contain cursor-pointer hover:opacity-95 transition" title="Klik untuk membuka di tab baru" />
+          <div class="mt-2.5 flex items-center justify-center gap-2 flex-wrap w-full">
+            <a id="detail-photo-link" href="#" target="_blank" class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition shadow-xs">
               <span class="material-symbols-outlined text-sm">open_in_new</span>
-              <span>Buka Gambar Penuh ↗</span>
+              <span>Buka Penuh ↗</span>
             </a>
-            <a id="detail-photo-download" href="#" download="bukti-izin-siswa.jpg" class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-200 transition">
+            <a id="detail-photo-download" href="#" download="bukti-izin-siswa.jpg" class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium border border-slate-200 transition">
               <span class="material-symbols-outlined text-sm">download</span>
-              <span>Unduh Foto</span>
+              <span>Unduh</span>
             </a>
           </div>
         </div>
 
         <!-- Alert Jika Tidak Ada Foto Bukti -->
-        <div id="detail-no-photo" class="hidden p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 text-center">
-          <span class="material-symbols-outlined text-2xl text-slate-400 mb-1">no_photography</span>
-          <p class="font-bold text-slate-700">Tidak ada foto bukti terlampir</p>
-          <p class="text-[11px] text-slate-500 mt-0.5">Permohonan diajukan melalui teks keterangan tanpa lampiran foto kamera.</p>
+        <div id="detail-no-photo" class="hidden p-4 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-600 text-center">
+          <span class="material-symbols-outlined text-2xl text-slate-300 mb-1">no_photography</span>
+          <p class="font-medium text-slate-600">Tidak ada foto bukti terlampir</p>
         </div>
       </div>
 
       <!-- Action Footer (Setujui / Tolak oleh Guru) -->
       <div class="flex items-center justify-between pt-3 border-t border-slate-100 flex-wrap sm:flex-nowrap gap-2">
-        <button type="button" id="btn-close-detail-modal-footer" class="w-full sm:w-auto px-4 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-all text-center">
+        <button type="button" id="btn-close-detail-modal-footer" class="px-3.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
           Tutup
         </button>
-        <div id="detail-action-buttons-group" class="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <div id="detail-action-buttons-group" class="flex items-center gap-2 justify-end">
           <!-- Dynamic Approve/Reject buttons -->
         </div>
       </div>
@@ -463,8 +496,8 @@ import Layout from '../layouts/Layout.astro';
     function updateStats() {
       const menunggu = permissionsData.filter((p) => p.status === 'Menunggu').length;
       const disetujui = permissionsData.filter((p) => p.status === 'Disetujui').length;
-      const ditolak = permissionsData.filter((p) => p.status === 'Ditolak').length;
       const selesai = permissionsData.filter((p) => p.status === 'Selesai').length;
+      const ditolak = permissionsData.filter((p) => p.status === 'Ditolak').length;
 
       const setEl = (id: string, val: string | number) => {
         const el = document.getElementById(id);
@@ -472,8 +505,8 @@ import Layout from '../layouts/Layout.astro';
       };
 
       setEl('perm-stat-menunggu', menunggu);
-      setEl('perm-stat-disetujui', disetujui);
-      setEl('perm-stat-ditolak', ditolak + selesai);
+      setEl('perm-stat-disetujui', disetujui + selesai);
+      setEl('perm-stat-ditolak', ditolak);
 
       setEl('count-all', permissionsData.length);
       setEl('count-sakit', permissionsData.filter((p) => p.category === 'sakit').length);
@@ -493,9 +526,9 @@ import Layout from '../layouts/Layout.astro';
 
       if (filtered.length === 0) {
         listContainer.innerHTML = `
-          <div class="bg-white rounded-2xl p-8 text-center text-slate-400 border border-slate-200/80">
-            <span class="material-symbols-outlined text-4xl mb-2 text-slate-300">inbox</span>
-            <p class="text-xs font-semibold">Tidak ada permohonan izin / dispensasi yang ditampilkan.</p>
+          <div class="bg-white rounded-xl p-10 text-center text-slate-400 border border-slate-200/80">
+            <span class="material-symbols-outlined text-3xl mb-1.5 text-slate-300">inbox</span>
+            <p class="text-xs font-medium text-slate-500">Tidak ada permohonan izin / dispensasi.</p>
           </div>
         `;
         return;
@@ -507,21 +540,18 @@ import Layout from '../layouts/Layout.astro';
         const isSelesai = item.status === 'Selesai';
         const isDitolak = item.status === 'Ditolak';
 
-        // Badge status akurat
+        // Badge status akurat (unslop monospaced ticket format)
         const statusBadge = isMenunggu
-          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border-amber-200">MENUNGGU</span>'
+          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border-amber-200/70">MENUNGGU</span>'
           : isDisetujui
-          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border-emerald-200">DISETUJUI</span>'
+          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border-emerald-200/70">DISETUJUI</span>'
           : isSelesai
-          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300">SELESAI</span>'
-          : '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200">DITOLAK</span>';
+          ? '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-600 border border-slate-200">ARSIP</span>'
+          : '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200/70">DITOLAK</span>';
 
-        const borderLeftColor = isMenunggu ? 'border-l-amber-500' : isDisetujui ? 'border-l-emerald-500' : isSelesai ? 'border-l-slate-400' : 'border-l-rose-500';
-
-        // Category icon & gradient
+        // Category icon & tag
         const isSakit = item.category === 'sakit';
         const isKeluarga = item.category === 'keluarga';
-        const badgeGrad = isSakit ? 'from-emerald-500 to-teal-700' : isKeluarga ? 'from-indigo-500 to-purple-700' : 'from-blue-600 via-indigo-600 to-purple-600';
         const badgeTag = isSakit ? 'MEDIS' : isKeluarga ? 'IZIN' : 'LKS/PKL';
 
         // Action buttons: Opsi Setujui atau Tolak untuk Guru / Admin
@@ -530,11 +560,11 @@ import Layout from '../layouts/Layout.astro';
           if (isMenunggu) {
             actionHtml = `
               <div class="flex items-center gap-1.5 sm:gap-2">
-                <button data-action="reject" data-id="${item.id}" class="btn-action-reject px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-[11px] sm:text-xs font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-rose-600 active:scale-95 flex items-center gap-1">
+                <button data-action="reject" data-id="${item.id}" class="btn-action-reject px-2.5 sm:px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-xs font-semibold transition active:scale-95 flex items-center gap-1 cursor-pointer">
                   <span class="material-symbols-outlined text-sm">cancel</span>
                   <span>Tolak</span>
                 </button>
-                <button data-action="approve" data-id="${item.id}" class="btn-action-approve px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-[11px] sm:text-xs font-bold transition-all duration-200 shadow-md shadow-blue-500/20 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-600 flex items-center gap-1">
+                <button data-action="approve" data-id="${item.id}" class="btn-action-approve px-3 sm:px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition shadow-xs active:scale-95 flex items-center gap-1 cursor-pointer">
                   <span class="material-symbols-outlined text-sm">check_circle</span>
                   <span>Setujui</span>
                 </button>
@@ -543,11 +573,11 @@ import Layout from '../layouts/Layout.astro';
           } else if (isDisetujui) {
             actionHtml = `
               <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-emerald-100 text-emerald-900 border border-emerald-300 text-[11px] sm:text-xs font-bold flex items-center gap-1">
-                  <span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/80 text-xs font-medium flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">check_circle</span>
                   <span>Disetujui</span>
                 </span>
-                <button data-action="reject" data-id="${item.id}" class="btn-action-reject px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 text-slate-600 border border-slate-200 text-[11px] sm:text-xs font-semibold transition-all duration-200 active:scale-95 flex items-center gap-1" title="Batalkan dan ubah status ke Ditolak">
+                <button data-action="reject" data-id="${item.id}" class="btn-action-reject px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-slate-600 border border-slate-200 text-xs font-medium transition active:scale-95 flex items-center gap-1 cursor-pointer" title="Batalkan dan ubah status ke Ditolak">
                   <span class="material-symbols-outlined text-xs">close</span>
                   <span>Tolak</span>
                 </button>
@@ -556,11 +586,11 @@ import Layout from '../layouts/Layout.astro';
           } else if (isDitolak) {
             actionHtml = `
               <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-rose-100 text-rose-900 border border-rose-300 text-[11px] sm:text-xs font-bold flex items-center gap-1">
-                  <span class="material-symbols-outlined text-sm text-rose-700">cancel</span>
+                <span class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200/80 text-xs font-medium flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm text-rose-600">cancel</span>
                   <span>Ditolak</span>
                 </span>
-                <button data-action="approve" data-id="${item.id}" class="btn-action-approve px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] sm:text-xs font-bold transition-all duration-200 active:scale-95 flex items-center gap-1" title="Ubah status ke Disetujui">
+                <button data-action="approve" data-id="${item.id}" class="btn-action-approve px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 text-slate-600 border border-slate-200 text-xs font-medium transition active:scale-95 flex items-center gap-1 cursor-pointer" title="Ubah status ke Disetujui">
                   <span class="material-symbols-outlined text-xs">check_circle</span>
                   <span>Setujui</span>
                 </button>
@@ -570,11 +600,11 @@ import Layout from '../layouts/Layout.astro';
             // Selesai (Arsip)
             actionHtml = `
               <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-300 text-[11px] sm:text-xs font-bold flex items-center gap-1">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 text-xs font-medium flex items-center gap-1">
                   <span class="material-symbols-outlined text-sm text-slate-500">inventory_2</span>
                   <span>Arsip</span>
                 </span>
-                <button data-action="approve" data-id="${item.id}" class="btn-action-approve px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] sm:text-xs font-semibold transition-all duration-200 active:scale-95 flex items-center gap-1" title="Buka kembali dan setujui izin ini">
+                <button data-action="approve" data-id="${item.id}" class="btn-action-approve px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 text-xs font-medium transition active:scale-95 flex items-center gap-1 cursor-pointer" title="Buka kembali dan setujui izin ini">
                   <span class="material-symbols-outlined text-xs">check</span>
                   <span>Setujui</span>
                 </button>
@@ -584,55 +614,54 @@ import Layout from '../layouts/Layout.astro';
         } else {
           // Siswa: hanya lihat badge
           actionHtml = `
-            <span class="px-2.5 sm:px-3 py-1 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold">
+            <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 text-xs font-medium">
               ${item.status}
             </span>
           `;
         }
 
         return `
-          <article class="bg-white rounded-2xl p-3.5 sm:p-5 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 border-l-4 ${borderLeftColor} border border-slate-200/70">
-            <div class="flex items-start sm:items-center gap-3 sm:gap-4">
-              <div class="w-14 h-14 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${badgeGrad} p-1.5 sm:p-2 text-white flex flex-col items-center justify-center text-center shrink-0 shadow-md">
-                <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-wider text-white/90">${badgeTag}</span>
-                <span class="text-[11px] sm:text-xs font-black mt-0.5 truncate max-w-full">${item.className}</span>
-                <span class="text-[8px] sm:text-[9px] text-white/80 font-mono">${item.daysCount || 1} HARI</span>
+          <article class="bg-white rounded-xl p-3.5 sm:p-4.5 shadow-xs hover:border-slate-300 transition-colors flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 border border-slate-200/80">
+            <div class="flex items-start sm:items-center gap-3 sm:gap-3.5">
+              <div class="w-12 h-12 sm:w-13 sm:h-13 rounded-lg bg-slate-50 border border-slate-200/80 p-1 flex flex-col items-center justify-center text-center shrink-0">
+                <span class="text-[9px] font-mono font-bold tracking-wider uppercase text-slate-500 leading-none">${badgeTag}</span>
+                <span class="text-xs font-bold text-slate-900 font-mono mt-1 leading-none">${item.daysCount || 1}H</span>
               </div>
               <div class="min-w-0 flex-1">
                 <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  <h4 class="text-sm sm:text-base font-extrabold text-slate-900 truncate">${item.name}</h4>
-                  <span class="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">${item.className}</span>
+                  <h4 class="text-xs sm:text-sm font-semibold text-slate-900 truncate">${item.name}</h4>
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-500 bg-slate-100 border border-slate-200/70">${item.className}</span>
                   ${statusBadge}
                 </div>
-                <p class="text-xs font-semibold text-slate-800 mt-1 flex flex-wrap items-center gap-1 sm:gap-1.5">
-                  <span class="material-symbols-outlined text-sm text-blue-600 shrink-0">article</span>
-                  <span class="break-words">${item.title}</span>
+                <p class="text-xs text-slate-700 mt-1 flex flex-wrap items-center gap-1 sm:gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-slate-400 shrink-0">article</span>
+                  <span class="font-medium break-words">${item.title}</span>
                   <span class="text-slate-300 hidden sm:inline">•</span>
-                  <span class="text-slate-500 font-normal font-mono text-[11px] w-full sm:w-auto mt-0.5 sm:mt-0">${item.startDate} s/d ${item.endDate}</span>
+                  <span class="text-slate-500 font-mono text-[11px] w-full sm:w-auto mt-0.5 sm:mt-0">${item.startDate} s/d ${item.endDate}</span>
                 </p>
-                <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-1.5 sm:mt-2 text-[11px] sm:text-xs text-slate-500">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-1.5 text-[11px] text-slate-400">
                   <span class="flex items-center gap-1 truncate max-w-full">
-                    <span class="material-symbols-outlined text-sm text-emerald-600 shrink-0">task</span>
+                    <span class="material-symbols-outlined text-sm text-slate-400 shrink-0">task</span>
                     <span class="truncate">Lampiran: ${item.attachmentNote || 'Surat Permohonan'}</span>
                   </span>
                   ${item.photoProof ? `
-                    <span class="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-lg shadow-2xs">
+                    <span class="inline-flex items-center gap-1 text-[10px] font-mono font-medium text-blue-700 bg-blue-50 border border-blue-200/70 px-1.5 py-0.5 rounded">
                       <span class="material-symbols-outlined text-xs text-blue-600">photo_library</span>
-                      <span>Ada Foto Bukti</span>
+                      <span>Foto Bukti</span>
                     </span>
                   ` : ''}
                 </div>
               </div>
             </div>
-            <div class="w-full lg:w-auto flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-1.5 sm:gap-2 pt-2.5 sm:pt-3 lg:pt-0 border-t border-slate-100 lg:border-0 shrink-0">
+            <div class="w-full lg:w-auto flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-1.5 sm:gap-2 pt-2.5 sm:pt-0 border-t border-slate-100 lg:border-0 shrink-0">
               <button
                 type="button"
                 data-id="${item.id}"
-                class="btn-view-detail px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 hover:border-blue-300 text-[11px] sm:text-xs font-bold transition-all duration-150 active:scale-95 flex items-center gap-1 cursor-pointer shadow-2xs"
+                class="btn-view-detail px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/80 text-xs font-medium transition active:scale-95 flex items-center gap-1 cursor-pointer"
                 title="Lihat foto bukti surat & rincian permohonan siswa"
               >
-                <span class="material-symbols-outlined text-sm text-blue-600">visibility</span>
-                <span class="whitespace-nowrap">Foto & Rincian</span>
+                <span class="material-symbols-outlined text-sm text-slate-500">visibility</span>
+                <span class="whitespace-nowrap">Detail</span>
               </button>
               <div class="flex items-center gap-1.5 sm:gap-2">
                 ${actionHtml}
@@ -640,7 +669,7 @@ import Layout from '../layouts/Layout.astro';
                   type="button"
                   data-id="${item.id}"
                   data-name="${item.name}"
-                  class="btn-action-delete p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200 hover:border-rose-300 text-xs font-bold transition-all duration-150 active:scale-95 flex items-center justify-center cursor-pointer shadow-2xs"
+                  class="btn-action-delete p-1.5 rounded-lg bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200/80 hover:border-rose-200 text-xs transition active:scale-95 flex items-center justify-center cursor-pointer"
                   title="Hapus permohonan ini secara permanen"
                 >
                   <span class="material-symbols-outlined text-base">delete</span>
@@ -722,13 +751,13 @@ import Layout from '../layouts/Layout.astro';
       const statusBadgeContainer = document.getElementById('detail-status-badge');
       if (statusBadgeContainer) {
         if (item.status === 'Menunggu') {
-          statusBadgeContainer.innerHTML = '<span class="px-2.5 py-1 rounded border text-[11px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border-amber-200">MENUNGGU</span>';
+          statusBadgeContainer.innerHTML = '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-amber-50 text-amber-700 border-amber-200/70">MENUNGGU</span>';
         } else if (item.status === 'Disetujui') {
-          statusBadgeContainer.innerHTML = '<span class="px-2.5 py-1 rounded border text-[11px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border-emerald-200">DISETUJUI</span>';
+          statusBadgeContainer.innerHTML = '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border-emerald-200/70">DISETUJUI</span>';
         } else if (item.status === 'Ditolak') {
-          statusBadgeContainer.innerHTML = '<span class="px-2.5 py-1 rounded border text-[11px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200">DITOLAK</span>';
+          statusBadgeContainer.innerHTML = '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200/70">DITOLAK</span>';
         } else {
-          statusBadgeContainer.innerHTML = '<span class="px-2.5 py-1 rounded border text-[11px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300">SELESAI</span>';
+          statusBadgeContainer.innerHTML = '<span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-600 border border-slate-200">ARSIP</span>';
         }
       }
 
@@ -759,30 +788,30 @@ import Layout from '../layouts/Layout.astro';
         if (isGuruOrAdmin) {
           if (item.status === 'Menunggu') {
             actionGroup.innerHTML = `
-              <button type="button" class="btn-modal-reject px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-xs font-bold transition flex items-center gap-1 active:scale-95 cursor-pointer">
+              <button type="button" class="btn-modal-reject px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 text-xs font-semibold transition flex items-center gap-1 active:scale-95 cursor-pointer">
                 <span class="material-symbols-outlined text-sm">cancel</span>
                 <span>Tolak</span>
               </button>
-              <button type="button" class="btn-modal-approve px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-md shadow-blue-500/20 active:scale-95 flex items-center gap-1 cursor-pointer">
+              <button type="button" class="btn-modal-approve px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition shadow-xs active:scale-95 flex items-center gap-1 cursor-pointer">
                 <span class="material-symbols-outlined text-sm">check_circle</span>
-                <span>Setujui Izin</span>
+                <span>Setujui</span>
               </button>
             `;
           } else if (item.status === 'Disetujui') {
             actionGroup.innerHTML = `
-              <span class="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold flex items-center gap-1">
-                <span class="material-symbols-outlined text-sm text-emerald-700">check_circle</span>
-                <span>Disetujui Sah</span>
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/80 text-xs font-medium flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-emerald-600">check_circle</span>
+                <span>Disetujui</span>
               </span>
-              <button type="button" class="btn-modal-reject px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 text-slate-600 border border-slate-200 text-xs font-semibold transition active:scale-95 cursor-pointer">
-                <span>Ubah ke Tolak</span>
+              <button type="button" class="btn-modal-reject px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-slate-600 border border-slate-200 text-xs font-medium transition active:scale-95 cursor-pointer">
+                <span>Tolak</span>
               </button>
             `;
           } else {
             actionGroup.innerHTML = `
-              <button type="button" class="btn-modal-approve px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-md active:scale-95 flex items-center gap-1 cursor-pointer">
-                <span class="material-symbols-outlined text-sm">check_circle</span>
-                <span>Setujui Sekarang</span>
+              <button type="button" class="btn-modal-approve px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 text-slate-600 border border-slate-200 text-xs font-medium transition active:scale-95 flex items-center gap-1 cursor-pointer">
+                <span class="material-symbols-outlined text-sm text-slate-500">check_circle</span>
+                <span>Setujui</span>
               </button>
             `;
           }
@@ -819,14 +848,79 @@ import Layout from '../layouts/Layout.astro';
       }
     }
 
-    // Modal Control
+    // Modal Control & Multi-Step Wizard
     const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
     const startInput = document.getElementById('perm-start-input') as HTMLInputElement | null;
     const endInput = document.getElementById('perm-end-input') as HTMLInputElement | null;
     if (startInput) startInput.value = todayStr;
     if (endInput) endInput.value = todayStr;
 
+    const step1El = document.getElementById('form-step-1');
+    const step2El = document.getElementById('form-step-2');
+    const stepBtn1 = document.getElementById('step-btn-1');
+    const stepBtn2 = document.getElementById('step-btn-2');
+    const stepBadge1 = document.getElementById('step-badge-1');
+    const stepBadge2 = document.getElementById('step-badge-2');
+    const btnStepNext = document.getElementById('btn-step-next');
+    const btnStepPrev = document.getElementById('btn-step-prev');
+    const studentError = document.getElementById('perm-student-error');
+
+    function setFormStep(step: number) {
+      if (step === 2) {
+        if (!studentSelect || !studentSelect.value) {
+          if (studentError) studentError.classList.remove('hidden');
+          studentSelect?.focus();
+          return false;
+        }
+        if (studentError) studentError.classList.add('hidden');
+      }
+
+      if (step === 1) {
+        step1El?.classList.remove('hidden');
+        step2El?.classList.add('hidden');
+
+        stepBtn1?.classList.add('bg-white', 'text-slate-800', 'shadow-xs', 'font-semibold');
+        stepBtn1?.classList.remove('text-slate-500', 'font-medium');
+        stepBadge1?.classList.add('bg-blue-600', 'text-white');
+        stepBadge1?.classList.remove('bg-slate-200', 'text-slate-600');
+
+        stepBtn2?.classList.remove('bg-white', 'text-slate-800', 'shadow-xs', 'font-semibold');
+        stepBtn2?.classList.add('text-slate-500', 'font-medium');
+        stepBadge2?.classList.remove('bg-blue-600', 'text-white');
+        stepBadge2?.classList.add('bg-slate-200', 'text-slate-600');
+      } else {
+        step1El?.classList.add('hidden');
+        step2El?.classList.remove('hidden');
+
+        stepBtn2?.classList.add('bg-white', 'text-slate-800', 'shadow-xs', 'font-semibold');
+        stepBtn2?.classList.remove('text-slate-500', 'font-medium');
+        stepBadge2?.classList.add('bg-blue-600', 'text-white');
+        stepBadge2?.classList.remove('bg-slate-200', 'text-slate-600');
+
+        stepBtn1?.classList.remove('bg-white', 'text-slate-800', 'shadow-xs', 'font-semibold');
+        stepBtn1?.classList.add('text-slate-500', 'font-medium');
+        stepBadge1?.classList.remove('bg-blue-600', 'text-white');
+        stepBadge1?.classList.add('bg-slate-200', 'text-slate-600');
+
+        const titleInput = document.getElementById('perm-title-input');
+        titleInput?.focus();
+      }
+      return true;
+    }
+
+    btnStepNext?.addEventListener('click', () => setFormStep(2));
+    btnStepPrev?.addEventListener('click', () => setFormStep(1));
+    stepBtn1?.addEventListener('click', () => setFormStep(1));
+    stepBtn2?.addEventListener('click', () => setFormStep(2));
+
+    studentSelect?.addEventListener('change', () => {
+      if (studentSelect.value && studentError) {
+        studentError.classList.add('hidden');
+      }
+    });
+
     btnOpenModal?.addEventListener('click', () => {
+      setFormStep(1);
       if (modal) {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -838,6 +932,7 @@ import Layout from '../layouts/Layout.astro';
         modal.classList.add('hidden');
         modal.classList.remove('flex');
       }
+      setFormStep(1);
     };
     btnCloseModal?.addEventListener('click', closeModal);
     btnCancelModal?.addEventListener('click', closeModal);
@@ -882,6 +977,7 @@ import Layout from '../layouts/Layout.astro';
         if (res.ok) {
           closeModal();
           permForm.reset();
+          setFormStep(1);
           if (startInput) startInput.value = todayStr;
           if (endInput) endInput.value = todayStr;
           await loadData();

@@ -11,8 +11,8 @@
     "lastAlpaDate": "2026-11-11",
     "lastBolosDate": "2026-11-11",
     "lastArchivedDate": "2026-11-09",
-    "nextRunType": "archive",
-    "nextRunTime": "2026-11-11 23:00:00 WIB (Arsip & Reset Harian)",
-    "lastStatusMessage": "Timer aktif: Menunggu jadwal berikutnya dalam ~7.30 jam (2026-11-11 23:00:00 WIB (Arsip & Reset Harian))"
+    "nextRunType": "alpa",
+    "nextRunTime": "2026-11-12 13:30:00 WIB (Penetapan Siswa Alpa)",
+    "lastStatusMessage": "Timer aktif: Menunggu jadwal berikutnya dalam ~0.72 jam (2026-11-12 13:30:00 WIB (Penetapan Siswa Alpa))"
   }
 }

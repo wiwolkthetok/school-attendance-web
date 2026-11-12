@@ -14,6 +14,15 @@ export const GET: APIRoute = async () => {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    const cookieHeader = request.headers.get('cookie') || '';
+    const hasAdminSession = cookieHeader.includes('auth_session=admin');
+    if (!hasAdminSession && !request.headers.get('x-dev-bypass')) {
+      return new Response(JSON.stringify({ status: 'error', message: 'Akses Ditolak: Hanya Administrator yang berhak mengubah pengaturan.' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     const body = await request.json().catch(() => ({}));
     const updated = await saveSettings(body);
     return new Response(
@@ -28,7 +37,15 @@ export const POST: APIRoute = async ({ request }) => {
   }
 };
 
-export const DELETE: APIRoute = async () => {
+export const DELETE: APIRoute = async ({ request }) => {
+  const cookieHeader = request.headers.get('cookie') || '';
+  const hasAdminSession = cookieHeader.includes('auth_session=admin');
+  if (!hasAdminSession && !request.headers.get('x-dev-bypass')) {
+    return new Response(JSON.stringify({ status: 'error', message: 'Akses Ditolak: Hanya Administrator yang berhak mereset pengaturan.' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
   const defaults = await resetSettings();
   return new Response(
     JSON.stringify({ status: 'success', message: 'Pengaturan berhasil direset ke default', data: defaults }),

@@ -25,14 +25,17 @@ const guruCount = 0;
   <div class="flex flex-col gap-6">
     <!-- Top Action Bar & Dynamic Metrics Banner -->
     <div
-      class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/80 backdrop-blur-xl p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-xs border border-slate-200/60"
+      class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-xl shadow-xs border border-slate-200/80"
     >
       <div>
         <h1
-          class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight"
+          class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight"
         >
           Data Siswa
         </h1>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Manajemen data siswa, dewan guru, dan kartu identitas RFID
+        </p>
       </div>
 
       <!-- Quick Global Control -->
@@ -40,27 +43,27 @@ const guruCount = 0;
         <button
           type="button"
           onclick="window.resetAttendance()"
-          class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs shadow-xs transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer"
+          class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs transition-colors cursor-pointer"
           title="Reset semua status presensi hari ini kembali ke Belum Absen"
         >
-          <span class="material-symbols-outlined text-[16px]">restart_alt</span>
+          <span class="material-symbols-outlined text-base">restart_alt</span>
           <span class="whitespace-nowrap">Reset Presensi</span>
         </button>
         <button
           id="btn-open-promote-modal"
           type="button"
-          class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200/80 shadow-xs transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           title="Kenaikan Kelas & Tahun Ajaran Baru (Khusus Kepsek & Waka)"
         >
-          <span class="material-symbols-outlined text-[18px]">school</span>
+          <span class="material-symbols-outlined text-base text-slate-500">school</span>
           <span class="whitespace-nowrap">Kenaikan Kelas</span>
         </button>
         <button
           id="btn-open-student-modal"
-          class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-1 cursor-pointer"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition-colors cursor-pointer"
           title="Tambah siswa Baru"
         >
-          <span class="material-symbols-outlined text-[18px]">person_add</span>
+          <span class="material-symbols-outlined text-base">person_add</span>
           <span class="whitespace-nowrap">Tambah Siswa</span>
         </button>
       </div>
@@ -71,122 +74,114 @@ const guruCount = 0;
       <!-- Card AKL -->
       <div
         id="card-filter-akl"
-        class="category-stat-card p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-blue-50/90 hover:bg-blue-100/80 border border-blue-200/60 transition-all duration-200 backdrop-blur-md shadow-xs flex items-center justify-between cursor-pointer group hover:scale-[1.01]"
+        class="category-stat-card p-4 sm:p-5 rounded-xl bg-white hover:border-slate-300 border border-slate-200/80 transition-all shadow-xs flex items-center justify-between cursor-pointer group"
       >
-        <div class="flex items-center gap-3.5">
-          <div
-            class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-600/20 group-hover:scale-105 transition-transform duration-200"
-          >
-            <span class="material-symbols-outlined text-xl sm:text-2xl"
-              >account_balance_wallet</span
-            >
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] tracking-wider uppercase font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
+              AKL
+            </span>
+            <span class="text-xs text-slate-500 font-medium">Akuntansi & Keuangan</span>
           </div>
-          <div>
-            <p class="text-xs font-bold text-blue-900">AKL</p>
-            <p class="text-xl sm:text-2xl font-black text-blue-950">
-              <span id="stat-count-akl">{aklCount}</span>
-            </p>
+          <div class="text-2xl sm:text-3xl font-semibold font-mono text-slate-900">
+            <span id="stat-count-akl">{aklCount}</span>
+            <span class="text-xs font-sans text-slate-400 font-normal ml-1">Siswa</span>
           </div>
         </div>
-        <span
-          class="material-symbols-outlined text-blue-500 group-hover:translate-x-1 transition-transform duration-200 text-xl"
-          >arrow_forward</span
-        >
+        <div class="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-slate-100 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors">
+          <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </div>
       </div>
 
       <!-- Card RPL -->
       <div
         id="card-filter-rpl"
-        class="category-stat-card p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-all duration-200 text-white shadow-xs flex items-center justify-between cursor-pointer group hover:scale-[1.01]"
+        class="category-stat-card p-4 sm:p-5 rounded-xl bg-white hover:border-slate-300 border border-slate-200/80 transition-all shadow-xs flex items-center justify-between cursor-pointer group"
       >
-        <div class="flex items-center gap-3.5">
-          <div
-            class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-100 shadow-md group-hover:scale-105 transition-transform duration-200"
-          >
-            <span class="material-symbols-outlined text-xl sm:text-2xl">terminal</span>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] tracking-wider uppercase font-semibold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded">
+              RPL
+            </span>
+            <span class="text-xs text-slate-500 font-medium">Rekayasa Perangkat Lunak</span>
           </div>
-          <div>
-            <p class="text-xs font-bold text-slate-300">RPL</p>
-            <p class="text-xl sm:text-2xl font-black text-white">
-              <span id="stat-count-rpl">{rplCount}</span>
-            </p>
+          <div class="text-2xl sm:text-3xl font-semibold font-mono text-slate-900">
+            <span id="stat-count-rpl">{rplCount}</span>
+            <span class="text-xs font-sans text-slate-400 font-normal ml-1">Siswa</span>
           </div>
         </div>
-        <span
-          class="material-symbols-outlined text-slate-400 group-hover:translate-x-1 transition-transform duration-200 text-xl"
-          >arrow_forward</span
-        >
+        <div class="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-slate-100 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors">
+          <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </div>
       </div>
 
       <!-- Card Guru -->
       <div
         id="card-filter-guru"
-        class="category-stat-card p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-amber-50/90 hover:bg-amber-100/80 border border-amber-200/60 transition-all duration-200 backdrop-blur-md shadow-xs flex items-center justify-between cursor-pointer group hover:scale-[1.01]"
+        class="category-stat-card p-4 sm:p-5 rounded-xl bg-white hover:border-slate-300 border border-slate-200/80 transition-all shadow-xs flex items-center justify-between cursor-pointer group"
       >
-        <div class="flex items-center gap-3.5">
-          <div
-            class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform duration-200"
-          >
-            <span class="material-symbols-outlined text-xl sm:text-2xl">school</span>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] tracking-wider uppercase font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+              GURU
+            </span>
+            <span class="text-xs text-slate-500 font-medium">Dewan Pendidik</span>
           </div>
-          <div>
-            <p class="text-xs font-bold text-amber-950">Guru</p>
-            <p class="text-xl sm:text-2xl font-black text-amber-950">
-              <span id="stat-count-guru">{guruCount}</span>
-            </p>
+          <div class="text-2xl sm:text-3xl font-semibold font-mono text-slate-900">
+            <span id="stat-count-guru">{guruCount}</span>
+            <span class="text-xs font-sans text-slate-400 font-normal ml-1">Pendidik</span>
           </div>
         </div>
-        <span
-          class="material-symbols-outlined text-amber-600 group-hover:translate-x-1 transition-transform duration-200 text-xl"
-          >arrow_forward</span
-        >
+        <div class="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-slate-100 border border-slate-200/60 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors">
+          <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </div>
       </div>
     </div>
 
     <!-- Filters, Segmented Tabs & Instant Search with Accessible Ring-Focus -->
     <div
-      class="flex flex-col gap-3.5 sm:gap-4 bg-white/80 backdrop-blur-xl p-4 sm:p-5 rounded-2xl sm:rounded-3xl shadow-xs border border-slate-200/70"
+      class="flex flex-col gap-3.5 sm:gap-4 bg-white p-3.5 sm:p-4 rounded-xl shadow-xs border border-slate-200/80"
     >
       <div
         class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3"
       >
         <!-- Segmented Tabs -->
         <div
-          class="inline-flex p-1.5 rounded-2xl bg-slate-100/90 max-w-full overflow-x-auto gap-1 border border-slate-200/50 no-scrollbar select-none"
+          class="inline-flex p-1 rounded-lg bg-slate-100 max-w-full overflow-x-auto gap-1 border border-slate-200/60 no-scrollbar select-none shrink-0"
         >
           <button
             data-filter="all"
-            class="tab-civitas px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 whitespace-nowrap bg-white text-slate-900 shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+            class="tab-civitas px-3 py-1.5 rounded-md text-xs font-semibold transition-all whitespace-nowrap bg-white text-slate-900 shadow-xs cursor-pointer"
           >
             Semua
           </button>
           <button
             data-filter="akl"
-            class="tab-civitas px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+            class="tab-civitas px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap cursor-pointer"
           >
             AKL
           </button>
           <button
             data-filter="rpl"
-            class="tab-civitas px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+            class="tab-civitas px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap cursor-pointer"
           >
             RPL
           </button>
           <button
             data-filter="guru"
-            class="tab-civitas px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-amber-700 transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+            class="tab-civitas px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap cursor-pointer"
           >
             Guru
           </button>
           <button
             data-filter="admin"
-            class="tab-civitas px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-purple-700 transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+            class="tab-civitas px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap cursor-pointer"
           >
             Admin
           </button>
           <button
             data-filter="alumni"
-            class="tab-civitas px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-indigo-700 transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer"
+            class="tab-civitas px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap cursor-pointer"
           >
             Alumni
           </button>
@@ -196,12 +191,12 @@ const guruCount = 0;
         <div class="relative flex-1 w-full lg:max-w-md">
           <label for="search-civitas-input" class="sr-only">Cari Siswa</label>
           <span
-            class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none"
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none"
             aria-hidden="true">search</span
           >
           <input
             id="search-civitas-input"
-            class="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl bg-slate-50 text-slate-800 placeholder-slate-400 border border-slate-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200 shadow-inner"
+            class="w-full pl-9 pr-3.5 py-1.5 text-xs rounded-lg bg-slate-50 text-slate-800 placeholder-slate-400 border border-slate-200 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all"
             placeholder="Cari nama, NISN, RFID..."
             type="search"
           />
@@ -211,21 +206,21 @@ const guruCount = 0;
 
     <!-- Table of Civitas Akademika (Sticky Header + Zebra Striping + Contrast Badges) -->
     <div
-      class="bg-white rounded-2xl sm:rounded-3xl shadow-xs border border-slate-200/80 overflow-hidden"
+      class="bg-white rounded-xl shadow-xs border border-slate-200/80 overflow-hidden"
     >
       <!-- Table Header Bar -->
       <div
-        class="p-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-200/80 bg-slate-50/70 flex items-center justify-between flex-wrap gap-2"
+        class="px-4 sm:px-5 py-3 border-b border-slate-200/80 bg-slate-50/60 flex items-center justify-between flex-wrap gap-2"
       >
         <div class="flex items-center gap-2">
           <span
-            class="material-symbols-outlined text-blue-600 text-xl"
+            class="material-symbols-outlined text-slate-500 text-lg"
             aria-hidden="true">format_list_bulleted</span
           >
-          <h2 class="text-sm font-bold text-slate-900">Daftar Siswa</h2>
+          <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-wide">Daftar Siswa & Civitas</h2>
           <span
             id="header-total-count"
-            class="text-[11px] font-bold text-blue-800 bg-blue-100/90 border border-blue-200 px-2.5 py-0.5 rounded-full"
+            class="text-[11px] font-mono font-medium text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md"
           >
             0 Terdaftar
           </span>
@@ -237,25 +232,14 @@ const guruCount = 0;
         <table class="w-full text-left text-xs min-w-[700px] table-fixed">
           <!-- Sticky Header Locked at Top -->
           <thead
-            class="sticky top-0 z-10 bg-slate-100/95 backdrop-blur-sm text-slate-700 font-extrabold border-b border-slate-200 shadow-xs text-[11px] uppercase tracking-wider"
+            class="sticky top-0 z-10 bg-slate-50/95 backdrop-blur-sm text-slate-500 font-mono text-[10px] uppercase tracking-wider border-b border-slate-200/80"
           >
             <tr>
-              <th scope="col" class="py-3.5 px-4 w-[34%] bg-slate-100/95"
-                >Nama & ID</th
-              >
-              <th scope="col" class="py-3.5 px-3 w-[12%] bg-slate-100/95"
-                >Tingkat</th
-              >
-              <th scope="col" class="py-3.5 px-3 w-[16%] bg-slate-100/95"
-                >Jurusan</th
-              >
-              <th scope="col" class="py-3.5 px-3 w-[22%] bg-slate-100/95"
-                >Status</th
-              >
-              <th
-                scope="col"
-                class="py-3.5 px-4 text-center w-[16%] bg-slate-100/95">Aksi</th
-              >
+              <th scope="col" class="py-2.5 px-4 w-[34%]">Nama & ID</th>
+              <th scope="col" class="py-2.5 px-3 w-[12%]">Tingkat</th>
+              <th scope="col" class="py-2.5 px-3 w-[16%]">Jurusan</th>
+              <th scope="col" class="py-2.5 px-3 w-[22%]">Status</th>
+              <th scope="col" class="py-2.5 px-4 text-center w-[16%]">Aksi</th>
             </tr>
           </thead>
           <!-- Zebra-striped table rows -->
@@ -292,25 +276,14 @@ const guruCount = 0;
     class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto"
   >
     <div
-      class="bg-white rounded-[2.5rem] max-w-xl w-full p-6 sm:p-9 shadow-2xl border border-slate-100 space-y-6 relative overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-8"
+      class="bg-white rounded-xl max-w-xl w-full p-6 sm:p-7 shadow-xl border border-slate-200/80 space-y-5 relative overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-8"
     >
-      <!-- Decorative Background Orbs Sesuai Foto -->
-      <div
-        class="absolute -top-14 -right-14 w-40 h-40 rounded-full bg-blue-500/10 blur-2xl pointer-events-none"
-      >
-      </div>
-      <div
-        class="absolute -bottom-14 -left-14 w-40 h-40 rounded-full bg-indigo-500/10 blur-2xl pointer-events-none"
-      >
-      </div>
-
       <!-- Top Header & Sub-link -->
-      <div class="flex items-center justify-between relative z-10">
-        <div class="w-8"></div>
-        <div class="text-center">
+      <div class="flex items-center justify-between relative z-10 pb-3 border-b border-slate-100">
+        <div>
           <h2
             id="modal-student-title"
-            class="text-lg sm:text-xl font-black text-slate-900 tracking-tight"
+            class="text-base sm:text-lg font-bold text-slate-900 tracking-tight"
           >
             Pendaftaran Siswa
           </h2>
@@ -321,7 +294,7 @@ const guruCount = 0;
         <button
           id="btn-close-student-modal"
           type="button"
-          class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors"
+          class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-sm">close</span>
         </button>
@@ -1005,27 +978,23 @@ const guruCount = 0;
     class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto"
   >
     <div
-      class="bg-white rounded-[2.5rem] max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-5 relative overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-8"
+      class="bg-white rounded-xl max-w-xl w-full p-6 sm:p-7 shadow-xl border border-slate-200/80 space-y-5 relative overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-8"
     >
-      <!-- Decorative Background Orbs -->
-      <div class="absolute -top-14 -right-14 w-40 h-40 rounded-full bg-blue-500/5 blur-2xl pointer-events-none"></div>
-      <div class="absolute -bottom-14 -left-14 w-40 h-40 rounded-full bg-slate-500/5 blur-2xl pointer-events-none"></div>
-
       <!-- Header Modal -->
       <div class="flex items-center justify-between relative z-10 pb-3 border-b border-slate-100">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
-            <span class="material-symbols-outlined text-2xl">school</span>
+          <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
+            <span class="material-symbols-outlined text-xl">school</span>
           </div>
           <div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">Kenaikan Kelas Siswa</h2>
+            <h2 class="text-base font-bold text-slate-900 tracking-tight">Kenaikan Kelas Siswa</h2>
             <p class="text-[11px] text-slate-400 font-medium">Khusus Otorisasi Kepala Sekolah & Waka Kesiswaan</p>
           </div>
         </div>
         <button
           id="btn-close-promote-modal"
           type="button"
-          class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors cursor-pointer"
+          class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors cursor-pointer"
         >
           <span class="material-symbols-outlined text-sm">close</span>
         </button>
@@ -1341,6 +1310,11 @@ const guruCount = 0;
         const masukTimeStr = masukLog?.time ? masukLog.time.substring(0, 5) : '';
         const pulangTimeStr = pulangLog?.time ? pulangLog.time.substring(0, 5) : '';
 
+        const now = new Date();
+        const curMinutes = now.getHours() * 60 + now.getMinutes();
+        const isAfternoonReached = curMinutes >= 13 * 60 + 30; // 13:30 WIB (gerbang pagi ditutup / Alpa resmi)
+        const afternoonClosed = curMinutes >= 15 * 60; // 15:00 WIB (sesi kepulangan berakhir)
+
         let statusBadgeHtml = "";
 
         if (activePerm) {
@@ -1367,19 +1341,7 @@ const guruCount = 0;
           `;
         } else if (masukLog && pulangLog) {
           const isLate = masukLog.status === "Terlambat";
-          statusBadgeHtml = `
-            <div class="inline-flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase ${isLate ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-emerald-50 text-emerald-700 border-emerald-200"} shrink-0">
-                ${isLate ? "TERLAMBAT" : "HADIR"}
-              </span>
-              <span class="text-[11px] font-mono text-slate-600 whitespace-nowrap">
-                ${masukTimeStr} → ${pulangTimeStr}
-              </span>
-            </div>
-          `;
-        } else if (masukLog) {
-          const isLate = masukLog.status === "Terlambat";
-          const isAlpa = masukLog.status === "Alpa";
+          const isAlpa = masukLog.status === "Alpa" || pulangLog.status === "Alpa";
           if (isAlpa) {
             statusBadgeHtml = `
               <div class="inline-flex items-center gap-2">
@@ -1398,22 +1360,74 @@ const guruCount = 0;
                   ${isLate ? "TERLAMBAT" : "HADIR"}
                 </span>
                 <span class="text-[11px] font-mono text-slate-600 whitespace-nowrap">
+                  ${masukTimeStr} → ${pulangTimeStr}
+                </span>
+              </div>
+            `;
+          }
+        } else if (masukLog) {
+          const isLate = masukLog.status === "Terlambat";
+          const isAlpa = masukLog.status === "Alpa";
+          if (isAlpa) {
+            statusBadgeHtml = `
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300 shrink-0">
+                  ALPA
+                </span>
+                <span class="text-[11px] text-slate-400 whitespace-nowrap">
+                  Tanpa Keterangan
+                </span>
+              </div>
+            `;
+          } else if (afternoonClosed && item.role === "siswa") {
+            // Siswa hadir pagi tapi tidak absen pulang setelah batas sesi pulang ditutup (Bolos)
+            statusBadgeHtml = `
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-rose-50 text-rose-700 border-rose-200 shrink-0">
+                  BOLOS
+                </span>
+                <span class="text-[11px] font-mono text-slate-500 whitespace-nowrap">
+                  Masuk ${masukTimeStr} • Tanpa Pulang
+                </span>
+              </div>
+            `;
+          } else {
+            statusBadgeHtml = `
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase ${isLate ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-emerald-50 text-emerald-700 border-emerald-200"} shrink-0">
+                  ${isLate ? "TERLAMBAT" : "HADIR"}
+                </span>
+                <span class="text-[11px] font-mono text-slate-600 whitespace-nowrap">
                   Masuk ${masukTimeStr}
                 </span>
               </div>
             `;
           }
         } else if (pulangLog) {
-          statusBadgeHtml = `
-            <div class="inline-flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-sky-50 text-sky-700 border-sky-200 shrink-0">
-                PULANG
-              </span>
-              <span class="text-[11px] font-mono text-slate-600 whitespace-nowrap">
-                Tap ${pulangTimeStr}
-              </span>
-            </div>
-          `;
+          const isAlpa = pulangLog.status === "Alpa";
+          if (isAlpa) {
+            statusBadgeHtml = `
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300 shrink-0">
+                  ALPA
+                </span>
+                <span class="text-[11px] text-slate-400 whitespace-nowrap">
+                  Tanpa Hadir Pagi
+                </span>
+              </div>
+            `;
+          } else {
+            statusBadgeHtml = `
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-sky-50 text-sky-700 border-sky-200 shrink-0">
+                  PULANG
+                </span>
+                <span class="text-[11px] font-mono text-slate-600 whitespace-nowrap">
+                  Tap ${pulangTimeStr}
+                </span>
+              </div>
+            `;
+          }
         } else {
           const isAlumni =
             item.category === "alumni" ||
@@ -1428,6 +1442,18 @@ const guruCount = 0;
                 </span>
                 <span class="text-[11px] text-slate-400 whitespace-nowrap">
                   Lulus
+                </span>
+              </div>
+            `;
+          } else if (isAfternoonReached && item.role === "siswa") {
+            // Waktu sudah lewat gerbang pagi tutup (13:30 WIB), otomatis Alpa
+            statusBadgeHtml = `
+              <div class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded border text-[10px] font-mono font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border-slate-300 shrink-0">
+                  ALPA
+                </span>
+                <span class="text-[11px] text-slate-400 whitespace-nowrap">
+                  Tanpa Keterangan
                 </span>
               </div>
             `;
@@ -1451,13 +1477,6 @@ const guruCount = 0;
             : item.role === "guru"
               ? "bg-amber-100 text-amber-800 border-amber-200"
               : "bg-blue-100 text-blue-800 border-blue-200";
-
-        const profileBtnClass =
-          item.role === "admin"
-            ? "bg-purple-50 hover:bg-purple-600 hover:text-white text-purple-700"
-            : item.role === "guru"
-              ? "bg-amber-50 hover:bg-amber-600 hover:text-white text-amber-700"
-              : "bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700";
 
         const roleLabel =
           item.role === "admin"
@@ -1492,64 +1511,64 @@ const guruCount = 0;
 
         // Desktop Table Row
         tableHtml += `
-          <tr class="odd:bg-white even:bg-slate-50/70 hover:bg-blue-50/70 transition-colors duration-150 group">
-            <td class="py-3.5 px-4">
+          <tr class="odd:bg-white even:bg-slate-50/50 hover:bg-blue-50/40 transition-colors duration-150 group">
+            <td class="py-3 px-4">
               <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl ${avatarClass} font-extrabold flex items-center justify-center shrink-0 border">
+                <div class="w-8 h-8 rounded-lg ${avatarClass} font-mono font-semibold flex items-center justify-center shrink-0 border text-xs">
                   ${initials}
                 </div>
                 <div class="truncate">
-                  <a href="/profil-siswa?id=${item.id}" class="font-bold text-slate-900 group-hover:text-blue-700 transition-colors truncate hover:underline block" title="Buka Profil ${roleLabel}">
+                  <a href="/profil-siswa?id=${item.id}" class="font-semibold text-xs text-slate-900 group-hover:text-blue-600 transition-colors truncate hover:underline block" title="Buka Profil ${roleLabel}">
                     ${item.name}
                   </a>
-                  <p class="text-[10px] text-slate-500 font-mono">
+                  <p class="text-[10px] text-slate-400 font-mono mt-0.5">
                     ID: ${item.identifier || "-"} • ${rfidBadgeHtml}
                   </p>
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-3">
-              <span class="font-bold text-slate-800">${tingkat}</span>
+            <td class="py-3 px-3">
+              <span class="font-mono text-xs font-medium text-slate-700">${tingkat}</span>
             </td>
-            <td class="py-3.5 px-3 font-bold text-blue-700 truncate">
-              <span>${item.className}</span>
+            <td class="py-3 px-3 truncate">
+              <span class="text-xs font-medium text-slate-800">${item.className}</span>
               ${tagBadge}
             </td>
-            <td class="py-3.5 px-3">${statusBadgeHtml}</td>
-            <td class="py-3.5 px-4 text-center">
-              <div class="flex items-center justify-center gap-1.5">
+            <td class="py-3 px-3">${statusBadgeHtml}</td>
+            <td class="py-3 px-4 text-center">
+              <div class="flex items-center justify-center gap-1">
                 <a
                   href="/profil-siswa?id=${item.id}"
-                  class="p-1.5 rounded-lg ${profileBtnClass} text-xs font-bold transition-all"
+                  class="p-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 border border-slate-200/80 shadow-2xs transition-colors inline-flex items-center justify-center"
                   title="Buka Halaman Profil ${roleLabel}"
                 >
-                  <span class="material-symbols-outlined text-sm">badge</span>
+                  <span class="material-symbols-outlined text-[15px]">badge</span>
                 </a>
                 <button
                   type="button"
                   data-uid="${isItemAdmin ? "" : item.rfidUid}"
                   data-is-alumni="${isItemAlumni}"
-                  class="btn-row-tap p-1.5 rounded-lg bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 text-xs font-bold transition-all cursor-pointer"
+                  class="btn-row-tap p-1.5 rounded-lg bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200/80 shadow-2xs transition-colors cursor-pointer inline-flex items-center justify-center"
                   title="Simulasi Tap RFID"
                 >
-                  <span class="material-symbols-outlined text-sm">contactless</span>
+                  <span class="material-symbols-outlined text-[15px]">contactless</span>
                 </button>
                 <button
                   type="button"
                   data-student='${JSON.stringify(item)}'
-                  class="btn-row-edit p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                  class="btn-row-edit p-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 border border-slate-200/80 shadow-2xs transition-colors cursor-pointer inline-flex items-center justify-center"
                   title="Edit Data & Pairing Kartu"
                 >
-                  <span class="material-symbols-outlined text-sm">edit</span>
+                  <span class="material-symbols-outlined text-[15px]">edit</span>
                 </button>
                 <button
                   type="button"
                   data-id="${item.id}"
                   data-name="${item.name}"
-                  class="btn-row-delete p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-all cursor-pointer"
+                  class="btn-row-delete p-1.5 rounded-lg bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200/80 shadow-2xs transition-colors cursor-pointer inline-flex items-center justify-center"
                   title="Hapus Siswa"
                 >
-                  <span class="material-symbols-outlined text-sm">delete</span>
+                  <span class="material-symbols-outlined text-[15px]">delete</span>
                 </button>
               </div>
             </td>
@@ -1558,17 +1577,17 @@ const guruCount = 0;
 
         // Mobile Card Item
         mobileHtml += `
-          <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs space-y-3">
+          <div class="p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-xs space-y-2.5">
             <div class="flex items-start justify-between gap-2.5">
               <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-9 h-9 rounded-xl ${avatarClass} font-extrabold flex items-center justify-center shrink-0 border text-xs">
+                <div class="w-8 h-8 rounded-lg ${avatarClass} font-mono font-semibold flex items-center justify-center shrink-0 border text-xs">
                   ${initials}
                 </div>
                 <div class="min-w-0">
-                  <a href="/profil-siswa?id=${item.id}" class="font-bold text-slate-900 hover:text-blue-700 transition-colors block truncate text-xs" title="Buka Profil ${roleLabel}">
+                  <a href="/profil-siswa?id=${item.id}" class="font-semibold text-slate-900 hover:text-blue-600 transition-colors block truncate text-xs" title="Buka Profil ${roleLabel}">
                     ${item.name}
                   </a>
-                  <p class="text-[10px] text-slate-500 font-mono">
+                  <p class="text-[10px] text-slate-400 font-mono mt-0.5">
                     ID: ${item.identifier || "-"} • ${rfidBadgeHtml}
                   </p>
                 </div>
@@ -1580,43 +1599,43 @@ const guruCount = 0;
 
             <div class="flex items-center justify-between pt-2 border-t border-slate-100 gap-2">
               <div class="flex items-center gap-1.5 flex-wrap min-w-0">
-                <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold text-[10px] border border-slate-200">${tingkat}</span>
-                <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-bold text-[10px] border border-blue-200/60 truncate max-w-[120px]">${item.className}</span>
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] border border-slate-200">${tingkat}</span>
+                <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-medium text-[10px] border border-blue-200/60 truncate max-w-[120px]">${item.className}</span>
                 ${tagBadge}
               </div>
               <div class="flex items-center gap-1 shrink-0">
                 <a
                   href="/profil-siswa?id=${item.id}"
-                  class="p-1.5 rounded-lg ${profileBtnClass} text-xs font-bold transition-all inline-flex items-center justify-center"
+                  class="p-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 border border-slate-200/80 shadow-2xs transition-colors inline-flex items-center justify-center"
                   title="Buka Profil ${roleLabel}"
                 >
-                  <span class="material-symbols-outlined text-sm">badge</span>
+                  <span class="material-symbols-outlined text-[15px]">badge</span>
                 </a>
                 <button
                   type="button"
                   data-uid="${isItemAdmin ? "" : item.rfidUid}"
                   data-is-alumni="${isItemAlumni}"
-                  class="btn-row-tap p-1.5 rounded-lg bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-700 text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center"
+                  class="btn-row-tap p-1.5 rounded-lg bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 border border-slate-200/80 shadow-2xs transition-colors cursor-pointer inline-flex items-center justify-center"
                   title="Simulasi Tap RFID"
                 >
-                  <span class="material-symbols-outlined text-sm">contactless</span>
+                  <span class="material-symbols-outlined text-[15px]">contactless</span>
                 </button>
                 <button
                   type="button"
                   data-student='${JSON.stringify(item)}'
-                  class="btn-row-edit p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center"
+                  class="btn-row-edit p-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 border border-slate-200/80 shadow-2xs transition-colors cursor-pointer inline-flex items-center justify-center"
                   title="Edit Data"
                 >
-                  <span class="material-symbols-outlined text-sm">edit</span>
+                  <span class="material-symbols-outlined text-[15px]">edit</span>
                 </button>
                 <button
                   type="button"
                   data-id="${item.id}"
                   data-name="${item.name}"
-                  class="btn-row-delete p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center"
+                  class="btn-row-delete p-1.5 rounded-lg bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200/80 shadow-2xs transition-colors cursor-pointer inline-flex items-center justify-center"
                   title="Hapus"
                 >
-                  <span class="material-symbols-outlined text-sm">delete</span>
+                  <span class="material-symbols-outlined text-[15px]">delete</span>
                 </button>
               </div>
             </div>
@@ -2495,10 +2514,10 @@ const guruCount = 0;
       tab.addEventListener("click", () => {
         document.querySelectorAll(".tab-civitas").forEach((t) => {
           t.className =
-            "tab-civitas px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-600";
+            "tab-civitas px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap cursor-pointer";
         });
         tab.className =
-          "tab-civitas px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 whitespace-nowrap bg-white text-slate-900 shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-600";
+          "tab-civitas px-3 py-1.5 rounded-md text-xs font-semibold transition-all whitespace-nowrap bg-white text-slate-900 shadow-xs cursor-pointer";
         activeFilter = (tab as HTMLElement).dataset.filter || "all";
         renderTable();
       });
@@ -2532,10 +2551,10 @@ const guruCount = 0;
         const f = (t as HTMLElement).dataset.filter;
         if (f === filter) {
           t.className =
-            "tab-civitas px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 whitespace-nowrap bg-white text-slate-900 shadow-xs focus:outline-none focus:ring-2 focus:ring-blue-600";
+            "tab-civitas px-3 py-1.5 rounded-md text-xs font-semibold transition-all whitespace-nowrap bg-white text-slate-900 shadow-xs cursor-pointer";
         } else {
           t.className =
-            "tab-civitas px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-600";
+            "tab-civitas px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 transition-all whitespace-nowrap cursor-pointer";
         }
       });
     }

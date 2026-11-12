@@ -349,11 +349,7 @@ export async function cleanupPermissionsTotal(targetDate?: string): Promise<{
       await turso.execute({ sql: 'DELETE FROM permissions WHERE id = ?;', args: [p.id] });
       deletedRejected++;
     }
-    // 2. Hapus total berkas Menunggu yang sudah lewat tanggalnya (Kadaluarsa/Hangus)
-    else if (p.status === 'Menunggu' && end < todayWib) {
-      await turso.execute({ sql: 'DELETE FROM permissions WHERE id = ?;', args: [p.id] });
-      deletedExpired++;
-    }
+    // 2. Berkas Menunggu lampau tetap dipertahankan agar dapat diverifikasi susulan oleh guru
     // 3. Berkas yang sudah Selesai (Arsip lampau): Presensinya sudah tercatat sah di attendance_history, bersihkan dari daftar aktif
     else if (p.status === 'Selesai') {
       await turso.execute({ sql: 'DELETE FROM permissions WHERE id = ?;', args: [p.id] });

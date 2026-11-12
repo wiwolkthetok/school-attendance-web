@@ -30,7 +30,15 @@ export const GET: APIRoute = async () => {
   });
 };
 
-export const DELETE: APIRoute = async () => {
+export const DELETE: APIRoute = async ({ request }) => {
+  const cookieHeader = request.headers.get('cookie') || '';
+  const hasAdminSession = cookieHeader.includes('auth_session=admin');
+  if (!hasAdminSession && !request.headers.get('x-dev-bypass')) {
+    return new Response(JSON.stringify({ status: 'error', message: 'Akses Ditolak: Hanya Administrator yang berhak mereset log presensi.' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
   await clearLogs();
   attendanceEmitter.emit('attendance', { type: 'reset' });
   return new Response(JSON.stringify({ status: 'success', message: 'Log presensi berhasil direset' }), {
@@ -161,6 +169,12 @@ export const POST: APIRoute = async ({ request }) => {
 
     const isStaff = student.role === 'guru' || student.role === 'admin';
 
+    // Step 1b: Cek Hari Libur / Akhir Pekan (Hari Minggu)
+    const isSunday = new Date(dateStr + 'T12:00:00+07:00').getDay() === 0;
+    if (isSunday && !isStaff) {
+      return makeDeniedResponse('HOLIDAY', 'Hari ini hari Minggu (Libur KBM Sekolah)', 'HARI LIBUR', 'TIDAK ADA KBM', 2);
+    }
+
     // Step 2: Cek jadwal gerbang umum (05:00 WIB hingga 23:00 WIB)
     if (totalMinutes < 5 * 60 || totalMinutes > 23 * 60) {
       return makeDeniedResponse('OUT_OF_HOURS', 'Di luar jadwal operasional gerbang (05:00 - 23:00 WIB)', 'GERBANG DITUTUP', 'LUAR JADWAL KBM', 3);
@@ -170,6 +184,23 @@ export const POST: APIRoute = async ({ request }) => {
     if (!isStaff) {
       const toleransiMinutes = timeToMinutes(settings.jamToleransi || '07:40');
       const tutupPulangMinutes = timeToMinutes(settings.jamTutupPulang || '15:00');
+
+      // Ambil log harian untuk deteksi konteks siswa (apakah sudah masuk pagi)
+      const currentLogs = await getLogs();
+      const hasMorningTap = currentLogs.some(
+        (l) => l.rfidUid.toUpperCase() === student.rfidUid.toUpperCase() && l.date === dateStr && l.type === 'masuk' && l.status !== 'Alpa'
+      );
+
+      // Jika waktu berada di antara batas toleransi masuk dan jam buka kepulangan (misal 11:00 - 13:30 WIB)
+      if (totalMinutes > toleransiMinutes && totalMinutes < pulangMinutes) {
+        if (hasMorningTap) {
+          // Siswa sudah hadir pagi dan mencoba keluar/pulang sebelum jamnya
+          return makeDeniedResponse('EARLY_LEAVE', `Presensi kepulangan belum dibuka (Jam pulang pukul ${settings.jamPulang} WIB)`, 'BLM JAM PULANG', `PULANG: ${settings.jamPulang} WIB`, 2);
+        } else {
+          // Siswa belum hadir dan baru datang saat jam KBM sudah berjalan
+          return makeDeniedResponse('LATE_CLOSED', `Presensi masuk telah ditutup (Batas toleransi pukul ${settings.jamToleransi || '07:40'} WIB)`, 'GERBANG TUTUP', 'TERLAMBAT', 3);
+        }
+      }
 
       if (session === 'masuk') {
         if (totalMinutes < bukaMinutes) {
@@ -277,9 +308,36 @@ export const POST: APIRoute = async ({ request }) => {
       const morningLog = allLogs.find((l) => l.rfidUid.toUpperCase() === student.rfidUid.toUpperCase() && l.date === dateStr && l.type === 'masuk');
 
       if (!morningLog || morningLog.status === 'Alpa') {
-        // Siswa tidak hadir di waktu pagi -> status tetap Alpa
-        status = 'Alpa';
-        message = `Tap Siang Terdeteksi (${student.name}), status tetap Alpa karena tidak presensi masuk pagi.`;
+        // Siswa tidak hadir di waktu pagi -> status tetap Alpa dan gerbang ditolak
+        const alpaLog: AttendanceLog = {
+          id: `ATT-${Date.now()}`,
+          rfidUid: student.rfidUid,
+          name: student.name,
+          className: student.className,
+          role: student.role,
+          date: dateStr,
+          time: timeStr.slice(0, 8),
+          type: 'pulang',
+          status: 'Alpa',
+        };
+        await saveLog(alpaLog);
+
+        attendanceEmitter.emit('attendance', { type: 'new_log', log: alpaLog, deduction: null, remainingPoints: studentPoints });
+
+        return new Response(
+          JSON.stringify({
+            status: 'warning',
+            code: 'ALPA_DENIED_GATE',
+            message: `Akses Ditolak (${student.name}): Anda tidak terdaftar presensi masuk pagi. Status tetap Alpa, silahkan melapor ke guru piket.`,
+            data: alpaLog,
+            points: studentPoints,
+            deduction: null,
+            lcd: { line1: student.name.slice(0, 16).toUpperCase(), line2: 'ALPA-TEMUI PIKET' },
+            beep: 3,
+            gate: false,
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
       } else if (morningLog.status === 'Terlambat') {
         // Siswa pagi terlambat -> label presensi tetap Terlambat (tidak berubah jadi Hadir)
         status = 'Terlambat';

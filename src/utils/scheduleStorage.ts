@@ -49,8 +49,6 @@ export async function autoCleanupPastMonthSchedules(): Promise<number> {
 
 export async function getSchedules(): Promise<ScheduleItem[]> {
   await initDatabase();
-  // Pembersihan otomatis agenda bulan lampau
-  await autoCleanupPastMonthSchedules().catch(() => {});
   try {
     const res = await turso.execute('SELECT * FROM schedules ORDER BY time_start ASC;');
     return res.rows.map((r: any) => ({

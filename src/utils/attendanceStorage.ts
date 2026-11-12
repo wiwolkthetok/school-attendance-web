@@ -417,7 +417,7 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
         date: dateStr,
         time: timeStr.slice(0, 8),
         minutesLate: 0,
-        pointsDeducted: 20,
+        pointsDeducted: 10,
         reason: 'Bolos: Tertangkap basah meninggalkan lingkungan sekolah / jam pelajaran tanpa izin',
       };
       await savePointDeduction(deductionRecord);
@@ -439,7 +439,7 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
             rfidUid: target.rfidUid,
             name: target.name,
             className: target.className,
-            pointsDeducted: 20,
+            pointsDeducted: 10,
           },
         ],
       };
@@ -462,7 +462,7 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
   dateLogs.forEach((l) => {
     if (l.role === 'siswa') {
       const u = l.rfidUid.toUpperCase();
-      if (l.type === 'masuk') morningUids.add(u);
+      if (l.type === 'masuk' && l.status !== 'Alpa') morningUids.add(u);
       if (l.type === 'pulang') {
         afternoonUids.add(u);
         if (l.status === 'Bolos') alreadyBolosUids.add(u);
@@ -498,9 +498,9 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
     if (!afternoonUids.has(uid) && !alreadyBolosUids.has(uid)) {
       const student = studentMap.get(uid);
       if (student) {
-        // 1. Simpan log presensi kepulangan dengan status 'Bolos'
+        // 1. Simpan log presensi kepulangan dengan status 'Bolos' (ID unik per tanggal untuk mencegah duplikasi)
         const bolosLog: AttendanceLog = {
-          id: `ATT-BOLOS-${Date.now()}-${student.id}`,
+          id: `ATT-BOLOS-${student.id}-${dateStr}`,
           rfidUid: student.rfidUid,
           name: student.name,
           className: student.className,
@@ -512,7 +512,7 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
         };
         await saveLog(bolosLog);
 
-        // 2. Potong 20 Poin otomatis sesuai aturan kedisiplinan (terkunci 1x per hari)
+        // 2. Potong 10 Poin otomatis sesuai aturan kedisiplinan (terkunci 1x per hari)
         const deductionRecord = {
           id: `DED-BOLOS-${student.id}-${dateStr}`,
           studentId: student.id,
@@ -520,7 +520,7 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
           date: dateStr,
           time: timeStr.slice(0, 8),
           minutesLate: 0,
-          pointsDeducted: 20,
+          pointsDeducted: 10,
           reason: 'Bolos: Tercatat presensi masuk pagi tetapi tidak melakukan presensi kepulangan (pulang)',
         };
         await savePointDeduction(deductionRecord);
@@ -538,7 +538,7 @@ export async function checkAndApplyBolos(targetDate?: string, targetStudentId?: 
           rfidUid: student.rfidUid,
           name: student.name,
           className: student.className,
-          pointsDeducted: 20,
+          pointsDeducted: 10,
         });
       }
     }
@@ -814,7 +814,7 @@ export async function syncDailyAttendanceAndPermissions(forcedDate?: string): Pr
     const bolosRes = await checkAndApplyBolos(todayWib);
     saveSchedulerState({
       lastBolosDate: todayWib,
-      lastStatusMessage: `Sukses Evaluasi Bolos: ${bolosRes.bolosCount} siswa bolos dipotong 20 poin.`,
+      lastStatusMessage: `Sukses Evaluasi Bolos: ${bolosRes.bolosCount} siswa bolos dipotong 10 poin.`,
     });
   }
 

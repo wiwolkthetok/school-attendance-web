@@ -1,9 +1,9 @@
 ---
 /**
  * @file src/components/BottomNav.astro
- * @description Docked Bottom Navigation Bar untuk Mobile & Android
- * Menempel mentok di bawah layar, 8 tombol terbagi dalam 2 halaman (4 tombol per tampilan),
- * dilengkapi animasi swap halus, indikator halaman, dan tombol logout mobile.
+ * @description Master Docked Bottom Navigation Bar untuk Mobile & Android
+ * Menggunakan sistem navigasi terpadu konsisten dengan estetika desktop & mobile,
+ * tanpa pagination artifisial ("Menu 1"/"Menu 2"), dengan active-pill konsentris.
  */
 interface Props {
   activeNav?:
@@ -19,394 +19,114 @@ interface Props {
 
 const { activeNav = "data-presensi" } = Astro.props;
 
-// Halaman 1: 4 Tombol Menu Utama
-const page1Items = [
+const authSession = Astro.cookies.get("auth_session")?.value;
+const isGuruSession = authSession === "guru";
+
+// Nav items terpadu untuk Admin / Waka / Kepsek (6 modul utama langsung 1-tap accessible)
+const adminNavItems = [
   { id: "data-presensi", label: "Presensi", href: "/", icon: "dashboard" },
   { id: "jadwal-agenda", label: "Jadwal", href: "/jadwal", icon: "calendar_month" },
   { id: "izin-dispensasi", label: "Izin", href: "/izin-dispensasi", icon: "description" },
   { id: "siswa-guru", label: "Siswa", href: "/siswa-guru", icon: "group" },
-];
-
-// Halaman 2: 4 Tombol Menu Lanjutan & Logout
-const page2Items = [
   { id: "rekap", label: "Rekap", href: "/rekapitulasi", icon: "analytics" },
   { id: "pengaturan", label: "Pengaturan", href: "/pengaturan", icon: "settings" },
-  { id: "profil-siswa", label: "Profil", href: "/profil-siswa", icon: "account_circle" },
+];
+
+// Nav items untuk Dewan Guru
+const guruNavItems = [
+  { id: "jadwal-agenda", label: "Jadwal", href: "/jadwal", icon: "calendar_month" },
+  { id: "profil-siswa", label: "Profil Guru", href: "/profil-siswa", icon: "badge" },
   { id: "logout", label: "Keluar", href: "#logout", icon: "logout", isLogout: true },
 ];
 
-const isPage2Active = ["rekap", "pengaturan", "profil-siswa"].includes(activeNav);
-const page1ActiveIndex = page1Items.findIndex((item) => item.id === activeNav);
-const page2ActiveIndex = page2Items.findIndex((item) => item.id === activeNav);
+const items = isGuruSession ? guruNavItems : adminNavItems;
 ---
 
 <nav
   aria-label="Navigasi Bawah Mobile"
-  class="fixed bottom-0 inset-x-0 z-40 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.06)] md:hidden select-none safe-bottom transition-all duration-200 touch-manipulation"
+  class="fixed bottom-0 inset-x-0 z-40 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:hidden select-none safe-bottom transition-all duration-200 touch-manipulation"
   id="bottom-nav-root"
 >
-  <!-- Mini Header: Indikator Pager & Tombol Swap Cepat -->
-  <div class="flex items-center justify-between px-4 pt-1.5 pb-0.5 border-b border-slate-100/70">
-    <button
-      type="button"
-      id="bnav-btn-prev"
-      class="text-[10px] font-bold text-slate-400 hover:text-blue-600 transition flex items-center gap-0.5 cursor-pointer py-0.5 active:scale-95"
-      aria-label="Swap ke Menu 1"
-    >
-      <span class="material-symbols-outlined text-[13px]">chevron_left</span>
-      <span>Menu 1</span>
-    </button>
+  <div class={`grid ${isGuruSession ? "grid-cols-3 max-w-sm mx-auto" : "grid-cols-6"} items-center px-1 py-1.5 w-full`}>
+    {
+      items.map((item) => {
+        const isActive = activeNav === item.id;
+        const isLogout = (item as any).isLogout;
 
-    <!-- Pager Dots Indicator (Bisa Diklik Langsung untuk Swap Animasi) -->
-    <div
-      class="flex items-center gap-1.5 cursor-pointer py-0.5 px-2"
-      id="bnav-dots-container"
-      title="Geser atau klik untuk ganti menu"
-    >
-      <button
-        type="button"
-        id="bnav-dot-1"
-        aria-label="Menu Halaman 1"
-        class={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-          !isPage2Active ? "w-6 bg-blue-600 shadow-xs" : "w-2 bg-slate-300 hover:bg-slate-400"
-        }`}
-      ></button>
-      <button
-        type="button"
-        id="bnav-dot-2"
-        aria-label="Menu Halaman 2"
-        class={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-          isPage2Active ? "w-6 bg-blue-600 shadow-xs" : "w-2 bg-slate-300 hover:bg-slate-400"
-        }`}
-      ></button>
-    </div>
-
-    <button
-      type="button"
-      id="bnav-btn-next"
-      class="text-[10px] font-bold text-slate-400 hover:text-blue-600 transition flex items-center gap-0.5 cursor-pointer py-0.5 active:scale-95"
-      aria-label="Swap ke Menu 2"
-    >
-      <span>Menu 2</span>
-      <span class="material-symbols-outlined text-[13px]">chevron_right</span>
-    </button>
-  </div>
-
-  <!-- Pager Viewport (Smooth CSS Transform Slider) -->
-  <div class="relative overflow-hidden w-full" id="bnav-pager-viewport">
-    <div
-      class="flex w-[200%] will-change-transform"
-      id="bnav-pages-slider"
-      style={`transform: translateX(${isPage2Active ? "-50%" : "0%"});`}
-    >
-      <!-- HALAMAN 1 (4 Tombol: Presensi, Jadwal, Izin, Siswa) -->
-      <div
-        class="w-1/2 shrink-0 grid grid-cols-4 items-center px-1 py-1 relative"
-        id="bnav-page-1"
-      >
-        <!-- Sliding Blue Pill (Lingkaran Berpindah Halus) -->
-        <div
-          id="bnav-pill-1"
-          class={`bnav-sliding-pill ${page1ActiveIndex !== -1 ? "opacity-100" : "opacity-0"}`}
-          style={`left: calc(${page1ActiveIndex !== -1 ? page1ActiveIndex * 25 + 12.5 : 12.5}% - 18px);`}
-        ></div>
-
-        {
-          page1Items.map((item, idx) => {
-            const isActive = activeNav === item.id;
-            return (
-              <a
-                href={item.href}
-                data-page="1"
-                data-index={idx}
-                data-astro-prefetch="load"
-                class="bnav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 touch-manipulation cursor-pointer"
-                aria-current={isActive ? "page" : undefined}
-              >
-                <!-- Icon Container -->
-                <div
-                  class={`bnav-icon-box w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300 ease-out ${
-                    isActive
-                      ? "text-white -translate-y-1.5"
-                      : "text-slate-400 group-hover:text-slate-700 translate-y-0"
-                  }`}
-                >
-                  <span class="material-symbols-outlined text-[20px]">
-                    {item.icon}
-                  </span>
-                </div>
-
-                <!-- Label Menu Ringkas -->
-                <span
-                  class={`bnav-label text-[10px] tracking-tight leading-tight transition-all duration-200 whitespace-nowrap ${
-                    isActive
-                      ? "text-blue-600 font-bold -translate-y-0.5"
-                      : "text-slate-400 font-medium translate-y-0"
-                  }`}
-                >
-                  {item.label}
+        if (isLogout) {
+          return (
+            <button
+              type="button"
+              id="bnav-logout-btn"
+              class="flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative touch-manipulation cursor-pointer"
+              title="Keluar dari Aplikasi"
+            >
+              <div class="w-11 h-7 rounded-full flex items-center justify-center transition-all duration-200 text-rose-500 group-hover:bg-rose-50 ease-[cubic-bezier(0.32,0.72,0,1)]">
+                <span class="material-symbols-outlined text-[20px]">
+                  {item.icon}
                 </span>
-              </a>
-            );
-          })
+              </div>
+              <span class="text-[9.5px] tracking-tight leading-tight transition-colors duration-200 mt-1 whitespace-nowrap text-rose-500 font-bold">
+                {item.label}
+              </span>
+            </button>
+          );
         }
-      </div>
 
-      <!-- HALAMAN 2 (4 Tombol: Rekap, Pengaturan, Profil, Logout) -->
-      <div
-        class="w-1/2 shrink-0 grid grid-cols-4 items-center px-1 py-1 relative"
-        id="bnav-page-2"
-      >
-        <!-- Sliding Blue Pill (Lingkaran Berpindah Halus) -->
-        <div
-          id="bnav-pill-2"
-          class={`bnav-sliding-pill ${page2ActiveIndex !== -1 ? "opacity-100" : "opacity-0"}`}
-          style={`left: calc(${page2ActiveIndex !== -1 ? page2ActiveIndex * 25 + 12.5 : 12.5}% - 18px);`}
-        ></div>
+        return (
+          <a
+            href={item.href}
+            data-astro-prefetch="load"
+            class="flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-200 active:scale-95 group relative touch-manipulation cursor-pointer"
+            aria-current={isActive ? "page" : undefined}
+          >
+            <!-- Pill Container Konsentris -->
+            <div
+              class={`w-11 h-7 rounded-full flex items-center justify-center transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                isActive
+                  ? "bg-blue-100 text-blue-700 shadow-2xs"
+                  : "text-slate-400 group-hover:text-slate-600 group-hover:bg-slate-100"
+              }`}
+            >
+              <span class={`material-symbols-outlined text-[20px] transition-transform duration-200 ${isActive ? "scale-105 font-bold" : ""}`}>
+                {item.icon}
+              </span>
+            </div>
 
-        {
-          page2Items.map((item, idx) => {
-            const isActive = activeNav === item.id;
-            const isLogout = item.isLogout;
-            if (isLogout) {
-              return (
-                <button
-                  type="button"
-                  id="bnav-logout-btn"
-                  class="bnav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 cursor-pointer touch-manipulation"
-                  title="Keluar dari Aplikasi"
-                >
-                  <div class="bnav-icon-box w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300 ease-out text-rose-500 group-hover:bg-rose-50 translate-y-0">
-                    <span class="material-symbols-outlined text-[20px]">
-                      {item.icon}
-                    </span>
-                  </div>
-                  <span class="bnav-label text-[10px] tracking-tight leading-tight whitespace-nowrap font-bold text-rose-500">
-                    {item.label}
-                  </span>
-                </button>
-              );
-            }
-            return (
-              <a
-                href={item.href}
-                data-page="2"
-                data-index={idx}
-                data-astro-prefetch="load"
-                class="bnav-btn flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-200 active:scale-95 group relative z-10 touch-manipulation cursor-pointer"
-                aria-current={isActive ? "page" : undefined}
-              >
-                <!-- Icon Container -->
-                <div
-                  class={`bnav-icon-box w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300 ease-out ${
-                    isActive
-                      ? "text-white -translate-y-1.5"
-                      : "text-slate-400 group-hover:text-slate-700 translate-y-0"
-                  }`}
-                >
-                  <span class="material-symbols-outlined text-[20px]">
-                    {item.icon}
-                  </span>
-                </div>
-
-                <!-- Label Menu Ringkas -->
-                <span
-                  class={`bnav-label text-[10px] tracking-tight leading-tight transition-all duration-200 whitespace-nowrap ${
-                    isActive
-                      ? "text-blue-600 font-bold -translate-y-0.5"
-                      : "text-slate-400 font-medium translate-y-0"
-                  }`}
-                >
-                  {item.label}
-                </span>
-              </a>
-            );
-          })
-        }
-      </div>
-    </div>
+            <!-- Label Menu Ringkas & Jelas -->
+            <span
+              class={`text-[9.5px] tracking-tight leading-tight transition-colors duration-200 mt-1 whitespace-nowrap ${
+                isActive
+                  ? "text-blue-700 font-bold"
+                  : "text-slate-500 font-medium group-hover:text-slate-700"
+              }`}
+            >
+              {item.label}
+            </span>
+          </a>
+        );
+      })
+    }
   </div>
 </nav>
 
 <style>
-  #bnav-pages-slider {
-    transition: transform 380ms cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  .bnav-btn {
-    touch-action: manipulation;
-  }
-  .bnav-sliding-pill {
-    position: absolute;
-    top: 8px;
-    width: 36px;
-    height: 36px;
-    border-radius: 1rem;
-    background-color: #2563eb;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
-    transform: translateY(-6px);
-    transition: left 300ms cubic-bezier(0.34, 1.25, 0.64, 1), opacity 150ms ease-out;
-    pointer-events: none;
-    z-index: 0;
-  }
   .safe-bottom {
     padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0.5rem));
   }
 </style>
 
 <script>
-  const slider = document.getElementById("bnav-pages-slider");
-  const viewport = document.getElementById("bnav-pager-viewport");
-  const dot1 = document.getElementById("bnav-dot-1");
-  const dot2 = document.getElementById("bnav-dot-2");
-  const btnPrev = document.getElementById("bnav-btn-prev");
-  const btnNext = document.getElementById("bnav-btn-next");
-  const logoutBtn = document.getElementById("bnav-logout-btn");
-
-  let currentPage = slider?.style.transform.includes("-50%") ? 1 : 0;
-
-  function updateDots(page: number) {
-    currentPage = page;
-    if (page === 0) {
-      dot1?.classList.remove("w-2", "bg-slate-300");
-      dot1?.classList.add("w-6", "bg-blue-600");
-      dot2?.classList.remove("w-6", "bg-blue-600");
-      dot2?.classList.add("w-2", "bg-slate-300");
-      if (btnPrev) btnPrev.classList.add("opacity-40");
-      if (btnNext) btnNext.classList.remove("opacity-40");
-    } else {
-      dot2?.classList.remove("w-2", "bg-slate-300");
-      dot2?.classList.add("w-6", "bg-blue-600");
-      dot1?.classList.remove("w-6", "bg-blue-600");
-      dot1?.classList.add("w-2", "bg-slate-300");
-      if (btnPrev) btnPrev.classList.remove("opacity-40");
-      if (btnNext) btnNext.classList.add("opacity-40");
-    }
-  }
-
-  const navRoot = document.getElementById("bottom-nav-root");
-
-  function swapToPage(page: number, force = false) {
-    if (!slider) return;
-    if (!force && currentPage === page) return;
-    slider.style.transition = "transform 260ms cubic-bezier(0.25, 1, 0.5, 1)";
-    slider.style.transform = page === 0 ? "translateX(0%)" : "translateX(-50%)";
-    updateDots(page);
-  }
-
-  // Klik Dots & Chevrons untuk Swap
-  dot1?.addEventListener("click", () => swapToPage(0));
-  dot2?.addEventListener("click", () => swapToPage(1));
-  btnPrev?.addEventListener("click", () => swapToPage(0));
-  btnNext?.addEventListener("click", () => swapToPage(1));
-
-  // Touch Swipe Gesture Ultra-Responsif (Realtime Finger Tracking + Flick Detection)
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchStartTime = 0;
-  let isSwiping = false;
-
-  const targetArea = navRoot || viewport;
-
-  targetArea?.addEventListener("touchstart", (e) => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-    touchStartTime = Date.now();
-    isSwiping = false;
-    if (slider) slider.style.transition = "none";
-  }, { passive: true });
-
-  targetArea?.addEventListener("touchmove", (e) => {
-    const currentX = e.touches[0].clientX;
-    const currentY = e.touches[0].clientY;
-    const diffX = currentX - touchStartX;
-    const diffY = currentY - touchStartY;
-
-    if (Math.abs(diffX) > 6 && Math.abs(diffX) > Math.abs(diffY)) {
-      isSwiping = true;
-    }
-
-    if (isSwiping && slider) {
-      const baseOffset = currentPage === 0 ? 0 : -50;
-      const vpWidth = viewport ? viewport.offsetWidth : window.innerWidth;
-      const diffPercent = (diffX / vpWidth) * 50;
-      let targetPercent = baseOffset + diffPercent;
-      if (targetPercent > 4) targetPercent = 4;
-      if (targetPercent < -54) targetPercent = -54;
-      slider.style.transform = `translateX(${targetPercent}%)`;
-    }
-  }, { passive: true });
-
-  targetArea?.addEventListener("touchend", (e) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const diffX = touchStartX - touchEndX;
-    const elapsed = Date.now() - touchStartTime;
-
-    if (slider) {
-      slider.style.transition = "transform 260ms cubic-bezier(0.25, 1, 0.5, 1)";
-    }
-
-    // Responsif tinggi: Flick cepat (< 300ms & geser > 12px) atau geser biasa > 20px
-    const isFlick = elapsed < 300 && Math.abs(diffX) > 12;
-    const isDragOver = Math.abs(diffX) > 20;
-
-    if (isFlick || isDragOver) {
-      if (diffX > 0) {
-        swapToPage(1, true); // Swipe kiri -> ke Menu 2
-      } else {
-        swapToPage(0, true); // Swipe kanan -> ke Menu 1
-      }
-    } else {
-      swapToPage(currentPage, true);
-    }
-
-    setTimeout(() => {
-      isSwiping = false;
-    }, 80);
-  }, { passive: true });
-
-  // Bundaran HANYA berpindah saat tombol diklik (bukan saat digeser/slide)
-  const bnavBtns = document.querySelectorAll<HTMLElement>(".bnav-btn");
-  bnavBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      // Jika pengguna sedang menggeser/slide, jangan pindahkan bundaran!
-      if (isSwiping) {
-        e.preventDefault();
-        return;
-      }
-
-      const pageNum = btn.dataset.page === "2" ? 2 : 1;
-      const idx = parseInt(btn.dataset.index || "0", 10);
-      const pill = document.getElementById(`bnav-pill-${pageNum}`);
-      if (pill) {
-        pill.classList.remove("opacity-0");
-        pill.classList.add("opacity-100");
-        pill.style.left = `calc(${idx * 25 + 12.5}% - 18px)`;
-      }
-
-      const pageContainer = document.getElementById(`bnav-page-${pageNum}`);
-      if (pageContainer) {
-        pageContainer.querySelectorAll(".bnav-btn").forEach((b) => {
-          const isTarget = b === btn;
-          const box = b.querySelector(".bnav-icon-box");
-          const label = b.querySelector(".bnav-label");
-          if (isTarget) {
-            box?.classList.remove("text-slate-400", "translate-y-0");
-            box?.classList.add("text-white", "-translate-y-1.5");
-            label?.classList.remove("text-slate-400", "font-medium", "translate-y-0");
-            label?.classList.add("text-blue-600", "font-bold", "-translate-y-0.5");
-          } else if (!b.id.includes("logout")) {
-            box?.classList.remove("text-white", "-translate-y-1.5");
-            box?.classList.add("text-slate-400", "translate-y-0");
-            label?.classList.remove("text-blue-600", "font-bold", "-translate-y-0.5");
-            label?.classList.add("text-slate-400", "font-medium", "translate-y-0");
-          }
-        });
-      }
-    });
-  });
-
-  // Pre-load semua rute navigasi di background agar perpindahan halaman seketika tanpa delay
-  const targetRoutes = ["/pengaturan", "/rekapitulasi", "/profil-siswa", "/", "/jadwal", "/izin-dispensasi", "/siswa-guru"];
+  // Pre-load semua rute navigasi di background agar perpindahan halaman seketika
+  const targetRoutes = [
+    "/",
+    "/jadwal",
+    "/izin-dispensasi",
+    "/siswa-guru",
+    "/rekapitulasi",
+    "/pengaturan",
+    "/profil-siswa",
+  ];
   targetRoutes.forEach((route) => {
     const link = document.createElement("link");
     link.rel = "prefetch";
@@ -414,7 +134,8 @@ const page2ActiveIndex = page2Items.findIndex((item) => item.id === activeNav);
     document.head.appendChild(link);
   });
 
-  // Tombol Logout Khusus Mobile
+  // Tombol Logout Mobile
+  const logoutBtn = document.getElementById("bnav-logout-btn");
   logoutBtn?.addEventListener("click", () => {
     if (typeof (window as any).performLogout === "function") {
       (window as any).performLogout();
